@@ -1609,7 +1609,7 @@
       <form id="paypalForm" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" onsubmit="handleOrderSubmission(event)">
         <!-- PayPal Hidden Parameters -->
         <input type="hidden" name="cmd" value="_xclick">
-        <input type="hidden" name="business" value="zongsm@gmail.com">
+        <input type="hidden" name="business" value="askgsm@live.fr">
         <input type="hidden" name="item_name" id="pp_item_name" value="ThermaRelief Pro - Duo Pack">
         <input type="hidden" name="item_number" id="pp_item_number" value="VERVE-NECK-DUO">
         <input type="hidden" name="amount" id="pp_amount" value="74.99">
@@ -1679,10 +1679,17 @@
           <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" class="paypal-logo" alt="PayPal">
           <span>Express Checkout &rarr;</span>
         </button>
+
+        <div style="margin: 12px 0 6px; text-align: center;">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Prefer instant one-click payment? </span>
+          <a id="paypalMeLink" href="https://paypal.me/asskoure" target="_blank" rel="noopener noreferrer" style="color: #0070ba; font-weight: 700; font-size: 0.85rem; text-decoration: underline;">
+            ⚡ Fast-Track via PayPal.Me/asskoure &rarr;
+          </a>
+        </div>
       </form>
 
       <div style="margin-top: 14px; font-size: 0.75rem; text-align: center; color: var(--text-muted); line-height: 1.4;">
-        By placing your order, you agree to VerveLiving's 30-Day Return Policy and Terms of Service. Your payment is encrypted and guaranteed by PayPal Buyer Protection.
+        Official PayPal Merchant: <strong>askgsm@live.fr</strong> (MHAMED ASKOURE). Protected by PayPal Buyer Protection and Cloudflare 256-bit SSL encryption.
       </div>
     </div>
   </div>
@@ -1867,6 +1874,12 @@
       document.getElementById('pp_item_name').value = `${activeProduct.name} - ${activeProduct.bundleName}`;
       document.getElementById('pp_item_number').value = `${activeProduct.skuPrefix}-QTY${activeProduct.currentQty}`;
       document.getElementById('pp_amount').value = activeProduct.currentPrice.toFixed(2);
+
+      // Update Fast-Track direct PayPal link
+      const fastTrackEl = document.getElementById('paypalMeLink');
+      if (fastTrackEl) {
+        fastTrackEl.href = `https://paypal.me/asskoure/${activeProduct.currentPrice.toFixed(2)}`;
+      }
 
       document.getElementById('checkoutModal').classList.add('active');
     }
