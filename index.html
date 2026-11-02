@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FurOff™ Pro — Portable Washable Sticky Pet Hair Remover</title>
+  <meta name="description" content="Instantly remove stubborn pet hair from couches, car seats, and clothes. Washable, reusable silicone roller with 7-12 day global YunExpress delivery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #10b981;
+      --accent-bg: #ecfdf5;
+      --dark: #0f172a;
+      --gray-900: #1e293b;
+      --gray-700: #334155;
+      --gray-500: #64748b;
+      --gray-200: #e2e8f0;
+      --gray-100: #f1f5f9;
+      --gray-50: #f8fafc;
+      --white: #ffffff;
+      --badge-orange: #ea580c;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background-color: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Top Banner */
+    .top-banner {
+      background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      text-align: center;
+      padding: 9px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .top-banner span {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    /* Nav */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-badge {
+      background: var(--primary);
+      color: var(--white);
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .nav-trust {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+    .btn-claim {
+      background: var(--primary);
+      color: var(--white);
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+    .btn-claim:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    /* Hero */
+    .hero-container {
+      max-width: 1200px;
+      margin: 40px auto 60px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        margin-top: 20px;
+      }
+    }
+    /* Visual Gallery Column */
+    .gallery-card {
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .hero-visual {
+      width: 100%;
+      height: 420px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 30px;
+      position: relative;
+    }
+    .visual-badge {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(16, 185, 129, 0.9);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .demo-roller-graphic {
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, #38bdf8 0%, #0284c7 70%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(56, 189, 248, 0.4);
+      margin-bottom: 24px;
+      animation: pulse 3s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .gallery-thumbnails {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 16px;
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-200);
+    }
+    .thumb {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      color: var(--gray-700);
+    }
+    /* Content Column */
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 2.6rem;
+      line-height: 1.15;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .subhead {
+      font-size: 1.15rem;
+      color: var(--gray-700);
+      margin-bottom: 24px;
+    }
+    .bullet-list {
+      list-style: none;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bullet-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+    .check-icon {
+      background: var(--accent-bg);
+      color: var(--accent);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    /* Pricing Tier Cards */
+    .pricing-section {
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 70px 24px;
+    }
+    .section-title {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 50px;
+    }
+    .section-title h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+    .section-title p {
+      font-size: 1.05rem;
+      color: var(--gray-500);
+    }
+    .pricing-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .plan-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .plan-card:hover {
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      transform: translateY(-4px);
+    }
+    .plan-card.popular {
+      background: var(--white);
+      border: 2px solid var(--primary);
+      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.12);
+      transform: scale(1.03);
+    }
+    .popular-tag {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: var(--white);
+      padding: 4px 16px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .plan-header {
+      margin-bottom: 24px;
+    }
+    .plan-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .plan-desc {
+      font-size: 0.88rem;
+      color: var(--gray-500);
+    }
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin: 16px 0 8px;
+    }
+    .plan-price span {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--gray-500);
+    }
+    .savings-badge {
+      display: inline-block;
+      background: var(--accent-bg);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .plan-features {
+      list-style: none;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--gray-700);
+    }
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      transition: all 0.2s ease;
+    }
+    .plan-btn.primary {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+    .plan-btn.primary:hover {
+      background: var(--primary-hover);
+    }
+    .plan-btn.outline {
+      background: var(--white);
+      color: var(--dark);
+      border: 1px solid var(--gray-200);
+    }
+    .plan-btn.outline:hover {
+      background: var(--gray-100);
+    }
+    /* Trust SLAs Section */
+    .sla-section {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .sla-section {
+        grid-template-columns: 1fr;
+      }
+    }
+    .sla-box {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+    .sla-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .sla-box h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+    .sla-box p {
+      font-size: 0.88rem;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+    /* Steps */
+    .steps-section {
+      background: var(--white);
+      padding: 70px 24px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .steps-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .step-card {
+      text-align: center;
+      padding: 20px;
+    }
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: #eff6ff;
+      color: var(--primary);
+      border-radius: 50%;
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      border: 2px solid #bfdbfe;
+    }
+    .step-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .step-card p {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+    }
+    /* Order Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-card {
+      background: var(--white);
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray-500);
+    }
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-200);
+      font-size: 0.95rem;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: var(--gray-500);
+      padding: 50px 24px 30px;
+      font-size: 0.85rem;
+    }
+    .footer-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--gray-700);
+      padding-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links a {
+      color: var(--gray-200);
+      text-decoration: none;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+    .footer-sla {
+      color: var(--gray-200);
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-banner">
+    ⚡ <strong>NOVEMBER SALE:</strong> Buy 2+ Units &amp; Unlock <span>FREE Priority Shipping</span> + 30-Day Money-Back Guarantee
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      🐾 FurOff™ <span style="font-weight:400; color:var(--gray-500);">Pro</span>
+      <span class="logo-badge">Official Store</span>
+    </div>
+    <div class="nav-trust">
+      <span>🛡️ CJ Verified SKU CJJT174982701AZ</span>
+      <a href="#pricing" class="btn-claim">Get Mine Now</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-container">
+    <div>
+      <div class="badge-pill">
+        ✨ 100% Washable &amp; Infinitely Reusable
+      </div>
+      <h1>Instantly Remove Embedded Pet Hair. Wash &amp; Reuse Forever.</h1>
+      <p class="subhead">
+        Stop throwing away sticky paper rolls. Our medical-grade silicone roller lifts cat and dog hair from couches, car seats, and wool clothing in one single sweep.
+      </p>
+      <ul class="bullet-list">
+        <li>
+          <span class="check-icon">✓</span>
+          <span><strong>Zero Sticky Paper Waste:</strong> Rinse under tap water to restore maximum stickiness instantly.</span>
+        </li>
+        <li>
+          <span class="check-icon">✓</span>
+          <span><strong>Fast 7–12 Business Day Tracked Air Shipping:</strong> Direct fulfillment via YunExpress Priority.</span>
+        </li>
+        <li>
+          <span class="check-icon">✓</span>
+          <span><strong>Fabric Safe &amp; Residue Free:</strong> Won't snag delicate silks, velvet, suede, or knit fabrics.</span>
+        </li>
+      </ul>
+      <div>
+        <a href="#pricing" class="btn-claim" style="font-size: 1.05rem; padding: 14px 30px;">
+          Claim Your 38% Launch Discount &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Visual Column -->
+    <div class="gallery-card">
+      <div class="hero-visual">
+        <div class="visual-badge">SKU CJJT174982701AZ</div>
+        <div class="demo-roller-graphic">
+          <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+            <circle cx="12" cy="12" r="2"></circle>
+            <path d="M6 12h.01M18 12h.01"></path>
+          </svg>
+        </div>
+        <h3 style="font-size: 1.3rem; margin-bottom: 6px;">FurOff™ Washable Pet Hair Roller</h3>
+        <p style="font-size: 0.9rem; opacity: 0.9;">High-Adhesion Polymer Surface • Rinse Under Water • Ready in 60s</p>
+      </div>
+      <div class="gallery-thumbnails">
+        <div class="thumb">🚗 Car Seats &amp; Trunks</div>
+        <div class="thumb">🛋️ Couches &amp; Sofas</div>
+        <div class="thumb">🧥 Coats &amp; Bedding</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="steps-section">
+    <div class="section-title">
+      <h2>How Does It Work?</h2>
+      <p>Three effortless steps to a hair-free home in under 60 seconds.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Roll Across Fabric</h3>
+        <p>Glide the roller gently over furniture, clothes, or carpets. Micro-sticky silicone traps all stubborn fur and lint.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Rinse Under Tap</h3>
+        <p>Hold the roller under lukewarm running water. Hair slips right off into the trash or drain filter effortlessly.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Dry &amp; Reuse Forever</h3>
+        <p>Shake dry with a clean towel. The adhesive bond is 100% reactivated and ready for your next cleaning run.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Tiers -->
+  <section class="pricing-section" id="pricing">
+    <div class="section-title">
+      <h2>Choose Your Bundle &amp; Save</h2>
+      <p>All orders backed by our 30-Day Money-Back Guarantee &amp; YunExpress Tracking.</p>
+    </div>
+    <div class="pricing-grid">
+      
+      <!-- Single -->
+      <div class="plan-card">
+        <div>
+          <div class="plan-header">
+            <div class="plan-name">1x Single Unit</div>
+            <div class="plan-desc">For quick room-to-room touchups</div>
+          </div>
+          <div class="plan-price">$39.99 <span>/ unit</span></div>
+          <ul class="plan-features">
+            <li>✓ 1x FurOff™ Washable Roller</li>
+            <li>✓ Protective Travel Cap</li>
+            <li>✓ YunExpress 7-12 Day Delivery</li>
+            <li>✓ 30-Day Money-Back Guarantee</li>
+          </ul>
+        </div>
+        <button class="plan-btn outline" onclick="openOrder('Single Unit', '$39.99', 'Starter Pack (1 Unit)')">
+          Order 1 Unit
+        </button>
+      </div>
+
+      <!-- Duo (Most Popular) -->
+      <div class="plan-card popular">
+        <div class="popular-tag">MOST POPULAR • BEST VALUE</div>
+        <div>
+          <div class="plan-header">
+            <div class="plan-name">2x Duo Bundle</div>
+            <div class="plan-desc">Keep 1 in Home + 1 in Your Car</div>
+          </div>
+          <div class="plan-price">$64.99 <span>total ($32.49/ea)</span></div>
+          <div class="savings-badge">SAVE $15.00 + FREE Priority Shipping</div>
+          <ul class="plan-features">
+            <li>✓ <strong>2x FurOff™ Washable Rollers</strong></li>
+            <li>✓ 2x Protective Travel Caps</li>
+            <li>✓ <strong>FREE Priority Insured Air Shipping</strong></li>
+            <li>✓ YunExpress 7-12 Day Tracked Delivery</li>
+            <li>✓ 30-Day No-Questions-Asked Guarantee</li>
+          </ul>
+        </div>
+        <button class="plan-btn primary" onclick="openOrder('Duo Bundle', '$64.99', '2 Units (Home + Car)')">
+          Claim Duo Pack (Free Shipping)
+        </button>
+      </div>
+
+      <!-- Trio Pack -->
+      <div class="plan-card">
+        <div>
+          <div class="plan-header">
+            <div class="plan-name">3x Family Bundle</div>
+            <div class="plan-desc">Maximum savings for multi-pet homes</div>
+          </div>
+          <div class="plan-price">$89.99 <span>total ($29.99/ea)</span></div>
+          <div class="savings-badge">SAVE $30.00 + FREE Shipping + Pouch</div>
+          <ul class="plan-features">
+            <li>✓ <strong>3x FurOff™ Washable Rollers</strong></li>
+            <li>✓ 3x Protective Travel Caps</li>
+            <li>✓ <strong>Bonus Travel Storage Pouch</strong></li>
+            <li>✓ <strong>FREE Priority Insured Air Shipping</strong></li>
+            <li>✓ Priority VIP Dispatch (within 24 hours)</li>
+          </ul>
+        </div>
+        <button class="plan-btn outline" onclick="openOrder('Family Bundle', '$89.99', '3 Units + Storage Pouch')">
+          Claim 3-Pack Bundle
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SLAs & Guarantees -->
+  <section class="sla-section">
+    <div class="sla-box">
+      <div class="sla-icon">✈️</div>
+      <h3>7–12 Business Days SLA</h3>
+      <p>Direct air courier fulfillment via YunExpress. Real-time end-to-end tracking number dispatched via email in 24–48 hours.</p>
+    </div>
+    <div class="sla-box">
+      <div class="sla-icon">🛡️</div>
+      <h3>30-Day Ironclad Guarantee</h3>
+      <p>If FurOff™ doesn't lift your pet's stubborn hair cleaner than disposable lint rollers, contact us for an immediate full refund.</p>
+    </div>
+    <div class="sla-box">
+      <div class="sla-icon">🔒</div>
+      <h3>Direct Buyer Protection</h3>
+      <p>Orders processed securely with encrypted checkout. Zero unexpected subscription fees or recurring charges.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div style="font-weight: 700; color: white;">
+          FurOff™ by Askoure Systems
+        </div>
+        <div class="footer-links">
+          <a href="mailto:support@askouresystems.com">Support &amp; Inquiries</a>
+          <a href="#pricing">Shop Bundles</a>
+          <a href="https://askouresystems.com" target="_blank">Parent Company</a>
+        </div>
+      </div>
+      <div class="footer-sla">
+        <strong>Fulfillment &amp; Gateway SLA Disclosure:</strong> All orders are dispatched via CJdropshipping verified inventory (SKU CJJT174982701AZ) with YunExpress air tracking delivered directly to US, UK, and European destinations within 7–12 business days. For support, custom requests, or tracking queries, contact <code>support@askouresystems.com</code>.
+        <br><br>
+        &copy; 2026 FurOff™ &bull; Askoure Systems. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Order Modal -->
+  <div class="modal-backdrop" id="orderModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeOrder()">&times;</button>
+      <h3 class="modal-title">Complete Your Order</h3>
+      <p style="font-size: 0.9rem; color: var(--gray-500); margin-bottom: 20px;" id="modalSelectedBundle">
+        Selected: Duo Bundle ($64.99)
+      </p>
+      
+      <form id="orderForm" onsubmit="handleOrderSubmit(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="custName" required placeholder="Jane Doe">
+        </div>
+        <div class="form-group">
+          <label>Email Address (For YunExpress Tracking)</label>
+          <input type="email" id="custEmail" required placeholder="jane@example.com">
+        </div>
+        <div class="form-group">
+          <label>Shipping Address &amp; Country</label>
+          <input type="text" id="custAddress" required placeholder="123 Main St, Apt 4, City, Postal Code, Country">
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="payMethod">
+            <option value="paypal">PayPal Express Checkout</option>
+            <option value="invoice">Direct Invoice / Bank Card</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn" id="submitOrderBtn">
+          Confirm Order &amp; Proceed to Secure Payment &rarr;
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentBundle = 'Duo Bundle';
+    let currentPrice = '$64.99';
+
+    function openOrder(bundle, price, desc) {
+      currentBundle = bundle;
+      currentPrice = price;
+      document.getElementById('modalSelectedBundle').innerText = `Selected: ${bundle} — ${price} (${desc})`;
+      document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeOrder() {
+      document.getElementById('orderModal').style.display = 'none';
+    }
+
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('custName').value;
+      const email = document.getElementById('custEmail').value;
+      const address = document.getElementById('custAddress').value;
+      const method = document.getElementById('payMethod').value;
+      
+      const subject = encodeURIComponent(`New FurOff Order: ${currentBundle} (${currentPrice}) - ${name}`);
+      const body = encodeURIComponent(`Order Details:\nBundle: ${currentBundle}\nPrice: ${currentPrice}\nCustomer: ${name}\nEmail: ${email}\nShipping Address: ${address}\nPayment Preference: ${method}\n\nFulfillment: CJdropshipping SKU CJJT174982701AZ via YunExpress.`);
+      
+      // Open direct payment / order confirmation email
+      window.location.href = `mailto:orders@askouresystems.com?subject=${subject}&body=${body}`;
+      
+      alert(`Thank you ${name}! Your order inquiry for ${currentBundle} has been prepared. We will dispatch your payment confirmation and YunExpress tracking to ${email} within 24 hours.`);
+      closeOrder();
+    }
+  </script>
+</body>
+</html>
