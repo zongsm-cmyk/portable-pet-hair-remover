@@ -25,3 +25,8 @@ Local CSS version: dae07d99c6f9. Local JS version: 53813cc7de79. See `receipts/p
 ## Remaining
 
 Publication under a write-capable session and actual deployed HTTP/asset verification. Supplier qualification, exact-variant authorization, US/GB cost/shipping/QC evidence and real Sandbox acceptance remain open. 61 genuine gallery images, 13 photo previews, two visual holds, zero qualified products, empty merchant feed and checkout disabled. Worker/D1/auth/financial configuration unchanged. No paid tools or ad spend.
+
+
+## Live publication supersession — 2026-11-03
+
+The earlier local-only publication boundary is superseded by [LIVE_DEPLOYMENT_ACCEPTANCE_20261103.md](LIVE_DEPLOYMENT_ACCEPTANCE_20261103.md). Remote main commit c0b245a5681df616145ec49e25e2c2bcd5fc3b95 is live at https://shop.askouresystems.com/. Read-only Chrome public QA passed 61/61 route/viewport checks (320–1440px), with zero broken loaded images, console errors or horizontal overflow. Every one of the 61 published CJ gallery assets returned HTTP 200. Checkout remains disabled; 0 qualified products and no verified Sandbox/real orders.

@@ -54,3 +54,8 @@ Root pages and their source generator had regressed after the earlier gated buil
 ## Premium storefront rebuild, 2026-11-03
 
 See [local rebuild and evidence](PREMIUM_UX_20261103.md): compact category photography, responsive accessible menu, product-led hero, refined preview grids and editorial sections. 39 Python / 31 Node tests; 145 Chrome route/viewport checks and 305 gallery selections pass across five widths. All 61 gallery originals and commerce gates preserved. Not committed/pushed: local Git network blocked and GitHub connector write refused by approval policy. Live URL/assets unverified. Supplier/Sandbox gates remain open.
+
+
+## Live publication supersession — 2026-11-03
+
+The earlier local-only publication boundary is superseded by [LIVE_DEPLOYMENT_ACCEPTANCE_20261103.md](LIVE_DEPLOYMENT_ACCEPTANCE_20261103.md). Remote main commit c0b245a5681df616145ec49e25e2c2bcd5fc3b95 is live at https://shop.askouresystems.com/. Read-only Chrome public QA passed 61/61 route/viewport checks (320–1440px), with zero broken loaded images, console errors or horizontal overflow. Every one of the 61 published CJ gallery assets returned HTTP 200. Checkout remains disabled; 0 qualified products and no verified Sandbox/real orders.
