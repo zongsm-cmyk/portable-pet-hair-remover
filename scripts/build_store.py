@@ -148,8 +148,11 @@ def build(root=ROOT, output=None):
     nav = f'<a class="skip" href="#main">Skip to content</a><div class="announcement">CONSIDERED TOOLS. EVERYDAY POSSIBILITIES. &nbsp; · &nbsp; ONLINE CHECKOUT CURRENTLY PAUSED</div><header class="header"><nav class="nav" aria-label="Main navigation"><a class="wordmark" href="/">Verve<span>Living</span><sup style="font:9px Arial;vertical-align:top;letter-spacing:0">™</sup></a><div class="nav-links">{links}</div><a class="nav-contact" href="/policies/contact/">Contact &amp; order lookup ↗</a></nav></header>'
     footer = f'<footer class="footer"><div class="wrap"><div class="footer-grid"><div class="footer-brand"><a class="wordmark" href="/">Verve<span>Living</span></a><p>Smart Everyday Problem Solvers.<br>Thoughtfully selected for your kitchen, your home, and your everyday.</p><p>A storefront by Askoure Systems.</p></div><div><h4>Explore</h4>{links}</div><div><h4>Good to know</h4><a href="/policies/shipping/">Shipping policy</a><a href="/policies/refunds/">Refund &amp; return policy</a><a href="/policies/privacy/">Privacy policy</a><a href="/policies/terms/">Terms of service</a><a href="/policies/contact/">Contact &amp; order lookup</a></div></div><div class="footer-bottom"><span>© 2026 VerveLiving · Askoure Systems</span><span>Product availability is being verified. No payments are currently accepted.</span></div></div></footer>'
     public_settings = {key:settings[key] for key in ('checkout_enabled','api_base','paypal_environment')}
-    style_version = hashlib.sha256((root/'static/store.css').read_bytes()).hexdigest()[:12]
-    script_version = hashlib.sha256((root/'static/store.js').read_bytes()).hexdigest()[:12]
+    # Hash the same normalized UTF-8 bytes that we publish, on Windows and Linux.
+    static_assets = {name: (root/'static'/name).read_text(encoding='utf-8')
+                     for name in ('store.css', 'store.js')}
+    style_version = hashlib.sha256(static_assets['store.css'].encode('utf-8')).hexdigest()[:12]
+    script_version = hashlib.sha256(static_assets['store.js'].encode('utf-8')).hexdigest()[:12]
     def page(title, description, path, body, schema=None, image=None, noindex=False):
         og_image = f'<meta property="og:image" content="{enc(site+image)}">' if image else ''
         ld = f'<script type="application/ld+json">{json_script(schema)}</script>' if schema else ''
@@ -248,7 +251,7 @@ def build(root=ROOT, output=None):
         ET.SubElement(node,'{http://www.sitemaps.org/schemas/sitemap/0.9}loc').text=site+path
     generated['sitemap.xml']=ET.tostring(sitemap,encoding='unicode',xml_declaration=True)+'\n'
     generated['robots.txt']=f'User-agent: *\nAllow: /\nDisallow: /checkout/\nDisallow: /api/\nSitemap: {site}/sitemap.xml\n'
-    for name in ('store.css','store.js'): generated['assets/'+name]=(root/'static'/name).read_text(encoding='utf-8')
+    for name, content in static_assets.items(): generated['assets/'+name] = content
     if settings['checkout_enabled']:
         replacements = {
             'ONLINE CHECKOUT CURRENTLY PAUSED':'DELIVERY TO THE US &amp; UK · PAY WITH PAYPAL',

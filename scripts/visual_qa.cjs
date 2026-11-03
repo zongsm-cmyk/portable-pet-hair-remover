@@ -7,7 +7,7 @@ const runtime = process.env.PLAYWRIGHT_MODULE || 'C:/Users/askgs/.cache/codex-ru
 const {chromium} = require(runtime);
 const root = path.resolve(process.argv[2] || '.');
 const label = process.argv[3] || 'after';
-const output = path.resolve('receipts/visual-recovery');
+const output = path.resolve(process.env.VISUAL_QA_OUTPUT || 'receipts/visual-recovery');
 fs.mkdirSync(output,{recursive:true});
 const mime = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.jpg':'image/jpeg','.webp':'image/webp','.png':'image/png'};
 (async()=>{
@@ -29,7 +29,7 @@ const mime = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8
     async function loaded(){
       await page.locator('img').evaluateAll(async images=>{
         images.forEach(i=>i.loading='eager');
-        await Promise.all(images.map(i=>i.decode().catch(()=>{})));
+        await Promise.all(images.map(i=>i.decode()));
       });
       return page.evaluate(()=>({images:[...document.images].map(i=>({src:new URL(i.src).pathname,loaded:i.complete&&i.naturalWidth>0,w:i.naturalWidth,h:i.naturalHeight})),overflow:document.documentElement.scrollWidth>innerWidth,cards:document.querySelectorAll('.product-tile').length,buy:document.querySelectorAll('[data-checkout-product],#quantity').length}));
     }
@@ -40,9 +40,24 @@ const mime = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8
       assert(!row.overflow,`Overflow at ${width}`);
       assert(row.images.every(i=>i.loaded),'Unloaded homepage image');
       if(label==='after'){assert.equal(row.cards,13);assert.equal(row.buy,0);}
+      if(label==='after' && width===390){
+        row.categoryLayout = await page.locator('.category-card').evaluateAll(cards=>cards.map(card=>({
+          height:card.getBoundingClientRect().height,
+          photoHeight:card.querySelector('.category-photo').getBoundingClientRect().height,
+          imageHeight:card.querySelector('.category-photo img').getBoundingClientRect().height
+        })));
+        assert.equal(row.categoryLayout.length,3);
+        for(const card of row.categoryLayout){
+          assert(card.height<420,`Category card too tall: ${card.height}`);
+          assert(card.photoHeight<260 && card.photoHeight>=210,`Category photo height: ${card.photoHeight}`);
+          assert(card.imageHeight===card.photoHeight,'Category image must fill its photo box');
+        }
+        assert.equal(await page.locator('.product-tile img').count(),13);
+      }
       if(width!==320){
         await page.screenshot({path:path.join(output,`${label}-home-${width}.png`),fullPage:true});
         await page.locator('.hero').screenshot({path:path.join(output,`${label}-hero-${width}.png`)});
+        if(label==='after')await page.locator('.collections').screenshot({path:path.join(output,`${label}-categories-${width}.png`)});
         if(label==='after')await page.locator('#kitchen-innovations').screenshot({path:path.join(output,`${label}-gallery-${width}.png`)});
       }
     }

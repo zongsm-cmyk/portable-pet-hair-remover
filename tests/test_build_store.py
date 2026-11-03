@@ -1,7 +1,9 @@
 import copy
+import hashlib
 from datetime import datetime, timezone, timedelta
 import importlib.util
 import json
+import shutil
 from pathlib import Path
 import tempfile
 import unittest
@@ -107,6 +109,34 @@ class BuildTests(unittest.TestCase):
                     self.assertNotIn('application/ld+json',path.read_text(encoding='utf-8'))
             self.assertTrue((out/'checkout/return/index.html').is_file())
             self.assertTrue((out/'checkout/cancel/index.html').is_file())
+
+    def test_lf_and_crlf_assets_publish_identical_bytes_and_versions(self):
+        with tempfile.TemporaryDirectory() as temp:
+            snapshots = []
+            for label, newline in [('lf', '\n'), ('crlf', '\r\n')]:
+                root = Path(temp)/label
+                for directory in ('data', 'assets'):
+                    shutil.copytree(ROOT/directory, root/directory)
+                (root/'static').mkdir()
+                for name in ('store.css', 'store.js'):
+                    normalized = (ROOT/'static'/name).read_text(encoding='utf-8')
+                    raw = normalized.replace('\n', newline).encode('utf-8')
+                    (root/'static'/name).write_bytes(raw)
+                    self.assertEqual(b'\r\n' in raw, label == 'crlf')
+                out = Path(temp)/(label+'-output')
+                receipt = module.build(root, out)
+                for name in ('store.css', 'store.js'):
+                    emitted = (out/'assets'/name).read_bytes()
+                    expected = (ROOT/'static'/name).read_text(encoding='utf-8').encode('utf-8')
+                    self.assertEqual(emitted, expected)
+                    digest = hashlib.sha256(expected).hexdigest()
+                    self.assertEqual(receipt['files']['assets/'+name], digest)
+                    for page in out.rglob('*.html'):
+                        self.assertIn('/assets/'+name+'?v='+digest[:12], page.read_text(encoding='utf-8'))
+                snapshots.append({str(p.relative_to(out)): p.read_bytes()
+                                  for p in out.rglob('*') if p.is_file()})
+            # Includes every page, both assets and build-receipt.json byte for byte.
+            self.assertEqual(snapshots[0], snapshots[1])
 
     def test_removed_products_and_payment_links_not_in_public_pages(self):
         with tempfile.TemporaryDirectory() as temp:
