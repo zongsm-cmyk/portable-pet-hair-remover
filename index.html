@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VerveLiving™ — Smart Daily Wellness & Home Problem Solvers</title>
+  <title>VerveLiving™ — Home & Everyday Essentials</title>
   <meta name="description" content="Explore practical home accessories and daily comfort products. Product availability, shipping costs and policies confirmed before any order.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -912,20 +912,25 @@
     }
 
     @media (max-width: 768px) {
-      .hero-banner {
-        grid-template-columns: 1fr;
-        padding: 32px 20px;
-      }
-      .detail-layout {
-        grid-template-columns: 1fr;
-      }
-      .nav-links {
-        display: none;
-      }
-      .footer-container {
-        grid-template-columns: 1fr;
-        gap: 28px;
-      }
+      .nav-container { flex-wrap: wrap; gap: 12px; padding: 12px 14px; }
+      .nav-actions { margin-left: auto; }
+      .nav-links { display: flex; order: 3; width: 100%; overflow-x: auto; gap: 16px; padding: 4px 0 8px; white-space: nowrap; }
+      main { padding: 20px 12px 72px; }
+      .hero-banner { grid-template-columns: 1fr; padding: 24px 18px; }
+      .hero-content h1 { font-size: 1.85rem; }
+      .product-grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+      .product-detail-view { padding: 18px; }
+      .detail-layout { grid-template-columns: minmax(0, 1fr); }
+      .bundle-option { padding: 12px 10px; gap: 8px; }
+      .bundle-name { font-size: 0.84rem; }
+      .bundle-subtext { font-size: 0.73rem; }
+      .bundle-price { font-size: 1rem; }
+      .sticky-bar { padding: 8px 12px; gap: 8px; }
+      .sticky-title { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.78rem; }
+      .sticky-price { font-size: 0.78rem; }
+      .sticky-btn { padding: 9px 10px; font-size: 0.76rem; }
+      .modal-box { padding: 20px 16px; }
+      .footer-container { grid-template-columns: 1fr; gap: 28px; }
     }
   </style>
 </head>
@@ -1001,7 +1006,7 @@
             <div class="card-price-row">
               <span class="card-price">$44.99</span>
             </div>
-            <button class="card-btn" onclick="openProduct('neck')">View Product &amp; Video Demo &rarr;</button>
+            <button class="card-btn" onclick="openProduct('neck')">View Product Details &rarr;</button>
           </div>
         </div>
 
@@ -1018,7 +1023,7 @@
             <div class="card-price-row">
               <span class="card-price">$34.99</span>
             </div>
-            <button class="card-btn" onclick="openProduct('furoff')">View Product &amp; Video Demo &rarr;</button>
+            <button class="card-btn" onclick="openProduct('furoff')">View Product Details &rarr;</button>
           </div>
         </div>
 
@@ -1035,7 +1040,7 @@
             <div class="card-price-row">
               <span class="card-price">$54.99</span>
             </div>
-            <button class="card-btn" onclick="openProduct('knee')">View Product &amp; Video Demo &rarr;</button>
+            <button class="card-btn" onclick="openProduct('knee')">View Product Details &rarr;</button>
           </div>
         </div>
 
@@ -1243,7 +1248,7 @@
               </div>
               <div class="bundle-price-box">
                 <div class="bundle-price">$54.99</div>
-                <div class="bundle-savings">Only $27.49 / unit</div>
+                <div class="bundle-savings">$27.50 / unit</div>
               </div>
             </div>
 
@@ -1258,7 +1263,7 @@
               </div>
               <div class="bundle-price-box">
                 <div class="bundle-price">$74.99</div>
-                <div class="bundle-savings">Only $24.99 / unit</div>
+                <div class="bundle-savings">$25.00 / unit</div>
               </div>
             </div>
           </div>
@@ -1367,7 +1372,7 @@
               </div>
               <div class="bundle-price-box">
                 <div class="bundle-price">$89.99</div>
-                <div class="bundle-savings">Only $44.99 / unit</div>
+                <div class="bundle-savings">$45.00 / unit</div>
               </div>
             </div>
 
@@ -1382,7 +1387,7 @@
               </div>
               <div class="bundle-price-box">
                 <div class="bundle-price">$119.99</div>
-                <div class="bundle-savings">Only $39.99 / unit</div>
+                <div class="bundle-savings">$40.00 / unit</div>
               </div>
             </div>
           </div>
@@ -1596,7 +1601,7 @@
       if(!alreadyOpen) {body.classList.add('open');headerEl.querySelector('span:last-child').textContent='−';}
     }
     function openCheckoutModal() {
-      document.getElementById('summaryProduct').textContent=activeProduct.name+' — '+activeProduct.bundleName+' ('+activeProduct.currentQty+' units)';
+      document.getElementById('summaryProduct').textContent=activeProduct.name+' — '+activeProduct.bundleName+' ('+activeProduct.currentQty+' '+(activeProduct.currentQty===1?'unit':'units')+')';
       document.getElementById('summaryPrice').textContent='$'+activeProduct.currentPrice.toFixed(2);
       document.getElementById('summaryTotal').textContent='$'+activeProduct.currentPrice.toFixed(2)+' USD';
       document.getElementById('checkoutModal').classList.add('active');
