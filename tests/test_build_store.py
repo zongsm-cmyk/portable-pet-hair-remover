@@ -18,8 +18,8 @@ class BuildTests(unittest.TestCase):
         self.settings=json.loads((ROOT/'data/settings.json').read_text(encoding='utf-8'))
 
     def verified(self):
-        p=self.catalog['products'][-1]
-        p.update(verified_for_checkout=True,cj_sku='TEST-SKU',cj_variant_id='TEST-VARIANT',cj_product_url='https://www.cjdropshipping.com/product/test.html',warehouse_origin='CN',supplier_cost_usd=2,shipping_us_usd=6,shipping_uk_usd=5,net_margin_usd=25,eta_us_days='8-14 business days',eta_uk_days='8-14 business days',supplier_verified_at=datetime.now(timezone.utc).isoformat(),stock_status='in_stock',shipping_us_line='CJPacket Ordinary',shipping_uk_line='CJPacket Ordinary')
+        p=next(p for p in self.catalog['products'] if p['id']=='furoff')
+        p.update(verified_for_checkout=True,cj_variant_id='TEST-VARIANT',warehouse_origin='CN',supplier_cost_usd=2,shipping_us_usd=6,shipping_uk_usd=5,net_margin_usd=25,eta_us_days='8-14 business days',eta_uk_days='8-14 business days',supplier_verified_at=datetime.now(timezone.utc).isoformat(),stock_status='in_stock',shipping_us_line='CJPacket Ordinary',shipping_uk_line='CJPacket Ordinary')
         p.update(customer_shipping_us_usd=0,customer_shipping_uk_usd=0)
         p['specs'].update(weight_g=200,contains_lithium=False,contains_liquid=False,medical=False)
         return p
@@ -33,29 +33,30 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(svg.attrib['stroke'],'currentColor')
             self.assertEqual(svg.attrib['viewBox'],'0 0 24 24')
 
-    def test_original_gallery_restored_without_enabling_checkout(self):
+    def test_matched_cj_photo_without_unverified_video_or_checkout(self):
         with tempfile.TemporaryDirectory() as temp:
             module.build(output=Path(temp))
             html=(Path(temp)/'products/furoff-pro-household-roller/index.html').read_text(encoding='utf-8')
-            self.assertEqual(html.count('data-gallery-src='),3)
-            self.assertIn('data-gallery-video=',html)
-            self.assertIn('Checkout not available yet',html)
+            self.assertEqual(html.count('data-gallery-src='),1)
+            self.assertNotIn('data-gallery-video=',html)
+            self.assertIn('Buying unavailable',html)
             self.assertNotIn('data-checkout-product=',html)
-            self.assertIn('403f0e596fb20e8c955ef778b30c169e9f73f7cd',json.dumps(self.catalog))
+            self.assertNotIn('freshseal',html.lower())
 
-    def test_owner_media_restore_cannot_substitute_a_different_video(self):
+    def test_video_without_matching_sku_and_rights_is_rejected(self):
         fur=next(p for p in self.catalog['products'] if p['id']=='furoff')
-        fur['video']['url']='https://example.com/different.mp4'
+        fur['video']={'url':'https://example.com/different.mp4','rights_verified':True,'matches_product_verified':True}
         with self.assertRaises(ValueError):module.validate(self.catalog,self.settings)
 
-    def test_current_catalog_is_15_drafts_five_per_category(self):
+    def test_current_catalog_is_15_researched_candidates_five_per_category(self):
         products=module.validate(self.catalog,self.settings)
         self.assertEqual(len(products),15)
         self.assertFalse(any(p['verified_for_checkout'] for p in products))
-        self.assertEqual(sum(bool(p.get('draft_slot')) for p in products),13)
+        self.assertEqual(sum(bool(p.get('visual_hold')) for p in products),2)
+        self.assertEqual(sum(bool(p['images']) for p in products),13)
 
     def test_flag_alone_cannot_enable_checkout(self):
-        self.catalog['products'][-1]['verified_for_checkout']=True
+        self.catalog['products'][0]['verified_for_checkout']=True
         with self.assertRaises(ValueError): module.validate(self.catalog,self.settings)
 
     def test_verified_requires_recent_real_shipping_and_safe_weight(self):
@@ -126,8 +127,12 @@ class BuildTests(unittest.TestCase):
             root=Path(temp)/'source';out=Path(temp)/'output'
             for directory in ['data','static','assets']:(root/directory).mkdir(parents=True,exist_ok=True)
             for name in ['store.css','store.js']:(root/'static'/name).write_text((ROOT/'static'/name).read_text(encoding='utf-8'),encoding='utf-8')
-            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg','freshseal-pro.jpg']:
-                (root/'assets'/image).write_bytes((ROOT/'assets'/image).read_bytes())
+            for product in self.catalog['products']:
+                for image in product['images']:
+                    target=root/image.lstrip('/')
+                    target.parent.mkdir(parents=True,exist_ok=True)
+                    target.write_bytes((ROOT/image.lstrip('/')).read_bytes())
+            (root/'data/image-provenance.json').write_bytes((ROOT/'data/image-provenance.json').read_bytes())
             (root/'data/catalog.json').write_text(json.dumps(self.catalog),encoding='utf-8')
             (root/'data/settings.json').write_text(json.dumps(self.settings),encoding='utf-8')
             module.build(root,out)
@@ -141,6 +146,7 @@ class BuildTests(unittest.TestCase):
             receipt['files'].update({'data/catalog.json':'ignored','assets/furoff-pro.jpg':'ignored','../outside.txt':'ignored'})
             (out/'build-receipt.json').write_text(json.dumps(receipt))
             self.catalog['products'][0]['slug']='new-verified-sourcing-slot'
+            (root/'data/image-provenance.json').write_bytes((ROOT/'data/image-provenance.json').read_bytes())
             (root/'data/catalog.json').write_text(json.dumps(self.catalog),encoding='utf-8')
             module.build(root,out)
             self.assertFalse(old.exists())
@@ -155,8 +161,12 @@ class BuildTests(unittest.TestCase):
             root=Path(temp)/'source';out=Path(temp)/'output'
             for directory in ['data','static','assets']:(root/directory).mkdir(parents=True,exist_ok=True)
             for name in ['store.css','store.js']:(root/'static'/name).write_text((ROOT/'static'/name).read_text(encoding='utf-8'),encoding='utf-8')
-            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg','freshseal-pro.jpg']:
-                (root/'assets'/image).write_bytes((ROOT/'assets'/image).read_bytes())
+            for product in self.catalog['products']:
+                for image in product['images']:
+                    target=root/image.lstrip('/')
+                    target.parent.mkdir(parents=True,exist_ok=True)
+                    target.write_bytes((ROOT/image.lstrip('/')).read_bytes())
+            (root/'data/image-provenance.json').write_bytes((ROOT/'data/image-provenance.json').read_bytes())
             (root/'data/catalog.json').write_text(json.dumps(self.catalog),encoding='utf-8')
             (root/'data/settings.json').write_text(json.dumps(self.settings),encoding='utf-8')
             module.build(root,out)

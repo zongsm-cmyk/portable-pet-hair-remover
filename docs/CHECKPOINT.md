@@ -32,3 +32,8 @@ Prior local mobile/text fixes were backed up under `C:\Users\askgs\Documents\dro
 ## P0 recovery boundary, 2026-11-03
 
 Root pages and their source generator had regressed after the earlier gated build. Current local recovery restores 15 slots (FurOff and FreshSeal previews plus 13 placeholders), with zero qualified products. FreshSeal supplier SKU and lithium specification remain unverified. Publication and current public HTTP are blocked in this restricted execution environment; consult the P0 receipt before making live-state claims. All original commercial stop gates remain in effect.
+
+
+## Visual catalog recovery, 2026-11-03 (supersedes the 13-slot visual state)
+
+15 researched candidates, 13 exact-CJ-photo previews, 2 visual holds. FreshSeal and anonymous slots retired from public generated output. All 15 remain unverified/noindex; feed empty, checkout false and sandbox unchanged. Worker and D1 untouched. 24 Python + 23 Node tests and 22 local Chrome route/viewport checks passed. Full evidence and source-media boundary: `receipts/visual-recovery/README.md`. Publication is a separate verification step.

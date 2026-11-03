@@ -1,0 +1,55 @@
+{
+  "baseline_sha": "ed7a7dd4994aed13794aa0a2fed0e0860fd9f21e",
+  "baseline_git_status": "clean (git status --short returned empty before edits)",
+  "backup": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-before-ed7a7dd.zip",
+  "backup_sha256": "4e2a3822014fd314ab1133d83a04384af4b0101290758ddcbc5f9de4d786868c",
+  "before_cards": 2,
+  "after_cards": 13,
+  "candidate_categories": {
+    "kitchen-innovations": 5,
+    "home-organization": 5,
+    "smart-cleaning-tools": 5
+  },
+  "photo_count": 13,
+  "photo_bytes_total": 972254,
+  "largest_photo_bytes": 147694,
+  "product_routes": 15,
+  "photographed_product_routes": 13,
+  "visual_hold": [
+    "cup-drainer",
+    "vacuum-hook"
+  ],
+  "python_tests": 24,
+  "node_tests": 23,
+  "browser_checks": 22,
+  "viewport_widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "browser_missing_assets": [],
+  "browser_errors": [],
+  "deterministic_build_equal": true,
+  "checkout_enabled": false,
+  "paypal_environment": "sandbox",
+  "verified_products": 0,
+  "feed_items": 0,
+  "worker_files_changed": false,
+  "D1_actions": 0,
+  "publication_verified": false,
+  "screenshots": "Real local Chrome renders through offline Playwright file routing; no public or Lighthouse claim",
+  "media_validation": "Original cached files decoded with Pillow; WEBP exactly regenerated and hash-matched; all 13 subjects visually inspected; original exact research URLs mapped per local file",
+  "http_boundary": "Cache producer used curl --fail; original HTTP headers not retained. Current direct requests blocked EACCES. MIME checked by decoded image magic; fresh HTTP headers not verified.",
+  "official_gallery_research": {
+    "cup-drainer": "https://cf.cjdropshipping.com/17218656/2407250629280327400.jpg",
+    "vacuum-hook": "https://cf.cjdropshipping.com/17057088/2401200800020327300.jpg"
+  },
+  "official_gallery_boundary": "Image references found on exact official CJ pages through web tool, but no downloaded binary or visual verification here; both remain visual_hold and absent from homepage.",
+  "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy",
+  "video_count": 0,
+  "local_head": "ed7a7dd4994aed13794aa0a2fed0e0860fd9f21e",
+  "commit_created": false,
+  "push_attempted": false,
+  "git_blocker": "git add --all: unable to create .git/index.lock: Permission denied; no commit or new revision to push"
+}

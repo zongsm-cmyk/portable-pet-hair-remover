@@ -21,7 +21,53 @@ class Links(HTMLParser):
 
 
 class StoreQualityTests(unittest.TestCase):
-    def test_published_files_equal_generator_including_worker_catalog(self):
+    def test_homepage_real_photo_cards_and_product_specific_provenance(self):
+        import hashlib
+        products = json.loads((ROOT/'data/catalog.json').read_text())['products']
+        media = {i['file']: i for i in json.loads((ROOT/'data/image-provenance.json').read_text())['images']}
+        home = (ROOT/'index.html').read_text(encoding='utf-8')
+        visible = [p for p in products if not p['visual_hold']]
+        self.assertGreaterEqual(len(visible), 10)
+        self.assertEqual(home.count('class="product-tile"'),len(visible))
+        for marker in ('sourcing slot','Details coming','freshseal','data-checkout-product','data-gallery-video'):
+            self.assertNotIn(marker,home.lower())
+        for p in products:
+            self.assertFalse(p['verified_for_checkout'])
+            self.assertEqual(p['stock_status'],'unknown')
+            self.assertNotIn('video',p)
+            for key in ('cj_variant_id','supplier_cost_usd','net_margin_usd','shipping_us_usd','shipping_uk_usd','eta_us_days','eta_uk_days'):
+                self.assertIsNone(p[key])
+            detail = (ROOT/'products'/p['slug']/'index.html').read_text(encoding='utf-8')
+            self.assertIn('noindex,follow',detail)
+            self.assertIn('View sourcing reference',detail)
+            self.assertIn(p['cj_product_url'],detail)
+            if p['visual_hold']:
+                self.assertNotIn('data-product-id="'+p['id']+'"',home)
+                self.assertEqual(p['images'],[])
+                continue
+            self.assertIn('data-product-id="'+p['id']+'"',home)
+            self.assertIn('/products/'+p['slug']+'/',home)
+            self.assertTrue(p['images'])
+            for image in p['images']:
+                record=media[image]; raw=(ROOT/image.lstrip('/')).read_bytes()
+                self.assertEqual(record['product_id'],p['id'])
+                self.assertEqual(record['listing_url'],p['cj_product_url'])
+                self.assertEqual(record['sha256'],hashlib.sha256(raw).hexdigest())
+                self.assertEqual(raw[:4],b'RIFF'); self.assertEqual(raw[8:12],b'WEBP')
+                self.assertLessEqual(len(raw),250*1024)
+                self.assertGreaterEqual(min(record['width'],record['height']),250)
+                self.assertIn(image,detail)
+
+    def test_visible_product_missing_photo_or_mismatched_provenance_fails_closed(self):
+        import copy
+        catalog=json.loads((ROOT/'data/catalog.json').read_text())
+        settings=json.loads((ROOT/'data/settings.json').read_text())
+        broken=copy.deepcopy(catalog);broken['products'][0]['images']=[]
+        with self.assertRaises(ValueError):module.validate(broken,settings)
+        broken=copy.deepcopy(catalog);broken['products'][0]['images']=catalog['products'][1]['images']
+        with self.assertRaises(ValueError):module.validate(broken,settings)
+
+    def test_publishable_files_equal_generator(self):
         with tempfile.TemporaryDirectory() as temp:
             module.build(output=Path(temp))
             for path in Path(temp).rglob('*'):
@@ -44,7 +90,7 @@ class StoreQualityTests(unittest.TestCase):
             self.assertNotIn('data-checkout-product=', html)
             self.assertNotIn('id="checkoutForm"', html)
 
-    def test_fifteen_unqualified_slots_with_two_honest_previews(self):
+    def test_fifteen_research_candidates_thirteen_photographed_previews(self):
         products = json.loads((ROOT/'data/catalog.json').read_text())['products']
         module.validate({'products': products}, json.loads((ROOT/'data/settings.json').read_text()))
         self.assertEqual(len(products), 15)
@@ -57,8 +103,11 @@ class StoreQualityTests(unittest.TestCase):
                 self.assertIsNone(p.get(key), (p['id'], key))
         by_id = {p['id']: p for p in products}
         self.assertEqual(by_id['furoff']['price_usd'], 34.99)
-        self.assertEqual(by_id['freshseal']['price_usd'], 24.99)
-        self.assertTrue(by_id['freshseal']['specs']['contains_lithium'])
+        self.assertNotIn('freshseal',by_id)
+        self.assertEqual(sum(bool(p['images']) for p in products),13)
+        self.assertEqual(sum(p['visual_hold'] for p in products),2)
+        for p in products:
+            if p['id'] != 'furoff': self.assertIsNone(p['price_usd'])
 
     def test_all_local_links_and_sitemap_routes_exist(self):
         for path in ROOT.rglob('*.html'):

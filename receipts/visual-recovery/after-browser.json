@@ -1,0 +1,848 @@
+{
+  "mode": "LOCAL_FILES_OFFLINE_BROWSER_ROUTING",
+  "browser": "156.0.8078.74",
+  "label": "after",
+  "rows": [
+    {
+      "route": "/",
+      "width": 320,
+      "images": [
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/press-release-ice-tray.webp",
+          "loaded": true,
+          "w": 700,
+          "h": 700
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/rotating-sink-caddy.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/push-down-garlic-chopper.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/space-saving-nine-hole-hanger.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/folding-multi-slot-closet-hanger.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/foldaway-nylon-storage-tote.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/flexible-drain-cleaning-spring.webp",
+          "loaded": true,
+          "w": 750,
+          "h": 750
+        },
+        {
+          "src": "/assets/products/reusable-microfiber-glass-cloth.webp",
+          "loaded": true,
+          "w": 600,
+          "h": 600
+        },
+        {
+          "src": "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/self-squeezing-mini-mop.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 13,
+      "buy": 0
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/press-release-ice-tray.webp",
+          "loaded": true,
+          "w": 700,
+          "h": 700
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/rotating-sink-caddy.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/push-down-garlic-chopper.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/space-saving-nine-hole-hanger.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/folding-multi-slot-closet-hanger.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/foldaway-nylon-storage-tote.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/flexible-drain-cleaning-spring.webp",
+          "loaded": true,
+          "w": 750,
+          "h": 750
+        },
+        {
+          "src": "/assets/products/reusable-microfiber-glass-cloth.webp",
+          "loaded": true,
+          "w": 600,
+          "h": 600
+        },
+        {
+          "src": "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/self-squeezing-mini-mop.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 13,
+      "buy": 0
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "images": [
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/press-release-ice-tray.webp",
+          "loaded": true,
+          "w": 700,
+          "h": 700
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/rotating-sink-caddy.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/push-down-garlic-chopper.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/space-saving-nine-hole-hanger.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/folding-multi-slot-closet-hanger.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/foldaway-nylon-storage-tote.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/flexible-drain-cleaning-spring.webp",
+          "loaded": true,
+          "w": 750,
+          "h": 750
+        },
+        {
+          "src": "/assets/products/reusable-microfiber-glass-cloth.webp",
+          "loaded": true,
+          "w": 600,
+          "h": 600
+        },
+        {
+          "src": "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/self-squeezing-mini-mop.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 13,
+      "buy": 0
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "images": [
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/press-release-ice-tray.webp",
+          "loaded": true,
+          "w": 700,
+          "h": 700
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/rotating-sink-caddy.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/push-down-garlic-chopper.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/space-saving-nine-hole-hanger.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/folding-multi-slot-closet-hanger.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/foldaway-nylon-storage-tote.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/flexible-drain-cleaning-spring.webp",
+          "loaded": true,
+          "w": 750,
+          "h": 750
+        },
+        {
+          "src": "/assets/products/reusable-microfiber-glass-cloth.webp",
+          "loaded": true,
+          "w": 600,
+          "h": 600
+        },
+        {
+          "src": "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/self-squeezing-mini-mop.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 13,
+      "buy": 0
+    },
+    {
+      "route": "/products/press-release-ice-tray/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/press-release-ice-tray.webp",
+          "loaded": true,
+          "w": 700,
+          "h": 700
+        },
+        {
+          "src": "/assets/products/press-release-ice-tray.webp",
+          "loaded": true,
+          "w": 700,
+          "h": 700
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/fruit-rinse-storage-bowl/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/rotating-sink-caddy/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/rotating-sink-caddy.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/rotating-sink-caddy.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/push-down-garlic-chopper/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/push-down-garlic-chopper.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/push-down-garlic-chopper.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/silicone-cup-drainer/",
+      "width": 390,
+      "images": [],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/space-saving-nine-hole-hanger/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/space-saving-nine-hole-hanger.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/space-saving-nine-hole-hanger.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/three-layer-cable-organizer/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/folding-multi-slot-closet-hanger/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/folding-multi-slot-closet-hanger.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/folding-multi-slot-closet-hanger.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/removable-suction-wall-hook/",
+      "width": 390,
+      "images": [],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/foldaway-nylon-storage-tote/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/foldaway-nylon-storage-tote.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/foldaway-nylon-storage-tote.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/furoff-pro-household-roller/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/flexible-drain-cleaning-spring/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/flexible-drain-cleaning-spring.webp",
+          "loaded": true,
+          "w": 750,
+          "h": 750
+        },
+        {
+          "src": "/assets/products/flexible-drain-cleaning-spring.webp",
+          "loaded": true,
+          "w": 750,
+          "h": 750
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/reusable-microfiber-glass-cloth/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/reusable-microfiber-glass-cloth.webp",
+          "loaded": true,
+          "w": 600,
+          "h": 600
+        },
+        {
+          "src": "/assets/products/reusable-microfiber-glass-cloth.webp",
+          "loaded": true,
+          "w": 600,
+          "h": 600
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/five-in-one-bottle-cleaning-brush/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/products/self-squeezing-mini-mop/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/self-squeezing-mini-mop.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/self-squeezing-mini-mop.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 0,
+      "buy": 0
+    },
+    {
+      "route": "/categories/kitchen-innovations/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/press-release-ice-tray.webp",
+          "loaded": true,
+          "w": 700,
+          "h": 700
+        },
+        {
+          "src": "/assets/products/fruit-rinse-storage-bowl.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/rotating-sink-caddy.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/push-down-garlic-chopper.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 4,
+      "buy": 0
+    },
+    {
+      "route": "/categories/home-organization/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/space-saving-nine-hole-hanger.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/three-layer-cable-organizer.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/folding-multi-slot-closet-hanger.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/foldaway-nylon-storage-tote.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        }
+      ],
+      "overflow": false,
+      "cards": 4,
+      "buy": 0
+    },
+    {
+      "route": "/categories/smart-cleaning-tools/",
+      "width": 390,
+      "images": [
+        {
+          "src": "/assets/products/furoff-pro-household-roller.webp",
+          "loaded": true,
+          "w": 900,
+          "h": 900
+        },
+        {
+          "src": "/assets/products/flexible-drain-cleaning-spring.webp",
+          "loaded": true,
+          "w": 750,
+          "h": 750
+        },
+        {
+          "src": "/assets/products/reusable-microfiber-glass-cloth.webp",
+          "loaded": true,
+          "w": 600,
+          "h": 600
+        },
+        {
+          "src": "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        },
+        {
+          "src": "/assets/products/self-squeezing-mini-mop.webp",
+          "loaded": true,
+          "w": 800,
+          "h": 800
+        }
+      ],
+      "overflow": false,
+      "cards": 5,
+      "buy": 0
+    }
+  ],
+  "missing": [],
+  "errors": [],
+  "screenshots": "Real Chrome headless renders, no Lighthouse run"
+}

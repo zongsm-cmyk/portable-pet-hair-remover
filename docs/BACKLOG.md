@@ -11,3 +11,12 @@
 - [ ] Indexing and checkout/tracking evidence before expansion beyond 15 approved products.
 
 No checkbox is satisfied merely because its code path exists.
+
+## Visual recovery follow-up
+
+- [x] Replace anonymous homepage slots with 13 exact-CJ-photo linked previews, retaining 15 research candidates.
+- [x] Local mobile/desktop screenshot and image-load verification; payments remain disabled.
+- [ ] Obtain/validate real local gallery images for cup-drainer and vacuum-hook (visual holds).
+- [ ] Refresh source HTTP headers and verify the public deployed revision.
+
+Supplier qualification and all commerce acceptance items above remain open.
