@@ -47,6 +47,9 @@ def secondary_media(cache):
     return result
 
 def main():
+    manifest = ROOT/'data/image-provenance.json'
+    if manifest.exists() and json.loads(manifest.read_text(encoding='utf-8')).get('canonical_media') == 'CJ_MULTIPHOTO_20261103':
+        raise ValueError('Canonical CJ galleries preserved. Use import_cj_galleries.py; this legacy importer cannot replace final catalog media.')
     existing = ROOT/'data/catalog.json'
     if existing.exists() and any(p.get('verified_for_checkout') for p in json.loads(existing.read_text(encoding='utf-8'))['products']):
         raise ValueError('Research importer cannot overwrite qualified commercial records')
@@ -74,6 +77,11 @@ def main():
                      features=['Handheld cylindrical ice mould', 'Press-release design shown in supplier photos'])
         p.update(images=[], specs={key:None for key in ('dimensions','weight_g','materials','contains_lithium','contains_liquid','medical')}, verified_for_checkout=False, stock_status='unknown', draft_slot=False,
                  visual_hold=True, visual_status='VISUAL_HOLD_NO_AUTHENTIC_IMAGE', source_status=candidate['source_status'])
+        p.update(target_launch_price_usd=None, pricing_status='PRICE_BEING_VERIFIED', qualification_evidence=None)
+        if p['id'] == 'drain-snake':
+            p.update(title='Flexible Drain Cleaning Spring', source_status='VARIANT_MISMATCH_60CM_CATALOG_VS_160CM_SUPPLIER_QUOTE_UNRESOLVED')
+        if p['id'] == 'fruit-colander':
+            p['source_status']='OBSERVED_VARIANT_628G_EXCEEDS_500G_LIMIT_NOT_QUALIFIED'
         r = receipt[p['id']]
         if r['status'] == 'OK':
             url = urlparse(r['source'])

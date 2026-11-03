@@ -38,7 +38,7 @@ FIT_NOTES = {
 }
 REQUIRED = set('id slug title category price_usd compare_at_usd supplier_cost_usd shipping_us_usd shipping_uk_usd net_margin_usd cj_sku cj_variant_id cj_product_url warehouse_origin eta_us_days eta_uk_days images short_problem_solved features specs verified_for_checkout'.split())
 REQUIRED.update(('target_launch_price_usd', 'pricing_status'))
-PREVIEW_DISCLOSURE = '<aside class="pricing-disclosure" aria-label="Preview pricing"><strong>Proposed prices. Payments paused.</strong><p>Prices shown are proposed launch targets, not offers. Exact product options, stock, US/UK shipping and import costs are being verified. Payments remain paused.</p></aside>'
+PREVIEW_DISCLOSURE = '<aside class="pricing-disclosure" aria-label="Collection preview"><strong>Product previews · Ordering unavailable.</strong><p>Prices, variants, inventory and delivery remain unverified. No payments accepted.</p></aside>'
 POLICIES = {
     'shipping': ('Shipping Policy', '''<p>Our initial delivery markets are the United States and United Kingdom. Online ordering is currently paused while supplier availability, carrier pricing and delivery estimates are verified.</p><h2>Before you pay</h2><p>Each available product will display its delivery estimate, origin and total shipping charge. An estimate is not a guaranteed arrival date. We will not advertise a carrier, prepaid duties or express delivery without confirmation for that product and destination.</p><h2>Processing and tracking</h2><p>Once an order is accepted, we will provide its processing estimate and tracking information when available. Customs checks, remote destinations and carrier delays can affect delivery. Contact us if your shipment is late or missing.</p><h2>Duties and taxes</h2><p>Any known charges collected by the store will be disclosed before payment. Import charges collected by local authorities or carriers will be described where applicable. We do not currently promise duties-paid delivery.</p>'''),
     'refunds': ('Refund & Return Policy', '''<p>Online ordering is currently paused. For an existing order, contact support with the order number, delivery date and the reason for your request.</p><h2>Requesting a return</h2><p>Contact us promptly to request return instructions. No additional voluntary return window or money-back guarantee is currently offered while ordering is paused. Obtain the correct return instructions and destination before sending anything. Do not send a return to a parcel's dispatch address without confirmation.</p><h2>Damaged, faulty or incorrect items</h2><p>Contact us promptly with photographs and your order details so we can assess a replacement or refund. This policy does not limit mandatory consumer rights that apply to your purchase.</p><h2>Costs and refunds</h2><p>For a change-of-mind return, the customer normally pays return shipping unless applicable law requires otherwise. For a confirmed faulty or incorrect item, we will provide an appropriate remedy and explain any return costs before you send it. Approved refunds are returned to the original payment method; processing time depends on the payment provider.</p>'''),
@@ -59,7 +59,50 @@ def eta_valid(value):
     if not isinstance(value, str):
         return False
     match = re.fullmatch(r'(\d+)\s*-\s*(\d+) (?:business )?days', value)
-    return bool(match and 0 < int(match[1]) <= int(match[2]) <= 14)
+    return bool(match and 0 < int(match[1]) <= int(match[2]) <= 12)
+
+def qualified_photo_count(p, provenance):
+    """Count individually reviewed distinct originals, never crops or composites."""
+    rows = [provenance[i] for i in p['images']]
+    approved = [r for r in rows if all(r.get(k) is True for k in
+                ('subject_verified', 'variant_verified', 'supplier_authorized', 'distinct_photo_verified'))
+                and r.get('visual_method') and r.get('rights_evidence')
+                and r.get('source_sha256') and r.get('original_url')
+                and min(r.get('width', 0), r.get('height', 0)) >= 250]
+    return min(len({r['source_sha256'] for r in approved}),
+               len({r['sha256'] for r in approved}), len({r['original_url'] for r in approved}))
+
+def validate_sellable_evidence(p, provenance):
+    if qualified_photo_count(p, provenance) < 4:
+        raise ValueError('SELLABLE requires four distinct authorized exact-variant photographs')
+    e = p.get('qualification_evidence') or {}
+    for key in ('supplier_availability', 'supplier_qc', 'silent_demo_15s', 'problem_solved', 'checkout_sandbox'):
+        if not isinstance(e.get(key), dict) or e[key].get('verified') is not True or not e[key].get('reference'):
+            raise ValueError('Missing verified evidence: '+key)
+    if not number(e.get('processing_hours'), positive=True) or e['processing_hours'] > 48:
+        raise ValueError('Verified processing must be <=48 hours')
+    margins = []
+    for country, dest in (('US', 'us'), ('GB', 'uk')):
+        market = (e.get('markets') or {}).get(country) or {}
+        comparison = market.get('market_competitor') or {}
+        if (comparison.get('same_variant_verified') is not True or not comparison.get('reference')
+                or not number(comparison.get('delivered_price_usd'), positive=True)
+                or not comparison.get('checked_at') or not market.get('landed_cost_reference')):
+            raise ValueError('Market comparison and landed-cost evidence required for '+country)
+        checked = datetime.fromisoformat(comparison['checked_at'].replace('Z', '+00:00'))
+        if checked.tzinfo is None or not 0 <= (datetime.now(timezone.utc)-checked).total_seconds() <= 7*86400:
+            raise ValueError('Market comparison must be no older than seven days')
+        costs = [market.get(k) for k in ('customs_usd', 'taxes_usd', 'payment_fees_usd', 'refund_reserve_usd')]
+        if not all(number(v) for v in costs):
+            raise ValueError('Customs, taxes, payment fees and refund reserve must be explicit')
+        landed = p['supplier_cost_usd'] + p[f'shipping_{dest}_usd'] + sum(costs)
+        revenue = p['price_usd'] + p[f'customer_shipping_{dest}_usd']
+        margins.append(revenue-landed)
+        if (revenue > comparison['delivered_price_usd'] or p['price_usd'] < 3*landed
+                or revenue-landed < 12 or (revenue-landed)/revenue < .60):
+            raise ValueError('Fails competitive price, 3x all-in cost or safe net margin')
+    if p['net_margin_usd'] > round(min(margins), 2) or p['net_margin_usd'] < 12:
+        raise ValueError('Catalog net margin must not overstate either destination margin')
 
 def validate(catalog, settings, root=ROOT):
     if not isinstance(catalog, dict) or not isinstance(catalog.get('products'), list):
@@ -74,6 +117,7 @@ def validate(catalog, settings, root=ROOT):
     now = datetime.now(timezone.utc)
     provenance_file = root/'data/image-provenance.json'
     provenance = {i['file']:i for i in json.loads(provenance_file.read_text(encoding='utf-8'))['images']} if provenance_file.is_file() else {}
+    published_hashes, published_sources, published_urls = set(), set(), set()
     for p in products:
         if any(p.get(key) is not None for key in ('rating', 'review_count', 'countdown', 'savings_pct')):
             raise ValueError('Unsupported review, urgency or discount claims are prohibited')
@@ -82,14 +126,8 @@ def validate(catalog, settings, root=ROOT):
             raise ValueError(f"Missing catalog fields for {p['id']}: {sorted(missing)}")
         if type(p['verified_for_checkout']) is not bool or not isinstance(p['images'],list) or not isinstance(p['features'],list) or not isinstance(p['specs'],dict):
             raise ValueError(f"Invalid catalog types: {p['id']}")
-        target = p['target_launch_price_usd']
-        if p.get('visual_hold') or p.get('draft_slot'):
-            if target is not None or p['pricing_status'] != 'NOT_EVALUATED':
-                raise ValueError('Visual holds and draft slots must remain unpriced')
-        elif (not number(target, positive=True)
-              or Decimal(str(target)) * 100 != (Decimal(str(target)) * 100).to_integral_value()
-              or p['pricing_status'] != 'NONBINDING_PREVIEW_TARGET'):
-            raise ValueError(f"Visible product requires a positive, cent-precision nonbinding target: {p['id']}")
+        if p['target_launch_price_usd'] is not None or p['pricing_status'] != 'PRICE_BEING_VERIFIED':
+            raise ValueError('Retired price proposals must stay outside the live catalog')
         for value in p['images']:
             if not isinstance(value,str) or not value.startswith('/assets/') or '..' in value or not (root / value.lstrip('/')).is_file():
                 raise ValueError(f"Images must be existing local assets: {p['id']}")
@@ -97,10 +135,20 @@ def validate(catalog, settings, root=ROOT):
             raw = (root/value.lstrip('/')).read_bytes()
             if not media or media['product_id'] != p['id'] or media['cj_sku'] != p['cj_sku'] or media['listing_url'] != p['cj_product_url'] or media['sha256'] != hashlib.sha256(raw).hexdigest():
                 raise ValueError(f"Image must match product-specific provenance and hash: {p['id']}")
-            if len(raw) > 256000 or raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
+            if len(raw) >= 256000 or raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
                 raise ValueError('Preview media must be an optimized real WEBP')
-        if not p.get('visual_hold') and not p.get('draft_slot') and not p['images']:
-            raise ValueError('A visible product must have an authenticated local photograph')
+            source = urlparse(media.get('original_url', ''))
+            if (source.scheme != 'https' or source.hostname not in {'cf.cjdropshipping.com', 'oss-cf.cjdropshipping.com', 'cc-west-usa.oss-accelerate.aliyuncs.com'}
+                    or source.username or source.password or not re.fullmatch(r'[a-f0-9]{64}', media.get('source_sha256', ''))
+                    or media.get('bytes') != len(raw) or min(media.get('width', 0), media.get('height', 0)) < 250):
+                raise ValueError('Gallery requires exact official CJ source, original SHA and dimensions')
+            if media['sha256'] in published_hashes or media['source_sha256'] in published_sources or media['original_url'] in published_urls:
+                raise ValueError('Gallery contains duplicate source or optimized photograph')
+            published_hashes.add(media['sha256']); published_sources.add(media['source_sha256']); published_urls.add(media['original_url'])
+        if not p.get('visual_hold') and not p.get('draft_slot') and not 4 <= len(p['images']) <= 5:
+            raise ValueError('A visible product requires four to five distinct authenticated local photographs')
+        if p.get('visual_hold') and (p['images'] or p['verified_for_checkout']):
+            raise ValueError('Visual holds must remain unpictured and unqualified')
         video = p.get('video')
         if video:
             video_url = urlparse(video.get('url',''))
@@ -129,7 +177,7 @@ def validate(catalog, settings, root=ROOT):
         if verified.tzinfo is None or not 0 <= (now - verified).total_seconds() <= 7*86400 or p['stock_status'] != 'in_stock':
             raise ValueError('Verified supplier stock evidence must be no older than 7 days')
         if not p['images'] or not eta_valid(p['eta_us_days']) or not eta_valid(p['eta_uk_days']):
-            raise ValueError('Verified product requires images and US/UK delivery <=14 days')
+            raise ValueError('Verified product requires images and US/UK delivery <=12 days')
         if not number(p['specs'].get('weight_g'),positive=True) or p['specs']['weight_g'] >= 500 or any(p['specs'].get(key) is not False for key in ('contains_lithium','contains_liquid','medical')):
             raise ValueError('Verified product requires under-500g weight and confirmed safe specification')
         for key in ('customer_shipping_us_usd','customer_shipping_uk_usd'):
@@ -137,11 +185,7 @@ def validate(catalog, settings, root=ROOT):
                 raise ValueError('Customer shipping must be explicit and numeric')
             if Decimal(str(p[key])) * 100 != (Decimal(str(p[key])) * 100).to_integral_value():
                 raise ValueError('Customer shipping must use at most two decimal places')
-        for destination in ('us','uk'):
-            landed = p['supplier_cost_usd'] + p[f'shipping_{destination}_usd']
-            margin = p['price_usd']*0.955 - landed
-            if p['price_usd'] < landed*3 and margin < 12:
-                raise ValueError('Product fails both minimum markup and contribution rules')
+        validate_sellable_evidence(p, provenance)
         if p['compare_at_usd'] is not None:
             raise ValueError('Compare-at pricing is disabled until historical-price evidence is implemented')
     if settings.get('checkout_enabled'):
@@ -174,7 +218,11 @@ def build(root=ROOT, output=None):
     links = ''.join(f'<a href="/categories/{key}/">{enc(value[0])}</a>' for key,value in CATEGORIES.items())
     nav = f'<a class="skip" href="#main">Skip to content</a><div class="announcement">CONSIDERED TOOLS. EVERYDAY POSSIBILITIES. &nbsp; · &nbsp; ONLINE CHECKOUT CURRENTLY PAUSED</div><header class="header"><nav class="nav" aria-label="Main navigation"><a class="wordmark" href="/">Verve<span>Living</span><sup style="font:13px Arial;vertical-align:top;letter-spacing:0">™</sup></a><div class="nav-links">{links}</div><a class="nav-contact" href="/policies/contact/">Contact &amp; order lookup ↗</a></nav></header>'
     footer = f'<footer class="footer"><div class="wrap"><div class="footer-grid"><div class="footer-brand"><a class="wordmark" href="/">Verve<span>Living</span></a><p>Smart Everyday Problem Solvers.<br>Thoughtfully selected for your kitchen, your home, and your everyday.</p><p>A storefront by Askoure Systems.</p></div><div><h4>Explore</h4>{links}</div><div><h4>Good to know</h4><a href="/policies/shipping/">Shipping policy</a><a href="/policies/refunds/">Refund &amp; return policy</a><a href="/policies/privacy/">Privacy policy</a><a href="/policies/terms/">Terms of service</a><a href="/policies/contact/">Contact &amp; order lookup</a></div></div><div class="footer-bottom"><span>© 2026 VerveLiving · Askoure Systems</span><span>Product availability is being verified. No payments are currently accepted.</span></div></div></footer>'
-    nav = nav.replace('</nav>', '<a class="nav-cart" href="/cart/">Cart <span data-cart-count>0</span></a></nav>')
+    # Native disclosure works with keyboard and without JavaScript; desktop links stay direct.
+    nav = nav.replace('<div class="nav-links">', '<div class="nav-links desktop-links">')
+    mobile_links = links + '<a href="/policies/contact/">Contact support</a><a href="/track-order/">Track an order</a><a href="/policies/shipping/">Shipping &amp; order information</a>'
+    nav = nav.replace('</nav>', '<a class="nav-cart" href="/cart/">Cart <span data-cart-count>0</span></a><details class="mobile-menu"><summary>Menu <span aria-hidden="true">+</span></summary><div class="mobile-menu-panel">'+mobile_links+'</div></details></nav>')
+    nav = nav.replace('CONSIDERED TOOLS. EVERYDAY POSSIBILITIES. &nbsp; · &nbsp; ONLINE CHECKOUT CURRENTLY PAUSED', 'A considered home, one everyday detail at a time.')
     footer = footer.replace('<h4>Good to know</h4>', '<h4>Good to know</h4><a href="/cart/">Your cart</a><a href="/track-order/">Track an order</a>')
     public_settings = {key:settings[key] for key in ('checkout_enabled','api_base','paypal_environment')}
     public_settings['catalog'] = [{key:p[key] for key in ('id','slug','title','price_usd','images','customer_shipping_us_usd','customer_shipping_uk_usd','supplier_verified_at')} for p in approved]
@@ -187,31 +235,50 @@ def build(root=ROOT, output=None):
         og_image = f'<meta property="og:image" content="{enc(site+image)}">' if image else ''
         ld = f'<script type="application/ld+json">{json_script(schema)}</script>' if schema else ''
         return f'<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{enc(title)} | VerveLiving</title><meta name="description" content="{enc(description)}"><link rel="canonical" href="{enc(site+path)}"><meta name="robots" content="{"noindex,follow" if noindex else "index,follow"}"><meta property="og:type" content="{"product" if schema else "website"}"><meta property="og:title" content="{enc(title)}"><meta property="og:description" content="{enc(description)}"><meta property="og:url" content="{enc(site+path)}">{og_image}<meta property="og:site_name" content="VerveLiving"><link rel="stylesheet" href="/assets/store.css?v={style_version}">{ld}</head><body>{nav}<main id="main" class="wrap"><p data-cart-feedback role="status" aria-live="polite"></p>{PREVIEW_DISCLOSURE if not settings["checkout_enabled"] else ""}{body}</main>{footer}<script type="application/json" id="store-config">{json_script(public_settings)}</script><script src="/assets/store.js?v={script_version}" defer></script></body></html>\n'
+    # Art direction selects authentic frames, never rewrites the catalog or gallery order.
+    preview_frames = {'fruit-colander':4, 'folding-hanger':1, 'garlic-press':5,
+                      'bottle-brush':3, 'faucet-caddy':3, 'mini-mop':3,
+                      '9hole-hanger':3, 'cable-organizer':4, 'foldable-tote':4,
+                      'drain-snake':2}
     def photo(p, lazy=True, cls=''):
-        return f'<img class="{cls}" src="{enc(p["images"][0])}" alt="{enc(p["title"])} — supplier product photograph" width="900" height="900" '+('loading="lazy"' if lazy else 'fetchpriority="high"')+'>'
+        src = p['images'][min(preview_frames.get(p['id'], 1), len(p['images']))-1]
+        return f'<img class="{cls}" src="{enc(src)}" alt="{enc(p["title"])} — supplier product photograph; variant unverified" width="900" height="900" '+('loading="lazy" decoding="async"' if lazy else 'fetchpriority="high"')+'>'
     def category_card(key):
         name, subtitle, description, kind = CATEGORIES[key]
-        pick = next(p for p in visible if p['id']=={'kitchen-innovations':'fruit-colander','home-organization':'cable-organizer','smart-cleaning-tools':'furoff'}[key])
         count = sum(p['category']==key for p in visible)
-        return f'<a class="category-card" href="/categories/{key}/"><div class="category-photo">{photo(pick)}</div><span class="eyebrow">0{list(CATEGORIES).index(key)+1} / {count} photographed previews</span><h3>{enc(name)} <span aria-hidden="true">↗</span></h3><p>{enc(description)}</p></a>'
+        featured_id = {'kitchen-innovations':'fruit-colander', 'home-organization':'folding-hanger', 'smart-cleaning-tools':'furoff'}[key]
+        featured = next(p for p in visible if p['id']==featured_id and p['category']==key)
+        return f'<a class="category-card" href="/categories/{key}/" data-featured-product="{enc(featured["id"])}"><div class="category-photo">{photo(featured)}</div><span class="eyebrow">{count} product previews</span><h3>{enc(name)}</h3><p>{enc(description)}</p></a>'
     def card(p):
         price = f'<p class="preview-price">${p["price_usd"]:.2f} USD</p>' if p['verified_for_checkout'] else preview_price(p)
-        if p['verified_for_checkout']:
+        if p['verified_for_checkout'] and settings['checkout_enabled']:
             price += f'<button class="button" type="button" data-add-cart="{enc(p["id"])}" aria-label="Add {enc(p["title"])} to cart">Add to cart</button>'
-        return f'<article class="product-tile" data-product-id="{enc(p["id"])}" data-product-title="{enc(p["title"])}"><a class="card-photo" href="/products/{p["slug"]}/">{photo(p)}</a><div class="card-copy">{price}<h3><a href="/products/{p["slug"]}/">{enc(p["title"])}</a></h3><p class="muted">{enc(p["short_problem_solved"])}</p><a class="text-link" href="/products/{p["slug"]}/">View details <span aria-hidden="true">↗</span></a></div></article>'
+        category_label = {'kitchen-innovations':'Kitchen', 'home-organization':'Organization', 'smart-cleaning-tools':'Cleaning'}[p['category']]
+        return f'<article class="product-tile" data-product-id="{enc(p["id"])}" data-product-title="{enc(p["title"])}"><a class="card-photo" href="/products/{p["slug"]}/">{photo(p)}</a><div class="card-copy"><span class="card-category">{category_label}</span><h3><a href="/products/{p["slug"]}/">{enc(p["title"])}</a></h3><p class="muted">{enc(p["short_problem_solved"])}</p>{price}<a class="text-link" href="/products/{p["slug"]}/">View product <span aria-hidden="true">↗</span></a></div></article>'
     def preview_price(p, detail=False):
-        label = 'Provisional launch target — not a payable price' if detail else 'Planned launch price'
-        verification = '<p class="target-verification">Exact variant, stock, US/UK shipping, tax and import costs await verification.</p>' if detail else ''
-        return f'<div class="target-price{" target-price-detail" if detail else ""}"><span class="target-price-label">{label}</span><strong class="target-price-amount">${p["target_launch_price_usd"]:.2f} <span>USD</span></strong><span class="target-price-status">Not available to order</span>{verification}</div>'
-    hero_product = next(p for p in visible if p['id']=='cable-organizer')
-    home = f'<section class="hero"><div class="hero-copy"><span class="eyebrow">For the little rituals of home</span><h1>Less friction.<br><em>More living.</em></h1><p>Cables in their place. Adapters together. A little more order in your everyday bag. Explore practical finds for home and travel.</p><a class="button" href="#collection">Explore collection <span aria-hidden="true">↗</span></a><p class="hero-note">Collection preview / sourcing validation.<br>Buying is unavailable while product and delivery details are checked.</p></div><a class="hero-photograph" href="/products/{hero_product["slug"]}/">{photo(hero_product,False)}<span class="hero-caption">02 / A place for the everyday <b>{enc(hero_product["title"])} ↗</b></span></a></section>'
-    home += f'<section id="collections" class="collections"><div class="section-head"><div><span class="eyebrow">A home, thoughtfully considered</span><h2>Small changes. Better rhythms.</h2></div><p>Three collections. Fifteen researched ideas.<br>{len(visible)} photographed previews to explore.</p></div><div class="category-grid">'+''.join(category_card(key) for key in CATEGORIES)+'</div></section>'
-    home += '<section id="collection" class="collection"><div class="section-head"><div><span class="eyebrow">The collection notebook</span><h2>Useful by nature.</h2></div><p>Explore the details, without the rush.<br>These previews are not yet open for orders.</p></div><nav class="collection-nav" aria-label="Browse collection categories">'+''.join(f'<a href="#{key}">{enc(value[0])}</a>' for key,value in CATEGORIES.items())+'</nav>'
+        pending = '<p class="photo-pending">Additional product photos under verification</p>' if len(p['images']) < 4 else ''
+        label = 'Price being verified' if detail else 'Price under verification'
+        photos = f'<span class="photo-count">{len(p["images"])} supplier photos</span>' if p['images'] and not detail else ''
+        return f'<p class="preview-price">{label}</p><p class="buying-status">Research preview · Not available to order</p>'+photos+pending
+    def unavailable(p):
+        reason_id = 'ordering-unavailable-'+p['id']
+        return f'<div class="purchase-unavailable"><button class="button buy-now" type="button" disabled aria-describedby="{reason_id}">Buy now</button><p id="{reason_id}" class="buying-status">Ordering is currently unavailable: product inventory, shipping and checkout not verified</p><a class="text-link" href="mailto:{enc(email)}?subject={quote("Availability: "+p["title"],safe="")}">Ask about availability</a></div>'
+    hero_product = next(p for p in visible if p['id']=='furoff')
+    hero_path = '/products/'+hero_product['slug']+'/'
+    home = '<section class="hero hero-editorial"><div class="hero-copy"><span class="eyebrow">Considered for the everyday</span><h1>Thoughtful finds.<br><em>A home in balance.</em></h1><p>Explore practical tools for kitchen rituals, calmer spaces and everyday cleaning.</p><a class="button" href="#collection">Explore the collection <span aria-hidden="true">↗</span></a><p class="hero-note">All products await qualification. Ordering is paused.</p></div><figure class="hero-feature"><a class="hero-photograph" href="'+enc(hero_path)+'" aria-label="View '+enc(hero_product['title'])+'">'+photo(hero_product, lazy=False, cls='hero-product-photo')+'</a><figcaption class="hero-caption"><a href="'+enc(hero_path)+'"><b>'+enc(hero_product['title'])+'</b><span>Genuine CJ photography · Variant unverified</span></a><span aria-hidden="true">↗</span></figcaption></figure></section>'
+    home = home.replace('Thoughtful finds.<br><em>A home in balance.</em>', 'Less mess.<br><em>More living.</em>')
+    home = home.replace('Explore practical tools for kitchen rituals, calmer spaces and everyday cleaning.', 'Tools for the fur on the sofa, the busy kitchen and the everyday things that need a place.')
+    home = home.replace('<p class="hero-note">', '<a class="text-link hero-secondary" href="#collections">Browse by room <span aria-hidden="true">↓</span></a><p class="hero-note">')
+    home += '<section class="collection sales-collection" aria-label="Available products"><h2>Ordering is paused</h2>'+(''.join(card(p) for p in approved) if settings['checkout_enabled'] and approved else '<p>No qualified products are available to order.</p>')+'</section>'
+    home += f'<section id="collections" class="collections"><div class="section-head"><div><span class="eyebrow">Research collections</span><h2>Small changes. Better rhythms.</h2></div><p>Three collections. Fifteen researched ideas.<br>{len(visible)} photographed previews to explore.</p></div><div class="category-grid">'+''.join(category_card(key) for key in CATEGORIES)+'</div></section>'
+    home += '<section class="editorial" aria-labelledby="everyday-title"><div><span class="eyebrow">The everyday, considered</span><h2 id="everyday-title">A little order.<br>A little breathing room.</h2><p>Start with the moments you know: putting groceries away, finding a cable or tidying up after a pet.</p></div><div class="editorial-notes"><article><span>01 / In the kitchen</span><h3>From rinse to reset.</h3><p>Explore drain baskets, bottle brushes and sink organizers. Check each preview for the design and fit details still being confirmed.</p></article><article><span>02 / Around the home</span><h3>Give the small things a place.</h3><p>Multi-slot hangers and cable cases offer different ways to organize. Compare the pictured configurations before choosing what fits your space.</p></article><article><span>03 / After the everyday</span><h3>Meet the little messes.</h3><p>Take a closer look at the household roller, cloth and mini mop. Surface suitability and care instructions still need verification.</p></article></div></section>'
+    home += '<section id="collection" class="collection"><div class="section-head"><div><span class="eyebrow">The preview collection</span><h2>Useful by design.</h2></div><p>Explore the details, without the rush.<br>These previews are not yet open for orders.</p></div><nav class="collection-nav" aria-label="Browse collection categories">'+''.join(f'<a href="#{key}">{enc(value[0])}</a>' for key,value in CATEGORIES.items())+'</nav>'
     for key,(name,subtitle,desc,kind) in CATEGORIES.items():
         members = [p for p in visible if p['category']==key]
         home += f'<section class="collection-group" id="{key}"><div class="group-heading"><h2>{enc(name)}</h2><p>{len(members)} photographed previews / 5 researched candidates</p></div><div class="product-list">'+''.join(card(p) for p in members)+'</div></section>'
     home += '</section><section class="promise"><span class="eyebrow">Considered before it reaches you</span><h2>A clear picture, from the start.</h2><p>We are checking exact variants, stock and delivery costs before opening orders. Photography is supplied by CJ for the corresponding product; pictured colours and configurations may vary. Two additional candidates are held back until matching photography is confirmed.</p><a class="text-link" href="/policies/contact/">A question about the collection? Get in touch ↗</a></section>'
-    generated['index.html'] = page('Practical finds for a thoughtful home','Explore photographed product previews for kitchen rituals, home organization and everyday cleaning.', '/', home, image=hero_product['images'][0])
+    home = home.replace('<h2>A clear picture, from the start.</h2>', '<h2>A clear picture, from the start.</h2><div class="selection-steps"><p><b>Look at the everyday.</b> We group researched tools around kitchen routines, storage and household cleaning.</p><p><b>Look closer at the product.</b> We retain the supplier photographs and identify specifications that still need checking.</p><p><b>Verify before offering.</b> Exact variants, media rights, supplier checks, costs and checkout evidence must be confirmed before ordering opens.</p></div>')
+    generated['index.html'] = page('Practical finds for a thoughtful home','Explore photographed product previews for kitchen rituals, home organization and everyday cleaning.', '/', home)
     sitemap_paths = ['/']
     for key, (name,subtitle,desc,kind) in CATEGORIES.items():
         members = [p for p in visible if p['category']==key]
@@ -235,19 +302,24 @@ def build(root=ROOT, output=None):
             delivery = ''
             if p['verified_for_checkout']:
                 delivery = '<section class="notice"><strong>Delivery options</strong><p>' + '<br>'.join(f'{country}: {enc(p[f"eta_{dest}_days"])} · ${p[f"customer_shipping_{dest}_usd"]:.2f} USD shipping per item · ${p["price_usd"]+p[f"customer_shipping_{dest}_usd"]:.2f} USD total for one item' for country,dest in [('United States','us'),('United Kingdom','uk')])+'</p></section>'
-            checkout = '<p class="buying-status" role="status">Buying unavailable — sourcing verification pending.</p>'
-            if p['verified_for_checkout']:
+            checkout = unavailable(p)
+            if active:
                 checkout = delivery + f'<div class="product-actions"><label for="quantity">Quantity</label><input id="quantity" type="number" min="1" max="10" step="1" value="1"><button type="button" class="button" data-add-cart="{enc(p["id"])}">Add to cart</button><a class="text-link" href="/cart/">View cart</a></div><p data-checkout-message role="status"></p>'
             features = ''.join(f'<li>{enc(feature)}</li>' for feature in p['features'])
             specs_text = ' · '.join(enc(label)+': '+enc(p['specs'][key]) for key,label in [('dimensions','Dimensions'),('weight_g','Weight (g)'),('materials','Materials')] if p['specs'].get(key) is not None) or 'Dimensions, weight, materials and compatibility will be published after the exact supplier variant has been verified.'
             enquiry_subject = quote('Product enquiry: '+p['title'], safe='')
-            gallery = '<div class="product-gallery"><div class="product-image"><img data-gallery-main src="'+enc(p['images'][0])+'" alt="'+enc(p['title'])+' product preview" width="650" height="650"></div><div class="gallery-thumbnails" role="group" aria-label="Product preview images">'+''.join('<button type="button" data-gallery-src="'+enc(src)+'" aria-label="View product image '+str(i+1)+'" aria-pressed="'+('true' if i==0 else 'false')+'"><img src="'+enc(src)+'" alt="Product preview angle '+str(i+1)+'" width="84" height="84"></button>' for i,src in enumerate(p['images']))+'</div></div>'
+            count = len(p['images'])
+            def gallery_alt(i):
+                return f"{p['title']} - Supplier product image {i} of {count}; color may vary"
+            gallery = '<div class="product-gallery"><div class="product-image"><img data-gallery-main src="'+enc(p['images'][0])+'" alt="'+enc(gallery_alt(1))+'" width="650" height="650" aria-describedby="gallery-caption"></div><p id="gallery-caption" data-gallery-caption aria-live="polite">'+enc(gallery_alt(1))+'</p><div class="gallery-thumbnails" role="group" aria-label="Supplier product images">'+''.join('<button type="button" data-gallery-src="'+enc(src)+'" aria-label="View product image '+str(i+1)+' of '+str(count)+'" aria-pressed="'+('true' if i==0 else 'false')+'"><img src="'+enc(src)+'" alt="'+enc(gallery_alt(i+1))+'" width="84" height="84"></button>' for i,src in enumerate(p['images']))+'</div><p class="photo-note">'+enc(p.get('photo_note', 'Colors shown for illustration; exact variant to be verified.'))+'</p></div>'
             video = p.get('video') or {}
             if video.get('rights_verified') is True and video.get('matches_product_verified') is True and video.get('cj_sku') == p['cj_sku']:
                 video_button = '<button class="video-thumbnail" type="button" data-gallery-video="'+enc(video['url'])+'" aria-label="Watch product demonstration" aria-pressed="false">▶<span>Watch demo</span></button>'
                 gallery = gallery.replace('</div></div>',video_button+'</div></div>')
             display_price = f'${p["price_usd"]:.2f} USD' if p['verified_for_checkout'] else preview_price(p, detail=True)
-            body = breadcrumb+f'<section class="product-layout">{gallery}<div class="product-copy"><span class="eyebrow">{enc(CATEGORIES[p["category"]][0])}</span><h1>{enc(p["title"])}</h1><div class="price">{display_price}</div><p class="lead">{enc(p["short_problem_solved"])}</p><span class="pill">{"Details confirmed" if p["verified_for_checkout"] else "Details being confirmed"}</span><ul>{features}</ul><div class="notice">{"Delivery estimates and any charges are shown before payment." if p["verified_for_checkout"] else "This is a product preview. Exact specifications, supplier stock, delivery timing and shipping costs are being confirmed. No payment is requested."}</div>{checkout}<a class="text-link" href="mailto:{enc(email)}?subject={enc(enquiry_subject)}">Ask us about this product ↗</a><details><summary>Product details</summary><p>{specs_text}</p></details><details><summary>Delivery &amp; returns</summary><p>Initial markets: United States and United Kingdom. Confirmed product-specific delivery estimates will appear when ordering opens. <a href="/policies/shipping/">Shipping policy</a> · <a href="/policies/refunds/">Return policy</a>.</p></details><details><summary>Photography &amp; sourcing</summary><p>Supplier photography from the corresponding CJ listing. Pictured options may differ from the final selected variant. No stock or delivery commitment is implied.</p><a href="{enc(p["cj_product_url"])}" target="_blank" rel="nofollow noopener">View sourcing reference</a><p>CJ is the supplier website, separate from VerveLiving.</p></details><details><summary>Secure payments</summary><p>Online payments are currently paused. When enabled, PayPal will process payment; Buyer Protection may apply to eligible transactions under PayPal’s terms.</p></details></div></section>'
+            body = breadcrumb+f'<section class="product-layout">{gallery}<div class="product-copy"><span class="eyebrow">{enc(CATEGORIES[p["category"]][0])}</span><h1>{enc(p["title"])}</h1><div class="price">{display_price}</div>{checkout}<p class="lead">{enc(p["short_problem_solved"])}</p><span class="pill">{"Details confirmed" if p["verified_for_checkout"] else "Details being confirmed"}</span><ul>{features}</ul><div class="notice">{"Delivery estimates and any charges are shown before payment." if p["verified_for_checkout"] else "This is a product preview. Exact specifications, supplier stock, delivery timing and shipping costs are being confirmed. No payment is requested."}</div><a class="text-link" href="mailto:{enc(email)}?subject={enc(enquiry_subject)}">Ask us about this product ↗</a><details><summary>Product details</summary><p>{specs_text}</p></details><details><summary>Delivery &amp; returns</summary><p>Initial markets: United States and United Kingdom. Confirmed product-specific delivery estimates will appear when ordering opens. <a href="/policies/shipping/">Shipping policy</a> · <a href="/policies/refunds/">Return policy</a>.</p></details><details><summary>Photography &amp; sourcing</summary><p>Supplier photography from the corresponding CJ listing. Pictured options may differ from the final selected variant. No stock or delivery commitment is implied.</p><a href="{enc(p["cj_product_url"])}" target="_blank" rel="nofollow noopener">View sourcing reference</a><p>CJ is the supplier website, separate from VerveLiving.</p></details><details><summary>Secure payments</summary><p>Online payments are currently paused. When enabled, PayPal will process payment; Buyer Protection may apply to eligible transactions under PayPal’s terms.</p></details></div></section>'
+        if p.get('visual_hold') or p.get('draft_slot'):
+            body = body.replace('</h1>', '</h1><p>Price being verified</p><p>Additional product photos under verification</p>'+unavailable(p), 1)
         faq = f'<section class="product-faq"><h2>Fit &amp; product questions</h2><details open><summary>Will it fit my setup?</summary><p>{enc(FIT_NOTES[p["id"]])}</p></details><details><summary>Which option will I receive?</summary><p>Colours, sizes and pictured accessories may represent different supplier variants. The exact variant and included pieces must be confirmed before a product is offered for sale.</p></details><details><summary>When can it ship?</summary><p>There is no confirmed shipping quote for this preview. Available destinations, shipping charges, import-charge terms and delivery estimates must be established for the selected variant before ordering opens. <a href="/policies/shipping/">Read shipping information</a>.</p></details></section>'
         if p['verified_for_checkout']:
             faq = faq.replace('There is no confirmed shipping quote for this preview. Available destinations, shipping charges, import-charge terms and delivery estimates must be established for the selected variant before ordering opens.', 'Review the product delivery options above and choose US or UK in the cart. Estimates are not guaranteed arrival dates. Check the selected variant and included pieces before ordering.')

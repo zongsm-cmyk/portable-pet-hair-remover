@@ -7,6 +7,7 @@ import shutil
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -21,9 +22,15 @@ class BuildTests(unittest.TestCase):
 
     def verified(self):
         p=next(p for p in self.catalog['products'] if p['id']=='furoff')
-        p.update(price_usd=34.99,verified_for_checkout=True,cj_variant_id='TEST-VARIANT',warehouse_origin='CN',supplier_cost_usd=2,shipping_us_usd=6,shipping_uk_usd=5,net_margin_usd=25,eta_us_days='8-14 business days',eta_uk_days='8-14 business days',supplier_verified_at=datetime.now(timezone.utc).isoformat(),stock_status='in_stock',shipping_us_line='CJPacket Ordinary',shipping_uk_line='CJPacket Ordinary')
+        p.update(price_usd=34.99,verified_for_checkout=True,cj_variant_id='TEST-VARIANT',warehouse_origin='CN',supplier_cost_usd=2,shipping_us_usd=6,shipping_uk_usd=5,net_margin_usd=25,eta_us_days='8-12 business days',eta_uk_days='8-12 business days',supplier_verified_at=datetime.now(timezone.utc).isoformat(),stock_status='in_stock',shipping_us_line='CJPacket Ordinary',shipping_uk_line='CJPacket Ordinary')
         p.update(customer_shipping_us_usd=0,customer_shipping_uk_usd=0)
+        p['net_margin_usd']=24.99
         p['specs'].update(weight_g=200,contains_lithium=False,contains_liquid=False,medical=False)
+        # Synthetic qualification fixture only. Real photo gating is tested separately.
+        photo_patch=patch.object(module,'qualified_photo_count',return_value=4)
+        photo_patch.start();self.addCleanup(photo_patch.stop)
+        p['qualification_evidence']={k:{'verified':True,'reference':'SYNTHETIC-TEST-ONLY'} for k in ('supplier_availability','supplier_qc','silent_demo_15s','problem_solved','checkout_sandbox')}
+        p['qualification_evidence'].update(processing_hours=48,markets={country:{'market_competitor':{'same_variant_verified':True,'reference':'https://example.test/competitor','checked_at':datetime.now(timezone.utc).isoformat(),'delivered_price_usd':35},'landed_cost_reference':'SYNTHETIC-TEST-ONLY','customs_usd':0,'taxes_usd':0,'payment_fees_usd':1,'refund_reserve_usd':1} for country in ('US','GB')})
         return p
 
     def test_icons_have_outline_fallback_without_css(self):
@@ -39,9 +46,9 @@ class BuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             module.build(output=Path(temp))
             html=(Path(temp)/'products/furoff-pro-household-roller/index.html').read_text(encoding='utf-8')
-            self.assertEqual(html.count('data-gallery-src='),2)
+            self.assertEqual(html.count('data-gallery-src='),4)
             self.assertNotIn('data-gallery-video=',html)
-            self.assertIn('Buying unavailable',html)
+            self.assertIn('Ordering is currently unavailable',html)
             self.assertNotIn('data-checkout-product=',html)
             self.assertNotIn('freshseal',html.lower())
 
@@ -144,9 +151,8 @@ class BuildTests(unittest.TestCase):
             html='\n'.join(path.read_text(encoding='utf-8') for path in Path(temp).rglob('*.html'))
             for marker in ['ThermaRelief','KneeFlex','paypal.me','Verified Buyer','Only 14 units','localStorage']:
                 self.assertNotIn(marker,html)
-            # Numeric nonbinding targets are now intentional; payment offers remain absent.
-            self.assertIn('$34.99',html)
-            self.assertIn('Provisional launch target — not a payable price',html)
+            self.assertNotIn('$34.99',html)
+            self.assertIn('Price being verified',html)
             self.assertNotIn('"offers"',html)
             self.assertNotIn('data-checkout-product=',html)
 
@@ -214,7 +220,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(item.find('g:availability',ns).text,'in_stock')
             self.assertEqual(receipt['merchant_feed_items'],1)
             html=(out/'products/furoff-pro-household-roller/index.html').read_text(encoding='utf-8')
-            self.assertIn('8-14 business days',html)
+            self.assertIn('8-12 business days',html)
             self.assertIn('USD total for one item',html)
             self.assertIn('data-add-cart="furoff"',html)
             self.assertNotIn('contains_lithium',html)

@@ -1,0 +1,27 @@
+{
+  "status": "RETIRED_NOT_OFFERS_OR_MARKET_EVIDENCE",
+  "previous_targets_usd": {
+    "ice-tray": 29.99,
+    "fruit-colander": 54.99,
+    "faucet-caddy": 39.99,
+    "garlic-press": 34.99,
+    "cup-drainer": null,
+    "9hole-hanger": 24.99,
+    "cable-organizer": 39.99,
+    "folding-hanger": 34.99,
+    "vacuum-hook": null,
+    "foldable-tote": 29.99,
+    "furoff": 34.99,
+    "drain-snake": 29.99,
+    "microfiber-cloth": 29.99,
+    "bottle-brush": 29.99,
+    "mini-mop": 39.99
+  },
+  "owner_comparison_snapshot_usd": {
+    "cable-organizer": 13,
+    "furoff": 12,
+    "9hole-hanger": 7,
+    "mini-mop": 10
+  },
+  "reason": "Uncompetitive or unsubstantiated. No replacement retail prices without market, supplier and profit evidence."
+}

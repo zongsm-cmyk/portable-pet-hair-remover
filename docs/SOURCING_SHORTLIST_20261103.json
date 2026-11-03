@@ -1,0 +1,77 @@
+{
+  "status": "RESEARCH_ONLY_NOT_IMPORTED_TO_LIVE_CATALOG",
+  "observed_date": "2026-11-03",
+  "policy": "No retail proposals or sellable recommendations until market, supplier, all-in US/GB profit, four authorized distinct exact-variant photos and real Sandbox checkout evidence pass.",
+  "required_gates": ["same-variant competitor delivered-price comparison US and GB", "fresh exact supplier variant and real stock", "under 500g, no liquid or restricted lithium", "silent 15-second demo and real problem solved", "processing <=48 hours and shipping <=12 business days", "supplier QC", "customs, tax, payment fee and refund reserve evidence", "minimum 3x all-in cost and safe net margin", "4-5 authorized distinct photos", "real Sandbox checkout receipt"],
+  "candidates": [
+    {
+      "id": "pet-hair-mitt",
+      "cj_sku_snapshot": "CJYD233200837KP",
+      "source_url": "https://cjdropshipping.com/product/pet-hair-remover-mitt-pet-hair-remover-gloves-deshedding-brush-glove-for-dog-cat-rabbit-with-long-short-curly-hair-p-2503191148021601200.html",
+      "snapshot_origin": "Owner-provided account observation, not refreshed",
+      "snapshot": {"item_usd": 0.57, "us_shipping_usd": 5, "weight_g": 31, "us_cj_stock": 53},
+      "public_listing_default_sku": "CJYD233200801AZ",
+      "status": "RESEARCH_HOLD",
+      "blockers": ["Default public SKU differs from account variant", "US GOFO carrier must be vetted", "No GB landed cost or market comparison", "No verified variant photos, QC, timing or Sandbox receipt"],
+      "retail_price_usd": null,
+      "verified_for_checkout": false
+    },
+    {
+      "id": "paw-bath-brush",
+      "cj_sku_snapshot": "CJJT177305702BY",
+      "source_url": "https://cjdropshipping.com/product/durable-cat-paw-bath-brush-fine-foaming-labor-saving-cartoon-shape-pet-dog-cat-pet-hair-grooming-brush-reusable-dog-hair-comb-pet-products-p-1666333651438673920.html",
+      "snapshot_origin": "Owner-provided account observation, not refreshed",
+      "snapshot": {"item_usd": 1.29, "us_shipping_usd": 5.75, "weight_g": 80, "cj_stock": 0},
+      "public_listing_default_sku": "CJJT177305701AZ",
+      "status": "STOCK_HOLD",
+      "blockers": ["Zero CJ stock in snapshot; factory availability is not allocated stock", "Exact colour/variant mismatch with public default", "Empty brush only: no included liquid verified", "Both-market comparison, all-in profit, photos and checkout unverified"],
+      "retail_price_usd": null,
+      "verified_for_checkout": false
+    },
+    {
+      "id": "wind-deflector",
+      "cj_sku_snapshot": "CJYD211551602BY",
+      "source_url": null,
+      "snapshot_origin": "Owner-provided account observation; exact public listing not recovered by SKU search",
+      "snapshot": {"item_usd": 1.19, "us_shipping_usd": 9.65, "weight_g": 390, "cj_stock": 0},
+      "status": "STOCK_AND_SOURCE_HOLD",
+      "blockers": ["Exact listing and variant evidence missing", "Zero CJ stock", "Bulky-item shipping economics need validation", "All market, QC, photo and checkout gates remain open"],
+      "retail_price_usd": null,
+      "verified_for_checkout": false
+    },
+    {
+      "id": "sink-drain-hair-catcher",
+      "cj_sku_public_default": "CJYS108057501AZ",
+      "source_url": "https://cjdropshipping.com/product/sink-drain-strainer-hair-catchers-rubber-shower-bathtub-floor-filter-water-stopper-silicone-bathroom-kitchen-deodorant-plug-p-1382324639715430400.html",
+      "source_method": "Public CJ listing discovery; no account quote",
+      "snapshot": {"listing_weight_range_g": [55, 275]},
+      "hypothesis": "Visible demonstration of trapping hair at a drain; inspect suction, drain fit and water flow.",
+      "status": "RESEARCH_HOLD",
+      "blockers": ["Material description inconsistent with silicone title", "Pack count and exact variant unverified", "Commodity price pressure; no competitor evidence yet", "Stock, US/GB shipping, all-in margin, QC, authorized photos and Sandbox unverified"],
+      "retail_price_usd": null,
+      "verified_for_checkout": false
+    },
+    {
+      "id": "compact-pet-massage-brush",
+      "cj_sku_public_default": "CJGY202058901AZ",
+      "source_url": "https://cjdropshipping.com/product/pet-bath-brush-cat-dog-massage-comb-p-1783438407037890560.html",
+      "source_method": "Public CJ listing discovery; distinct listing from CJJT1773057",
+      "snapshot": {"listing_weight_range_g": [87, 125]},
+      "hypothesis": "Compare dry grooming usefulness and cleanability with mitt; no performance claim verified.",
+      "status": "RESEARCH_HOLD",
+      "blockers": ["Colour and packaging selection needed", "Do not bundle liquid", "Market demand, competitor delivered prices, stock, destination quotes and QC missing", "Four exact-variant authorized photos and Sandbox missing"],
+      "retail_price_usd": null,
+      "verified_for_checkout": false
+    },
+    {
+      "id": "starfish-drain-filter",
+      "cj_sku_public_default": "CJCF1653868-Green-3Pcs",
+      "source_url": "https://cjdropshipping.com/product/3pcs-silicone-starfish-shaped-sink-drain-filter-bathtub-hair-catcher-stopper-drain-hole-filter-strainer-for-bathroom-kitchen-toilet-p-1609410194650845184.html",
+      "source_method": "Public CJ listing discovery",
+      "status": "REJECT_CURRENT_PROCESSING_TERMS",
+      "blockers": ["Listing allows processing within 72 hours, fails owner <=48-hour gate", "Listing weight and three-pack specification need reconciliation", "No verified market, supplier, profit, photos or checkout"],
+      "retail_price_usd": null,
+      "verified_for_checkout": false
+    }
+  ]
+}

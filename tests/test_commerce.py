@@ -9,14 +9,14 @@ import test_build_store as build_tests
 
 
 class CommerceTests(unittest.TestCase):
-    def test_all_eight_galleries_preserve_primary_and_exact_secondary(self):
+    def test_all_thirteen_galleries_have_approved_canonical_photos(self):
         catalog=json.loads((ROOT/'data/catalog.json').read_text())
         media=json.loads((ROOT/'data/image-provenance.json').read_text())['images']
-        self.assertEqual(len(media),21)
-        ids={'ice-tray','faucet-caddy','fruit-colander','garlic-press','9hole-hanger','furoff','mini-mop','bottle-brush'}
+        self.assertEqual(len(media),61)
         for p in catalog['products']:
-            if p['id'] in ids:
-                self.assertEqual(p['images'],[f'/assets/products/{p["slug"]}.webp',f'/assets/products/{p["slug"]}-02.webp'])
+            if not p['visual_hold']:
+                self.assertIn(len(p['images']),(4,5))
+                self.assertEqual(p['images'],[f'/assets/products/{p["slug"]}-gallery-{n:02}.webp' for n in range(1,len(p['images'])+1)])
             self.assertIsNone(p['price_usd'])
         for record in media:
             self.assertTrue(record['original_url'].startswith('https://'))
@@ -32,7 +32,7 @@ class CommerceTests(unittest.TestCase):
         self.assertIn('id="order-lookup"',(ROOT/'track-order/index.html').read_text())
 
     def test_qualified_fixture_has_reusable_add_cart_but_preview_does_not(self):
-        fixture=build_tests.BuildTests();fixture.setUp();fixture.verified()
+        fixture=build_tests.BuildTests();fixture.setUp();fixture.verified();self.addCleanup(fixture.doCleanups)
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)/'source'
             for directory in ('data','assets','static'):
@@ -40,10 +40,11 @@ class CommerceTests(unittest.TestCase):
             (root/'data/catalog.json').write_text(json.dumps(fixture.catalog))
             module.build(root,Path(temp)/'output')
             home=(Path(temp)/'output/index.html').read_text(encoding='utf-8')
-            self.assertEqual(home.count('data-add-cart='),1)
+            self.assertEqual(home.count('data-add-cart='),0)
             self.assertIn('"checkout_enabled":false',home)
             detail=(Path(temp)/'output/products/furoff-pro-household-roller/index.html').read_text(encoding='utf-8')
-            self.assertEqual(detail.count('data-add-cart='),1)
+            self.assertEqual(detail.count('data-add-cart='),0)
+            self.assertIn('disabled aria-describedby=',detail)
             self.assertNotIn('data-checkout-product=',detail)
 
     def test_no_exception_for_unqualified_retail_price(self):

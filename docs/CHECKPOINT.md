@@ -1,5 +1,9 @@
 # VerveLiving expansion checkpoint — 2026-11-03
 
+## Owner acceptance supersession
+
+See `ACCEPTANCE_FIX_20261103.md`. All 15 detail pages have disabled Buy now, accessible reasons and availability mailto. Numeric proposals are retired; 13 existing photo previews are separate from an empty sales collection. Four exact-variant authorized distinct photographs, market comparison, supplier/QC, both-market all-in profit and Sandbox evidence now gate qualification. Existing media stays 21 files (1–2 on 13 products, two zero-photo holds); no SKU meets four-photo qualification. Six additional ideas are research-only. Checkout false; Worker/D1/sandbox unchanged. This supersedes prior proposed-price and completion language; no production deployment or real Sandbox transaction is established.
+
 ## Current local commerce update (supersedes earlier pricing/placeholder notes)
 
 See `COMMERCE_COMPLETION_20261103.md` and `receipts/commerce-completion/validation.json`. Fifteen real candidates, thirteen pictured, twenty-one authenticated product images, eight two-image galleries, two visual holds, zero qualified variants and no unqualified retail prices. Reusable gated cart and `/track-order/` are implemented. 31 Python / 29 Node tests and 58 local Chrome route/viewport checks passed. Original photos and all protected Worker/D1 files remain unchanged. No actual Sandbox transaction, supplier qualification, inbound-mail acceptance, live activation or publication is proven by this work.
@@ -41,3 +45,12 @@ Root pages and their source generator had regressed after the earlier gated buil
 ## Visual catalog recovery, 2026-11-03 (supersedes the 13-slot visual state)
 
 15 researched candidates, 13 exact-CJ-photo previews, 2 visual holds. FreshSeal and anonymous slots retired from public generated output. All 15 remain unverified/noindex; feed empty, checkout false and sandbox unchanged. Worker and D1 untouched. 24 Python + 23 Node tests and 22 local Chrome route/viewport checks passed. Full evidence and source-media boundary: `receipts/visual-recovery/README.md`. Publication is a separate verification step.
+
+## CJ multiphoto completion, 2026-11-03
+
+61 authentic CJ gallery photos imported for all 13 displayed previews (4 or 5 each); 2 visual holds preserved. 39 Python + 31 Node tests, 87 Chrome route/viewport checks and 183 real thumbnail actions at 320/390/1440px pass. Checkout remains disabled, zero qualified products. See [release evidence](CJ_MULTIPHOTO_RELEASE_20261103.md). Commercial and production verification gates remain open.
+
+
+## Premium storefront rebuild, 2026-11-03
+
+See [local rebuild and evidence](PREMIUM_UX_20261103.md): compact category photography, responsive accessible menu, product-led hero, refined preview grids and editorial sections. 39 Python / 31 Node tests; 145 Chrome route/viewport checks and 305 gallery selections pass across five widths. All 61 gallery originals and commerce gates preserved. Not committed/pushed: local Git network blocked and GitHub connector write refused by approval policy. Live URL/assets unverified. Supplier/Sandbox gates remain open.

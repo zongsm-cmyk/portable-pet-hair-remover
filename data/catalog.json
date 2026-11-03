@@ -33,8 +33,10 @@
         "Press-release design shown in supplier photos"
       ],
       "images": [
-        "/assets/products/press-release-ice-tray.webp",
-        "/assets/products/press-release-ice-tray-02.webp"
+        "/assets/products/press-release-ice-tray-gallery-01.webp",
+        "/assets/products/press-release-ice-tray-gallery-02.webp",
+        "/assets/products/press-release-ice-tray-gallery-03.webp",
+        "/assets/products/press-release-ice-tray-gallery-04.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -48,10 +50,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 29.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -83,8 +87,11 @@
         "Built-in removable drainage"
       ],
       "images": [
-        "/assets/products/fruit-rinse-storage-bowl.webp",
-        "/assets/products/fruit-rinse-storage-bowl-02.webp"
+        "/assets/products/fruit-rinse-storage-bowl-gallery-01.webp",
+        "/assets/products/fruit-rinse-storage-bowl-gallery-02.webp",
+        "/assets/products/fruit-rinse-storage-bowl-gallery-03.webp",
+        "/assets/products/fruit-rinse-storage-bowl-gallery-04.webp",
+        "/assets/products/fruit-rinse-storage-bowl-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -98,10 +105,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 54.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
+      "source_status": "OBSERVED_VARIANT_628G_EXCEEDS_500G_LIMIT_NOT_QUALIFIED",
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -133,8 +142,10 @@
         "Draining holder"
       ],
       "images": [
-        "/assets/products/rotating-sink-caddy.webp",
-        "/assets/products/rotating-sink-caddy-02.webp"
+        "/assets/products/rotating-sink-caddy-gallery-01.webp",
+        "/assets/products/rotating-sink-caddy-gallery-02.webp",
+        "/assets/products/rotating-sink-caddy-gallery-03.webp",
+        "/assets/products/rotating-sink-caddy-gallery-04.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -148,10 +159,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 39.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -183,8 +196,11 @@
         "Stainless steel cutting blades"
       ],
       "images": [
-        "/assets/products/push-down-garlic-chopper.webp",
-        "/assets/products/push-down-garlic-chopper-02.webp"
+        "/assets/products/push-down-garlic-chopper-gallery-01.webp",
+        "/assets/products/push-down-garlic-chopper-gallery-02.webp",
+        "/assets/products/push-down-garlic-chopper-gallery-03.webp",
+        "/assets/products/push-down-garlic-chopper-gallery-04.webp",
+        "/assets/products/push-down-garlic-chopper-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -198,10 +214,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 34.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -248,7 +266,8 @@
       "visual_status": "VISUAL_HOLD_NO_AUTHENTIC_IMAGE",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
       "target_launch_price_usd": null,
-      "pricing_status": "NOT_EVALUATED"
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null
     },
     {
       "price_usd": null,
@@ -280,8 +299,11 @@
         "Horizontal or vertical configuration"
       ],
       "images": [
-        "/assets/products/space-saving-nine-hole-hanger.webp",
-        "/assets/products/space-saving-nine-hole-hanger-02.webp"
+        "/assets/products/space-saving-nine-hole-hanger-gallery-01.webp",
+        "/assets/products/space-saving-nine-hole-hanger-gallery-02.webp",
+        "/assets/products/space-saving-nine-hole-hanger-gallery-03.webp",
+        "/assets/products/space-saving-nine-hole-hanger-gallery-04.webp",
+        "/assets/products/space-saving-nine-hole-hanger-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -295,10 +317,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 24.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -330,7 +354,11 @@
         "Adjustable pockets"
       ],
       "images": [
-        "/assets/products/three-layer-cable-organizer.webp"
+        "/assets/products/three-layer-cable-organizer-gallery-01.webp",
+        "/assets/products/three-layer-cable-organizer-gallery-02.webp",
+        "/assets/products/three-layer-cable-organizer-gallery-03.webp",
+        "/assets/products/three-layer-cable-organizer-gallery-04.webp",
+        "/assets/products/three-layer-cable-organizer-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -344,10 +372,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 39.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -379,7 +409,11 @@
         "Foldable form"
       ],
       "images": [
-        "/assets/products/folding-multi-slot-closet-hanger.webp"
+        "/assets/products/folding-multi-slot-closet-hanger-gallery-01.webp",
+        "/assets/products/folding-multi-slot-closet-hanger-gallery-02.webp",
+        "/assets/products/folding-multi-slot-closet-hanger-gallery-03.webp",
+        "/assets/products/folding-multi-slot-closet-hanger-gallery-04.webp",
+        "/assets/products/folding-multi-slot-closet-hanger-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -393,10 +427,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 34.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -443,7 +479,8 @@
       "visual_status": "VISUAL_HOLD_NO_AUTHENTIC_IMAGE",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
       "target_launch_price_usd": null,
-      "pricing_status": "NOT_EVALUATED"
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null
     },
     {
       "price_usd": null,
@@ -475,7 +512,11 @@
         "Reusable nylon"
       ],
       "images": [
-        "/assets/products/foldaway-nylon-storage-tote.webp"
+        "/assets/products/foldaway-nylon-storage-tote-gallery-01.webp",
+        "/assets/products/foldaway-nylon-storage-tote-gallery-02.webp",
+        "/assets/products/foldaway-nylon-storage-tote-gallery-03.webp",
+        "/assets/products/foldaway-nylon-storage-tote-gallery-04.webp",
+        "/assets/products/foldaway-nylon-storage-tote-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -489,10 +530,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 29.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -524,8 +567,10 @@
         "Reusable roller design"
       ],
       "images": [
-        "/assets/products/furoff-pro-household-roller.webp",
-        "/assets/products/furoff-pro-household-roller-02.webp"
+        "/assets/products/furoff-pro-household-roller-gallery-01.webp",
+        "/assets/products/furoff-pro-household-roller-gallery-02.webp",
+        "/assets/products/furoff-pro-household-roller-gallery-03.webp",
+        "/assets/products/furoff-pro-household-roller-gallery-04.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -539,10 +584,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 34.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -564,7 +611,7 @@
       "review_count": null,
       "id": "drain-snake",
       "slug": "flexible-drain-cleaning-spring",
-      "title": "Flexible 60cm Drain Cleaning Spring",
+      "title": "Flexible Drain Cleaning Spring",
       "category": "smart-cleaning-tools",
       "cj_sku": "CJJJCFCF00399-Black 60cm",
       "cj_product_url": "https://cjdropshipping.com/product/60cm-sewer-dredger-spring-pipe-dredging-tool-household-hair-cleaner-drain-clog-remover-cleaning-tools-household-for-kitchen-sink-kitchen-gadgets-p-4328806F-26C7-47B0-940F-35B1AE409B00.html",
@@ -574,7 +621,11 @@
         "Manual cleaner"
       ],
       "images": [
-        "/assets/products/flexible-drain-cleaning-spring.webp"
+        "/assets/products/flexible-drain-cleaning-spring-gallery-01.webp",
+        "/assets/products/flexible-drain-cleaning-spring-gallery-02.webp",
+        "/assets/products/flexible-drain-cleaning-spring-gallery-03.webp",
+        "/assets/products/flexible-drain-cleaning-spring-gallery-04.webp",
+        "/assets/products/flexible-drain-cleaning-spring-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -588,10 +639,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 29.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
+      "source_status": "VARIANT_MISMATCH_60CM_CATALOG_VS_160CM_SUPPLIER_QUOTE_UNRESOLVED",
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer. Supplier photos show the 60cm option; the earlier 160cm shipping quote does not match this pictured option."
     },
     {
       "price_usd": null,
@@ -623,7 +676,10 @@
         "Glass and mirror use"
       ],
       "images": [
-        "/assets/products/reusable-microfiber-glass-cloth.webp"
+        "/assets/products/reusable-microfiber-glass-cloth-gallery-01.webp",
+        "/assets/products/reusable-microfiber-glass-cloth-gallery-02.webp",
+        "/assets/products/reusable-microfiber-glass-cloth-gallery-03.webp",
+        "/assets/products/reusable-microfiber-glass-cloth-gallery-04.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -637,10 +693,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 29.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -672,8 +730,11 @@
         "Handheld plastic and nylon"
       ],
       "images": [
-        "/assets/products/five-in-one-bottle-cleaning-brush.webp",
-        "/assets/products/five-in-one-bottle-cleaning-brush-02.webp"
+        "/assets/products/five-in-one-bottle-cleaning-brush-gallery-01.webp",
+        "/assets/products/five-in-one-bottle-cleaning-brush-gallery-02.webp",
+        "/assets/products/five-in-one-bottle-cleaning-brush-gallery-03.webp",
+        "/assets/products/five-in-one-bottle-cleaning-brush-gallery-04.webp",
+        "/assets/products/five-in-one-bottle-cleaning-brush-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -687,10 +748,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 29.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     },
     {
       "price_usd": null,
@@ -722,8 +785,11 @@
         "Compact sponge head"
       ],
       "images": [
-        "/assets/products/self-squeezing-mini-mop.webp",
-        "/assets/products/self-squeezing-mini-mop-02.webp"
+        "/assets/products/self-squeezing-mini-mop-gallery-01.webp",
+        "/assets/products/self-squeezing-mini-mop-gallery-02.webp",
+        "/assets/products/self-squeezing-mini-mop-gallery-03.webp",
+        "/assets/products/self-squeezing-mini-mop-gallery-04.webp",
+        "/assets/products/self-squeezing-mini-mop-gallery-05.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -737,10 +803,12 @@
       "stock_status": "unknown",
       "draft_slot": false,
       "visual_hold": false,
-      "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
+      "visual_status": "MATCHED_CJ_RESEARCH_GALLERY",
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
-      "target_launch_price_usd": 39.99,
-      "pricing_status": "NONBINDING_PREVIEW_TARGET"
+      "target_launch_price_usd": null,
+      "pricing_status": "PRICE_BEING_VERIFIED",
+      "qualification_evidence": null,
+      "photo_note": "Colors shown for illustration; exact variant to be verified. Pictured accessories and quantities are not a confirmed offer."
     }
   ]
 }

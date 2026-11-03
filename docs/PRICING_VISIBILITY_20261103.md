@@ -1,5 +1,7 @@
 # Pricing visibility receipt ? 3 November 2026
 
+SUPERSEDED: the owner acceptance fix removes all proposals below from customer pages and the live catalog. They are historical rejected proposals, not current prices. See `ACCEPTANCE_FIX_20261103.md` and `RETIRED_PRICE_PROPOSALS_20261103.json`.
+
 ## Delivered tree and boundary
 
 Populated numeric **nonbinding launch targets** on all 13 photographed home cards, their three category collections and all 13 detail pages. Two visual holds remain unpriced. English disclosure appears above page content; card labels say ?Planned launch price? and ?Not available to order?; details say ?Provisional launch target ? not a payable price?. Card prices are 30?32 px and detail prices 42?46 px, with dark high-contrast text.

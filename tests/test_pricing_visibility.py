@@ -1,4 +1,4 @@
-"""Nonbinding numeric prices must never become checkout or merchant prices."""
+"""Acceptance regressions: no false prices; explicit disabled purchase; real gates."""
 import copy
 import json
 from pathlib import Path
@@ -6,98 +6,97 @@ import re
 import shutil
 import tempfile
 import unittest
-import xml.etree.ElementTree as ET
+from unittest.mock import patch
 from test_build_store import module
 import test_build_store as build_tests
-
-ROOT = Path(__file__).resolve().parents[1]
-# Exact owner-supplied proposals, independently asserted rather than read back
-# from the catalog under test. These are not supplier qualification evidence.
-TARGETS = {
-    'ice-tray':29.99, 'fruit-colander':54.99, 'faucet-caddy':39.99,
-    'garlic-press':34.99, '9hole-hanger':24.99, 'cable-organizer':39.99,
-    'folding-hanger':34.99, 'foldable-tote':29.99, 'furoff':34.99,
-    'drain-snake':29.99, 'microfiber-cloth':29.99, 'bottle-brush':29.99,
-    'mini-mop':39.99,
-}
-
+ROOT=Path(__file__).resolve().parents[1]
 
 class PricingVisibilityTests(unittest.TestCase):
     def setUp(self):
-        self.catalog = json.loads((ROOT/'data/catalog.json').read_text())
-        self.settings = json.loads((ROOT/'data/settings.json').read_text())
+        self.catalog=json.loads((ROOT/'data/catalog.json').read_text())
+        self.settings=json.loads((ROOT/'data/settings.json').read_text())
 
-    def test_exact_proposals_on_every_home_category_card_and_detail(self):
-        home = (ROOT/'index.html').read_text(encoding='utf-8')
-        self.assertEqual(home.count('class="target-price-amount"'),13)
+    def test_all_fifteen_detail_buttons_and_no_prices(self):
         for p in self.catalog['products']:
-            detail = (ROOT/'products'/p['slug']/'index.html').read_text(encoding='utf-8')
+            html=(ROOT/'products'/p['slug']/'index.html').read_text(encoding='utf-8')
             self.assertFalse(p['verified_for_checkout'])
-            self.assertIsNone(p['price_usd'])
-            self.assertIn('noindex,follow',detail)
-            if p['id'] not in TARGETS:
-                self.assertTrue(p['visual_hold'])
-                self.assertIsNone(p['target_launch_price_usd'])
-                self.assertEqual(p['pricing_status'],'NOT_EVALUATED')
-                self.assertNotIn('target-price-amount',detail)
-                self.assertNotRegex(detail,r'\$\d')
-                continue
-            self.assertEqual(p['target_launch_price_usd'],TARGETS[p['id']])
-            self.assertEqual(p['pricing_status'],'NONBINDING_PREVIEW_TARGET')
-            amount = f'${TARGETS[p["id"]]:.2f} <span>USD</span>'
-            for html in (home,(ROOT/'categories'/p['category']/'index.html').read_text(encoding='utf-8')):
-                card = re.search(r'<article class="product-tile" data-product-id="'+p['id']+r'".*?</article>',html).group()
-                self.assertIn(amount,card)
-                self.assertIn('Planned launch price',card)
-                self.assertIn('Not available to order',card)
-                self.assertIn('Prices shown are proposed launch targets, not offers.',html)
-            self.assertIn(amount,detail)
-            self.assertIn('Provisional launch target — not a payable price',detail)
-            self.assertIn('Exact variant, stock, US/UK shipping, tax and import costs await verification.',detail)
+            self.assertIsNone(p['price_usd']);self.assertIsNone(p['target_launch_price_usd'])
+            self.assertEqual(p['pricing_status'],'PRICE_BEING_VERIFIED')
+            self.assertIn('Price being verified',html);self.assertNotRegex(html,r'\$\d')
+            self.assertEqual(html.count('>Buy now</button>'),1)
+            self.assertIn('disabled aria-describedby="ordering-unavailable-'+p['id']+'"',html)
+            self.assertIn('id="ordering-unavailable-'+p['id']+'"',html)
+            self.assertIn('Ordering is currently unavailable: product inventory, shipping and checkout not verified',html)
+            self.assertIn('>Ask about availability</a>',html)
+            if p['visual_hold']:
+                self.assertIn('Additional product photos under verification',html)
+            else:
+                self.assertNotIn('Additional product photos under verification',html)
+            self.assertIn('noindex,follow',html)
+        home=(ROOT/'index.html').read_text(encoding='utf-8')
+        sales=re.search(r'<section class="collection sales-collection".*?</section>',home).group()
+        self.assertNotIn('product-tile',sales)
+        self.assertIn('No qualified products are available to order.',sales)
+        self.assertIn('hero-photograph',home)
+        self.assertIn('class="hero-product-photo"',home)
+        self.assertIn('Price under verification',home)
 
-    def test_invalid_missing_and_inconsistent_targets_fail_closed(self):
-        for value in (None,True,False,'29.99',0,-1,29.999,float('inf'),float('nan')):
-            broken=copy.deepcopy(self.catalog)
-            broken['products'][0]['target_launch_price_usd']=value
-            with self.subTest(value=value),self.assertRaises(ValueError):
-                module.validate(broken,self.settings)
-        for key in ('target_launch_price_usd','pricing_status'):
-            broken=copy.deepcopy(self.catalog);del broken['products'][0][key]
-            with self.subTest(missing=key),self.assertRaises(ValueError):
-                module.validate(broken,self.settings)
-        for hold in (False,True):
-            broken=copy.deepcopy(self.catalog)
-            p=next(p for p in broken['products'] if bool(p['visual_hold'])==hold)
-            p['pricing_status']='NONBINDING_PREVIEW_TARGET' if hold else 'NOT_EVALUATED'
-            with self.assertRaises(ValueError):module.validate(broken,self.settings)
-        broken=copy.deepcopy(self.catalog)
-        next(p for p in broken['products'] if p['visual_hold'])['target_launch_price_usd']=29.99
-        with self.assertRaises(ValueError):module.validate(broken,self.settings)
-
-    def test_targets_cannot_qualify_or_leak_into_commerce(self):
-        broken=copy.deepcopy(self.catalog);broken['products'][0]['verified_for_checkout']=True
-        with self.assertRaises(ValueError):module.validate(broken,self.settings)
-        settings=dict(self.settings,checkout_enabled=True)
-        with self.assertRaises(ValueError):module.validate(self.catalog,settings)
+    def test_retired_proposals_rejected_and_never_in_commerce(self):
+        for value in (29.99,True,'29.99',0,-1,float('nan')):
+            c=copy.deepcopy(self.catalog);c['products'][0]['target_launch_price_usd']=value
+            with self.subTest(value=value),self.assertRaises(ValueError):module.validate(c,self.settings)
         for name in json.loads((ROOT/'build-receipt.json').read_text())['files']:
             if not name.endswith('.html'):continue
             html=(ROOT/name).read_text(encoding='utf-8')
-            self.assertNotIn('data-add-cart=',html)
-            self.assertNotIn('application/ld+json',html)
-            self.assertNotIn('"offers"',html)
+            self.assertNotIn('data-add-cart=',html);self.assertNotIn('target-price-amount',html)
+            self.assertNotIn('"offers"',html);self.assertNotRegex(html,r'\$\d')
             config=json.loads(re.search(r'id="store-config">(.*?)</script>',html).group(1))
-            self.assertFalse(config['checkout_enabled'])
-            self.assertEqual(config['catalog'],[])
-            self.assertNotIn('target_launch_price',json.dumps(config))
-        self.assertEqual(ET.parse(ROOT/'feed.xml').findall('./channel/item'),[])
-        worker=(ROOT/'workers/order-gateway/catalog.generated.json').read_text()
-        self.assertNotIn('target_launch_price_usd',worker)
-        self.assertNotIn('NONBINDING_PREVIEW_TARGET',worker)
+            self.assertFalse(config['checkout_enabled']);self.assertEqual(config['catalog'],[])
+        self.assertNotIn('target_launch_price_usd',(ROOT/'workers/order-gateway/catalog.generated.json').read_text())
 
-    def test_future_worker_generation_also_excludes_targets(self):
-        fixture=build_tests.BuildTests();fixture.setUp();p=fixture.verified()
-        # An independent real price must win over the preview in every payment surface.
-        p['target_launch_price_usd']=99.99
+    def test_distinct_reviewed_photo_count(self):
+        p={'images':['a','b','c','d']}
+        rows={key:dict(source_sha256=key,sha256=key,original_url='https://cf.cjdropshipping.com/'+key,
+            subject_verified=True,variant_verified=True,supplier_authorized=True,distinct_photo_verified=True,
+            visual_method='Contact sheet',rights_evidence='CJ exact product usage',width=800,height=800) for key in p['images']}
+        self.assertEqual(module.qualified_photo_count(p,rows),4)
+        for flag in ('subject_verified','variant_verified','supplier_authorized','distinct_photo_verified'):
+            broken=copy.deepcopy(rows);broken['d'][flag]=False
+            self.assertEqual(module.qualified_photo_count(p,broken),3)
+        for field in ('source_sha256','sha256','original_url'):
+            broken=copy.deepcopy(rows);broken['d'][field]=broken['c'][field]
+            self.assertEqual(module.qualified_photo_count(p,broken),3)
+        actual={r['file']:r for r in json.loads((ROOT/'data/image-provenance.json').read_text())['images']}
+        for p in self.catalog['products']:self.assertLess(module.qualified_photo_count(p,actual),4)
+
+    def test_market_supplier_profit_and_sandbox_required(self):
+        fixture=build_tests.BuildTests();fixture.setUp();p=fixture.verified();self.addCleanup(fixture.doCleanups)
+        module.validate(fixture.catalog,fixture.settings)
+        e=p['qualification_evidence']
+        for key in ('supplier_availability','supplier_qc','silent_demo_15s','problem_solved','checkout_sandbox'):
+            saved=e.pop(key)
+            with self.subTest(key=key),self.assertRaises(ValueError):module.validate(fixture.catalog,fixture.settings)
+            e[key]=saved
+        for country in ('US','GB'):
+            market=e['markets'][country]
+            for key in ('customs_usd','taxes_usd','payment_fees_usd','refund_reserve_usd','landed_cost_reference','market_competitor'):
+                saved=market[key];market[key]=None
+                with self.subTest(country=country,key=key),self.assertRaises(ValueError):module.validate(fixture.catalog,fixture.settings)
+                market[key]=saved
+            market['market_competitor']['delivered_price_usd']=12
+            with self.assertRaises(ValueError):module.validate(fixture.catalog,fixture.settings)
+            market['market_competitor']['delivered_price_usd']=35
+            market['refund_reserve_usd']=5
+            with self.assertRaises(ValueError):module.validate(fixture.catalog,fixture.settings)
+            market['refund_reserve_usd']=1
+        e['processing_hours']=49
+        with self.assertRaises(ValueError):module.validate(fixture.catalog,fixture.settings)
+        e['processing_hours']=48
+        with patch.object(module,'qualified_photo_count',return_value=3):
+            with self.assertRaises(ValueError):module.validate(fixture.catalog,fixture.settings)
+
+    def test_future_enabled_verified_product_has_actual_price_and_cart(self):
+        fixture=build_tests.BuildTests();fixture.setUp();p=fixture.verified();self.addCleanup(fixture.doCleanups)
         fixture.settings['checkout_enabled']=True
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)/'source';out=Path(temp)/'out'
@@ -108,8 +107,6 @@ class PricingVisibilityTests(unittest.TestCase):
             worker=json.loads((out/'workers/order-gateway/catalog.generated.json').read_text())
             self.assertNotIn('target_launch_price_usd',json.dumps(worker))
             html=(out/'products'/p['slug']/'index.html').read_text(encoding='utf-8')
-            config=json.loads(re.search(r'id="store-config">(.*?)</script>',html).group(1))
-            self.assertEqual(config['catalog'][0]['price_usd'],34.99)
-            self.assertNotIn('target_launch_price_usd',json.dumps(config))
-            self.assertEqual(ET.parse(out/'feed.xml').find('./channel/item/{http://base.google.com/ns/1.0}price').text,'34.99 USD')
-            self.assertNotIn('$99.99',html)
+            self.assertIn('data-add-cart="furoff"',html)
+            self.assertNotIn('>Buy now</button>',html)
+            self.assertIn('$34.99 USD',html)

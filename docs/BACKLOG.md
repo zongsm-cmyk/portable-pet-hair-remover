@@ -1,5 +1,16 @@
 # Remaining acceptance work
 
+## Owner acceptance follow-up
+
+- [x] Prominent disabled Buy now with accessible reason on all 15 details; remove all unsupported retail proposals.
+- [x] Separate research previews from the empty available-to-order section; remove product-led hero promotion.
+- [x] Fail-closed four-photo, market/supplier/profit/checkout evidence gate and isolated six-item research shortlist.
+- [ ] Download/authorize and visually verify four distinct exact-variant photos per SKU (current local files remain 21; zero photo-qualified SKUs).
+- [ ] Resolve colander overweight variant and 60cm/160cm drain-snake mismatch.
+- [ ] Complete real US/GB supplier, market and profit evidence plus actual Sandbox checkout; no qualified sellable candidates yet.
+
+See `ACCEPTANCE_FIX_20261103.md` for local checks and source blockers.
+
 ## Local shopping UX completed, 3 November 2026
 
 - [x] Qualified-only reusable cart, quantity/removal/country estimates, privacy-safe session storage and disabled payment gate.
@@ -30,3 +41,12 @@ No checkbox is satisfied merely because its code path exists.
 - [ ] Refresh source HTTP headers and verify the public deployed revision.
 
 Supplier qualification and all commerce acceptance items above remain open.
+
+## CJ multiphoto completion, 2026-11-03
+
+61 authentic CJ gallery photos imported for all 13 displayed previews (4 or 5 each); 2 visual holds preserved. 39 Python + 31 Node tests, 87 Chrome route/viewport checks and 183 real thumbnail actions at 320/390/1440px pass. Checkout remains disabled, zero qualified products. See [release evidence](CJ_MULTIPHOTO_RELEASE_20261103.md). Commercial and production verification gates remain open.
+
+
+## Premium storefront rebuild, 2026-11-03
+
+See [local rebuild and evidence](PREMIUM_UX_20261103.md): compact category photography, responsive accessible menu, product-led hero, refined preview grids and editorial sections. 39 Python / 31 Node tests; 145 Chrome route/viewport checks and 305 gallery selections pass across five widths. All 61 gallery originals and commerce gates preserved. Not committed/pushed: local Git network blocked and GitHub connector write refused by approval policy. Live URL/assets unverified. Supplier/Sandbox gates remain open.

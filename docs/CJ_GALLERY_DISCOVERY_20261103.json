@@ -1,0 +1,175 @@
+{
+  "date": "2026-11-03",
+  "method": "Public CJ listing extraction and gallery link resolution; not photo validation",
+  "blocker": "curl.exe -4 cannot connect to CJ from sandbox; connected browser host unavailable. Public link resolution does not deliver local image bytes.",
+  "rows": [
+    {
+      "id": "ice-tray",
+      "listing_url": "https://cjdropshipping.com/product/ice-cube-mold-household-ice-maker-food-grade-press-ice-tray-ice-cube-maker-ice-tray-mold-with-storage-box-kitchen-gadget-p-1785940589914107904.html",
+      "candidate_image_urls": [
+        "https://oss-cf.cjdropshipping.com/product/2024/05/06/03/41df9649-a773-4c0e-88e2-3c086d162d6e.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/05/02/07/91a70db3-3c5c-4626-a887-80608c5690ab_trans.jpeg",
+        "https://oss-cf.cjdropshipping.com/product/2024/05/02/07/266b42e3-3d72-47e0-b8ae-128068fab6aa_trans.jpeg",
+        "https://oss-cf.cjdropshipping.com/product/2024/05/02/07/ecd547ed-902e-445e-8854-743c006f3924_trans.jpeg",
+        "https://oss-cf.cjdropshipping.com/product/2024/05/02/07/09d2d755-e181-4c8c-bbab-548f67e4eeb3_trans.jpeg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "fruit-colander",
+      "listing_url": "https://cjdropshipping.com/product/fruit-drain-basket-with-lid-vegetable-washing-bowl-foldable-handle-cleaning-colander-plastic-refrigerator-crisper-kitchen-box-kitchen-gadgets-p-2407160828401622500.html",
+      "candidate_image_urls": [
+        "https://oss-cf.cjdropshipping.com/product/2024/08/12/03/cd648248-1d24-423b-b2e7-9454a0ee8415.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/08/12/03/e409ca67-9428-4549-966a-dd4f1cfea071.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/08/12/03/9f0ed035-2d36-47c5-a9fe-acd189e7ff49.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/08/12/03/6262bc9a-7a09-4845-8820-708cc94a7dbe.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/08/12/03/87c2157c-a861-469e-9a56-29e5b68dfb0c.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "faucet-caddy",
+      "listing_url": "https://cjdropshipping.com/product/kitchen-space-aluminum-sink-faucet-storage-rack-dishwasher-vegetable-sink-supplies-household-drain-basket-bathroom-accessories-p-2407020239431617500.html",
+      "candidate_image_urls": [
+        "https://cf.cjdropshipping.com/quick/product/d44542ae-2969-4ba0-96ce-d3f8b74dc44e.jpg",
+        "https://cf.cjdropshipping.com/quick/product/cc4d2dde-1d1c-408b-aba7-6d87bc8bd2ee.jpg",
+        "https://cf.cjdropshipping.com/quick/product/fd8a2d31-22fe-4260-8de1-30474788bb2e.jpg",
+        "https://cf.cjdropshipping.com/quick/product/2c605957-565c-4872-b342-4c4c5f0b9d9c.jpg",
+        "https://cf.cjdropshipping.com/quick/product/594df8a6-819b-4862-a679-cc6423f96f3c.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "garlic-press",
+      "listing_url": "https://cjdropshipping.com/product/garlic-crusher-onion-chopper-multipeler-vegetables-chopper-manual-garlic-press-machine-garlic-squeezer-kitchen-gadget-p-1633393678565781504.html",
+      "candidate_image_urls": [
+        "https://oss-cf.cjdropshipping.com/product/2024/07/12/03/f1971257-220b-44ed-8470-41697cfcfda1.jpg",
+        "https://cf.cjdropshipping.com/770dbc8b-3f71-49ae-b6f6-063caea2ba75.jpg",
+        "https://cf.cjdropshipping.com/9bb8f117-d650-48c5-b827-360b6f4edb12.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/04/03/05/eb71261b-afb7-4f45-8ee8-d83d8276eaef_trans.jpeg",
+        "https://cf.cjdropshipping.com/fff947c4-5b3e-4260-a834-10f404d531cb.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "cup-drainer",
+      "listing_url": "https://cjdropshipping.com/product/cup-silicone-drainboard-storage-rack-kitchen-gadgets-p-2407250234081608100.html",
+      "candidate_image_urls": [
+        "https://cf.cjdropshipping.com/quick/product/84ba3baa-d460-4147-8e73-82675f584455.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/07/25/02/3deaa272-58bd-40f8-b361-75e3abb4124e_trans.jpeg",
+        "https://cf.cjdropshipping.com/quick/product/9f03ea96-5edb-48ac-82a3-e90c03712805.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/07/25/02/34ace3e9-488d-43f1-a7b2-f8b462a79781_trans.jpeg",
+        "https://cf.cjdropshipping.com/quick/product/80d4ff78-b952-4858-b3fd-5e44dbb728a1.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "9hole-hanger",
+      "listing_url": "https://www.cjdropshipping.com/product/9-hole-clothes-hanger-organizer-space-saving-hanger-multi-function-folding-magic-hangers-drying-racks-scarf-clothes-storage-p-1450401413535502336.html",
+      "candidate_image_urls": [
+        "https://oss-cf.cjdropshipping.com/product/2025/05/26/08/62fde51b-9069-4747-b82e-07a6cce3406d.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/05/26/08/d7de057b-024f-4ac5-8a5a-5b7e76ac97f6.jpg",
+        "https://cf.cjdropshipping.com/662b2923-413a-434a-9927-9feb6d50b786.jpg",
+        "https://cf.cjdropshipping.com/abc713ec-d027-4274-b0af-c0a34cba31ea.jpg",
+        "https://cf.cjdropshipping.com/2b3388f6-9b05-422b-a65e-f05f85b29bd7.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "cable-organizer",
+      "listing_url": "https://cjdropshipping.com/product/cable-organizer-bag-travel-electronic-accessories-carrying-case-for-digital-camera-usb-charger-power-bank-storage-bag-box-p-1380028552015122432.html",
+      "candidate_image_urls": [],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "folding-hanger",
+      "listing_url": "https://cjdropshipping.com/product/clothes-special-multi-functional-light-luxury-folding-thickening-storage-rack-p-2508130311231622200.html",
+      "candidate_image_urls": [
+        "https://oss-cf.cjdropshipping.com/product/2025/08/13/07/d5bd167d-0018-4f16-9754-6fac23119122.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2025/08/13/03/87905c92-cbd9-4f90-8a11-993a81649b5d_trans.jpeg",
+        "https://oss-cf.cjdropshipping.com/product/2025/08/13/03/87855a53-d790-404d-8740-f24b8c42f4c0_trans.jpeg",
+        "https://oss-cf.cjdropshipping.com/product/2025/08/13/03/8cb640c2-ff26-4aeb-bc92-ca98801a0181_trans.jpeg",
+        "https://oss-cf.cjdropshipping.com/product/2025/08/13/03/009265cc-e5b7-4f45-a221-df3588c55b85.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "vacuum-hook",
+      "listing_url": "https://cjdropshipping.com/product/wall-suction-cup-hook-punch-free-powerful-vacuum-single-hook-kitchen-bathroom-door-rear-non-marking-clothes-hook-p-1748605268390322176.html",
+      "candidate_image_urls": [
+        "https://cf.cjdropshipping.com/quick/product/730890d6-97fb-4d69-9fd3-806b5c40d28c.jpg",
+        "https://cf.cjdropshipping.com/quick/product/56ce57f6-a519-444e-a697-de34569e63f7.jpg",
+        "https://cf.cjdropshipping.com/quick/product/ad66a3f9-6605-48a5-82d4-cbc8c6766840.jpg",
+        "https://cf.cjdropshipping.com/quick/product/d0bb56b6-06b6-4ca2-ab31-380672f1e673.jpg",
+        "https://cf.cjdropshipping.com/quick/product/d6b3456e-a81d-4105-8e51-4d68cdfd969a.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "foldable-tote",
+      "listing_url": "https://cjdropshipping.com/product/large-capacity-shopping-bags-portable-foldable-reusable-grocery-bags-daily-commuting-picnic-camping-storage-bag-p-A682EF80-BF0D-4074-A97A-B6841DF90CA2.html",
+      "candidate_image_urls": [],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "furoff",
+      "listing_url": "https://cjdropshipping.com/product/portable-washable-hair-remover-with-adhesive-roller-p-1653949161269637120.html",
+      "candidate_image_urls": [
+        "https://cf.cjdropshipping.com/9d4a3e49-2368-4a91-a510-ff2f25a0c8fc.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2023/12/12/07/8f28e659-30b6-4f3c-9252-86389bda686c.jpg",
+        "https://cf.cjdropshipping.com/7a5e25ed-0eba-43e0-b079-4bc0350c8360.jpg",
+        "https://cf.cjdropshipping.com/cc380bb7-0d4b-491d-8fa0-4cd1dfd316d5.jpg",
+        "https://cf.cjdropshipping.com/b477b6a9-6e19-4e44-b6f0-f7262aef17ee.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "drain-snake",
+      "listing_url": "https://cjdropshipping.com/product/60cm-sewer-dredger-spring-pipe-dredging-tool-household-hair-cleaner-drain-clog-remover-cleaning-tools-household-for-kitchen-sink-kitchen-gadgets-p-4328806F-26C7-47B0-940F-35B1AE409B00.html",
+      "candidate_image_urls": [
+        "https://cf.cjdropshipping.com/15574176/2489616969655.jpg",
+        "https://cf.cjdropshipping.com/15574176/4207005167508.jpg",
+        "https://cf.cjdropshipping.com/15574176/5457379460520.jpg",
+        "https://cf.cjdropshipping.com/20190510/1186683529265.png",
+        "https://cf.cjdropshipping.com/20200308/239781063236.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "microfiber-cloth",
+      "listing_url": "https://cjdropshipping.com/product/thickened-magic-cleaning-cloth-microfiber-surface-instant-polishing-household-cleaning-cloth-for-glass-windows-mirrors-car-kitchen-gadgets-p-249AE73F-A7EC-45AD-9F48-E708BC592CC9.html",
+      "candidate_image_urls": [
+        "https://cf.cjdropshipping.com/056e7dc1-f229-43c7-9aff-8ea48cdeead7.jpg",
+        "https://cf.cjdropshipping.com/02946c22-8dac-4658-9a27-e60c71f1026a.jpg",
+        "https://cf.cjdropshipping.com/5b3f02f8-5fb4-41eb-b1e9-2e67db96ddac.jpg",
+        "https://cf.cjdropshipping.com/bcd8e080-4737-46ce-969e-7e00e7ecf8f8.jpg",
+        "https://cf.cjdropshipping.com/82b22342-7742-47d5-b6d0-e1e4f9d10207.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "bottle-brush",
+      "listing_url": "https://cjdropshipping.com/product/multi-purpose-five-in-one-cup-washing-device-household-multifunctional-cup-brush-water-cup-insulation-cup-brush-milk-bottle-kitchen-gadgets-p-2412130400351606600.html",
+      "candidate_image_urls": [
+        "https://oss-cf.cjdropshipping.com/product/2024/12/23/06/9b893bff-7eaf-4cec-ba8c-601f2431bdab.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/12/23/06/6427d1e4-6bca-493a-83f2-0dde99253609.jpg",
+        "https://cf.cjdropshipping.com/quick/product/d11f0605-f047-4ddd-9636-7acc6a8c68c9.jpg",
+        "https://oss-cf.cjdropshipping.com/product/2024/12/13/03/e7b26570-109e-4c35-807b-f904cfccd4cc_trans.jpeg",
+        "https://oss-cf.cjdropshipping.com/product/2024/12/13/03/1c4d8aa6-65cf-42db-a357-13e8176bdd72_trans.jpeg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    },
+    {
+      "id": "mini-mop",
+      "listing_url": "https://cjdropshipping.com/product/new-portable-self-nsqueeze-mini-mop-lazy-hand-wash-free-strong-absorbent-mop-multifunction-portable-squeeze-cleaning-mop-desk-window-glass-cleaner-kitchen-car-sponge-cleaning-mop-home-cleaning-tools-p-1650408451954593792.html",
+      "candidate_image_urls": [
+        "https://cf.cjdropshipping.com/810fee2a-b9ad-4e03-b6ec-61460d110052.jpg",
+        "https://cf.cjdropshipping.com/9d64018f-834a-4166-a6b0-c48011fc84d6.jpg",
+        "https://cf.cjdropshipping.com/18ff6602-fb25-4fba-803a-422d315452d0.jpg",
+        "https://cf.cjdropshipping.com/0972fa17-db7e-4dbf-82f8-8d58be5bb7e0.jpg",
+        "https://cf.cjdropshipping.com/f69b96fd-736b-4393-b2e4-973af720ec75.jpg"
+      ],
+      "status": "DISCOVERED_ONLY_NOT_DOWNLOADED_OR_VARIANT_VERIFIED"
+    }
+  ]
+}

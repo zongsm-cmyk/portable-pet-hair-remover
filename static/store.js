@@ -1,4 +1,17 @@
 'use strict';
+// Native disclosure remains usable without JS. Escape closes it and restores focus.
+document.querySelectorAll('.mobile-menu').forEach(menu => {
+  menu.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && menu.open) {
+      menu.open = false;
+      menu.querySelector('summary').focus();
+    }
+  });
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { menu.open = false; }));
+  document.addEventListener('click', event => {
+    if (menu.open && !menu.contains(event.target)) menu.open = false;
+  });
+});
 document.querySelectorAll('[data-product-search]').forEach(input => {
   input.addEventListener('input', () => {
     const term = input.value.trim().toLowerCase();
@@ -162,6 +175,9 @@ document.querySelectorAll('[data-gallery-src]').forEach(button => {
     const gallery = button.closest('.product-gallery');
     const image = gallery.querySelector('[data-gallery-main]');
     image.src = button.dataset.gallerySrc;
+    image.alt = button.querySelector('img').alt;
+    const caption = gallery.querySelector('[data-gallery-caption]');
+    if (caption) caption.textContent = image.alt;
     gallery.querySelectorAll('[data-gallery-src]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
   });
 });

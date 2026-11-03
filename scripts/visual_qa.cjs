@@ -7,7 +7,7 @@ const runtime = process.env.PLAYWRIGHT_MODULE || 'C:/Users/askgs/.cache/codex-ru
 const {chromium} = require(runtime);
 const root = path.resolve(process.argv[2] || '.');
 const label = process.argv[3] || 'after';
-const output = path.resolve(process.env.VISUAL_QA_OUTPUT || 'receipts/visual-recovery');
+const output = path.resolve(process.env.VISUAL_QA_OUTPUT || path.join(require('node:os').tmpdir(),'VerveLiving-acceptance-20261103','legacy-visual'));
 fs.mkdirSync(output,{recursive:true});
 const mime = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.jpg':'image/jpeg','.webp':'image/webp','.png':'image/png'};
 (async()=>{
@@ -43,14 +43,14 @@ const mime = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8
       if(label==='after' && width===390){
         row.categoryLayout = await page.locator('.category-card').evaluateAll(cards=>cards.map(card=>({
           height:card.getBoundingClientRect().height,
-          photoHeight:card.querySelector('.category-photo').getBoundingClientRect().height,
-          imageHeight:card.querySelector('.category-photo img').getBoundingClientRect().height
+          iconHeight:card.querySelector('svg').getBoundingClientRect().height,
+          productPhotos:card.querySelectorAll('img').length
         })));
         assert.equal(row.categoryLayout.length,3);
         for(const card of row.categoryLayout){
           assert(card.height<420,`Category card too tall: ${card.height}`);
-          assert(card.photoHeight<260 && card.photoHeight>=210,`Category photo height: ${card.photoHeight}`);
-          assert(card.imageHeight===card.photoHeight,'Category image must fill its photo box');
+          assert(card.iconHeight>=30,'Category icon must remain visible');
+          assert.equal(card.productPhotos,0,'Research category must not promote an unqualified SKU photo');
         }
         assert.equal(await page.locator('.product-tile img').count(),13);
       }
@@ -71,7 +71,8 @@ const mime = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8
         assert(!row.overflow,`Overflow ${route}`);
         assert(row.images.every(i=>i.loaded)); assert.equal(row.buy,0);
         assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'),'noindex,follow');
-        assert(await page.getByText('Buying unavailable', {exact:false}).count());
+        assert(await page.getByRole('button',{name:'Buy now',exact:true}).isDisabled());
+        assert(await page.getByText('Ordering is currently unavailable:', {exact:false}).count());
         if(p.images.length)assert(row.images.length>=1);
         if(p.id==='furoff')await page.screenshot({path:path.join(output,'after-furoff-390.png'),fullPage:true});
       }

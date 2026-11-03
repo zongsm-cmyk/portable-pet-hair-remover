@@ -83,7 +83,7 @@ class StoreQualityTests(unittest.TestCase):
                      '7-12 business days', 'marcus b', 'david l', 'elena r')
         for path in ROOT.rglob('*.html'):
             html = path.read_text(encoding='utf-8')
-            self.assertIn('ONLINE CHECKOUT CURRENTLY PAUSED', html, str(path))
+            self.assertIn('Product previews · Ordering unavailable.', html, str(path))
             self.assertIn('"checkout_enabled":false', html, str(path))
             for marker in forbidden:
                 self.assertNotIn(marker, html.lower(), str(path))
