@@ -1,0 +1,162 @@
+{
+  "observed_at_utc": "2026-11-03T10:30:33.367942+00:00",
+  "result": "PASS",
+  "url": "https://shop.askouresystems.com",
+  "checks": {
+    "all_generated_routes_match": true,
+    "rss_feed_empty_until_qualified": true,
+    "worker_live_checkout_disabled_sandbox": true,
+    "/api/orders/create": true,
+    "/api/orders/capture": true,
+    "admin_export_rejects_unauthorized": true,
+    "authenticated_cj_export_requires_real_template": true
+  },
+  "routes": {
+    "/assets/store.css": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/assets/store.js": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/categories/home-organization/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/categories/kitchen-innovations/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/categories/smart-cleaning-tools/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/checkout/cancel/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/checkout/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/checkout/return/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/feed.xml": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/policies/contact/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/policies/privacy/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/policies/refunds/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/policies/shipping/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/policies/terms/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/furoff-pro-household-roller/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/home-organization-01/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/home-organization-02/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/home-organization-03/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/home-organization-04/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/home-organization-05/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/kitchen-innovations-01/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/kitchen-innovations-02/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/kitchen-innovations-03/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/kitchen-innovations-04/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/kitchen-innovations-05/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/smart-cleaning-tools-01/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/smart-cleaning-tools-02/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/smart-cleaning-tools-03/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/products/smart-cleaning-tools-04/": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/robots.txt": {
+      "status": 200,
+      "matches_expected": true
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "matches_expected": true
+    }
+  },
+  "api_probes": {
+    "/api/orders/create": {
+      "status": 503,
+      "error": "checkout_disabled"
+    },
+    "/api/orders/capture": {
+      "status": 503,
+      "error": "checkout_disabled"
+    }
+  },
+  "worker_health": {
+    "status": "ok",
+    "checkout_enabled": false,
+    "mode": "sandbox"
+  },
+  "real_sandbox_tested": false,
+  "real_payments_performed": 0,
+  "commercial_launch_approved": false
+}

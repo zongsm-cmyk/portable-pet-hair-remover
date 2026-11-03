@@ -1,0 +1,30 @@
+{
+  "step": 3,
+  "status": "PREVIEW_DEPLOYED_COMMERCIAL_LAUNCH_BLOCKED",
+  "verified_code_commit": "2ad12e36ce75ca86cde336d7138c7169f36eb2e3",
+  "pages_workflow": "https://github.com/zongsm-cmyk/portable-pet-hair-remover/actions/runs/41619728850",
+  "pages_workflow_result": "success",
+  "validation_workflow": "https://github.com/zongsm-cmyk/portable-pet-hair-remover/actions/runs/41619728688",
+  "validation_workflow_result": "success",
+  "production_verification": "PRODUCTION_VERIFICATION.json",
+  "production_verification_result": "PASS",
+  "mobile_browser_width": 390,
+  "mobile_document_width": 390,
+  "visible_categories": 3,
+  "homepage_payment_buttons": 0,
+  "merchant_feed_items": 0,
+  "qualified_products": 0,
+  "actual_paypal_sandbox_tested": false,
+  "cj_csv_import_acceptance_tested": false,
+  "live_payments_enabled": false,
+  "google_merchant_center_connected": false,
+  "pinterest_catalog_connected": false,
+  "search_console_submission_verified": false,
+  "blockers": [
+    "14 new qualified products and actual FurOff supplier verification not delivered",
+    "No authorized PayPal Developer session or Sandbox merchant/buyer credentials established",
+    "Current account-specific CJ import template not supplied",
+    "Merchant account limitations, operating float and support delivery readiness unverified"
+  ],
+  "scope_note": "A deployed preview and passing mocked tests do not satisfy the complete commercial launch definition of done."
+}
