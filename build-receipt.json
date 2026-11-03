@@ -1,18 +1,15 @@
 {
   "build_time": "2026-11-03T15:35:00Z",
-  "product_count": 4,
+  "product_count": 2,
   "products": [
     "furoff",
-    "neck",
-    "knee",
     "freshseal"
   ],
   "categories_built": [
     "home-organization",
     "kitchen-innovations",
-    "smart-cleaning-tools",
-    "wellness-comfort"
+    "smart-cleaning-tools"
   ],
   "empty_categories": 0,
-  "pages_generated": 15
+  "pages_generated": 12
 }

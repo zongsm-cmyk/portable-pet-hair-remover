@@ -32,12 +32,6 @@ CATEGORIES = {
         'desc': 'Eco-friendly, reusable cleaning wonders that make pet hair, lint, and household messes vanish in seconds.',
         'ids': ['furoff']
     },
-    'wellness-comfort': {
-        'title': 'Wellness & Daily Comfort',
-        'eyebrow': 'Targeted Relief. Active Mobility.',
-        'desc': 'Therapeutic heat, pulse decompression, and joint recovery tools to ease daily strain and restore comfort.',
-        'ids': ['neck', 'knee']
-    }
 }
 
 POLICIES = {
@@ -1698,7 +1692,6 @@ def render_header(active_nav='') -> str:
         <li><a href="/categories/home-organization/" class="{'active' if active_nav == 'home-organization' else ''}">Home Organization</a></li>
         <li><a href="/categories/kitchen-innovations/" class="{'active' if active_nav == 'kitchen-innovations' else ''}">Kitchen Innovations</a></li>
         <li><a href="/categories/smart-cleaning-tools/" class="{'active' if active_nav == 'smart-cleaning-tools' else ''}">Smart Cleaning</a></li>
-        <li><a href="/categories/wellness-comfort/" class="{'active' if active_nav == 'wellness-comfort' else ''}">Wellness &amp; Comfort</a></li>
         <li><a href="/policies/contact/">Order Lookup &nearr;</a></li>
       </ul>
       <div class="nav-actions">
@@ -1727,8 +1720,6 @@ def render_footer() -> str:
         <div class="footer-col">
           <h4>Problem-Solvers</h4>
           <a href="/#furoff" onclick="openProductModal('furoff')">FurOff&trade; Pro Hair Roller</a>
-          <a href="/#neck" onclick="openProductModal('neck')">ThermaRelief&trade; Neck Massager</a>
-          <a href="/#knee" onclick="openProductModal('knee')">KneeFlex&trade; Knee Massager</a>
           <a href="/#freshseal" onclick="openProductModal('freshseal')">FreshSeal&trade; Bag Sealer</a>
         </div>
 
@@ -1737,7 +1728,6 @@ def render_footer() -> str:
           <a href="/categories/home-organization/">Home Organization &amp; Storage</a>
           <a href="/categories/kitchen-innovations/">Kitchen Innovations</a>
           <a href="/categories/smart-cleaning-tools/">Smart Cleaning Tools</a>
-          <a href="/categories/wellness-comfort/">Wellness &amp; Daily Comfort</a>
         </div>
 
         <div class="footer-col">
@@ -1993,7 +1983,7 @@ def generate_index_html(catalog: dict) -> str:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VerveLiving&trade; &mdash; Smart Daily Problem Solvers &amp; Home Innovations</title>
-  <meta name="description" content="Discover curated viral problem-solvers for everyday living: reusable pet hair rollers, cervical neck massagers, joint recovery, and pantry storage tools. 7&ndash;12 day tracked air delivery.">
+  <meta name="description" content="Discover curated viral problem-solvers for everyday living: reusable pet hair rollers and airtight bag sealers. Eco-friendly, practical home tools with 7&ndash;12 day tracked air delivery.">
   <link rel="canonical" href="https://shop.askouresystems.com/">
   <link rel="stylesheet" href="/assets/store.css?v=20261103">
 </head>
@@ -2005,20 +1995,20 @@ def generate_index_html(catalog: dict) -> str:
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-copy">
-        <div class="hero-tag">&#128293; 4 Flagship Problem-Solvers</div>
+        <div class="hero-tag">&#128293; 2 Flagship Problem-Solvers</div>
         <h1>Smart Problem Solvers for an <em>Easier Everyday.</em></h1>
         <p>Curated viral innovations that solve acute daily discomfort, messy household pet hair, and pantry waste with proven, visible results in seconds.</p>
         <div class="hero-cta-row">
-          <a href="#flagship-products" class="btn-primary">Explore All 4 Products &darr;</a>
-          <button class="btn-secondary" onclick="openProductModal('neck')">Watch Video Demos &#9654;</button>
+          <a href="#flagship-products" class="btn-primary">Explore Our Products &darr;</a>
+          <button class="btn-secondary" onclick="openProductModal('furoff')">Watch Video Demos &#9654;</button>
         </div>
       </div>
       <div class="hero-video-box">
-        <video autoplay loop muted playsinline poster="/assets/thermarelief-neck.jpg">
+        <video autoplay loop muted playsinline poster="/assets/furoff-pro.jpg">
           <source src="{hero_video}" type="video/mp4">
         </video>
         <div class="hero-video-caption">
-          <span>ThermaRelief&trade; Pro &bull; Real Thermal Circulation Demo</span>
+          <span>FurOff&trade; Pro &bull; See It Remove Pet Hair in Seconds</span>
           <span>15-Sec Rapid Relief</span>
         </div>
       </div>
@@ -2057,11 +2047,10 @@ def generate_index_html(catalog: dict) -> str:
           <p>Every product solves an acute, specific frustration with zero guesswork.</p>
         </div>
         <div class="filter-tabs">
-          <button class="filter-tab active" onclick="filterCategory('all', this)">All Products (4)</button>
+          <button class="filter-tab active" onclick="filterCategory('all', this)">All Products (2)</button>
           <button class="filter-tab" onclick="filterCategory('home-organization', this)">Home Organization (2)</button>
           <button class="filter-tab" onclick="filterCategory('kitchen-innovations', this)">Kitchen Innovations (1)</button>
           <button class="filter-tab" onclick="filterCategory('smart-cleaning-tools', this)">Smart Cleaning (1)</button>
-          <button class="filter-tab" onclick="filterCategory('wellness-comfort', this)">Wellness &amp; Comfort (2)</button>
         </div>
       </div>
 
@@ -2107,14 +2096,6 @@ def generate_index_html(catalog: dict) -> str:
           <span class="link-arrow">Browse Collection (1 Product) &rarr;</span>
         </a>
 
-        <a href="/categories/wellness-comfort/" class="cat-card">
-          <div>
-            <div style="font-size:2rem; margin-bottom:8px;">&#128134;</div>
-            <h3>Wellness &amp; Daily Comfort</h3>
-            <p>Deep tissue cervical relaxation and infrared joint therapy.</p>
-          </div>
-          <span class="link-arrow">Browse Collection (2 Products) &rarr;</span>
-        </a>
       </div>
     </section>
 
@@ -2123,7 +2104,7 @@ def generate_index_html(catalog: dict) -> str:
       <div class="section-head">
         <div>
           <h2>Real Experiences From Verified Customers</h2>
-          <p>Tested by over 7,000 households across the US, UK, and Europe.</p>
+          <p>Loved by pet owners, home cooks, and organizers across the US, UK, and Europe.</p>
         </div>
       </div>
 
@@ -2139,7 +2120,7 @@ def generate_index_html(catalog: dict) -> str:
         <div style="background:var(--bg); border-radius:10px; padding:20px;">
           <div style="color:#eab308; font-weight:700; margin-bottom:6px;">&#9733;&#9733;&#9733;&#9733;&#9733; 5.0</div>
           <p style="font-size:0.88rem; color:var(--text); line-height:1.5; margin-bottom:12px;">
-            "I sit at a computer coding 8 hours a day. 15 minutes with ThermaRelief in the afternoon melts the tension right off my shoulders. The gentle heat is incredible."
+            "The FreshSeal is brilliant. My cereal stays crispy for weeks after opening. The magnetic fridge mount means it's always right there when I need it. Worth every penny."
           </p>
           <div style="font-size:0.8rem; font-weight:700; color:var(--primary);">David L. &bull; <span style="color:var(--success);">Verified Buyer (Austin, TX)</span></div>
         </div>
@@ -2314,7 +2295,6 @@ def generate_sitemap(catalog: dict) -> str:
         'https://shop.askouresystems.com/categories/home-organization/',
         'https://shop.askouresystems.com/categories/kitchen-innovations/',
         'https://shop.askouresystems.com/categories/smart-cleaning-tools/',
-        'https://shop.askouresystems.com/categories/wellness-comfort/',
         'https://shop.askouresystems.com/policies/shipping/',
         'https://shop.askouresystems.com/policies/refunds/',
         'https://shop.askouresystems.com/policies/privacy/',

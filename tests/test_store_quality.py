@@ -12,12 +12,12 @@ class StoreQualityTests(unittest.TestCase):
         self.assertTrue(catalog_path.is_file(), "catalog.json must exist")
         self.catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
 
-    def test_catalog_has_all_4_products(self):
-        """Verify the store has the 4 winning problem-solvers."""
+    def test_catalog_has_vetted_products(self):
+        """Verify the store features only approved non-medical products."""
         products = self.catalog.get('products', [])
-        self.assertEqual(len(products), 4, "Store must feature exactly 4 products")
+        self.assertEqual(len(products), 2, "Store must feature vetted products (FurOff and FreshSeal)")
         product_ids = {p['id'] for p in products}
-        self.assertEqual(product_ids, {'furoff', 'neck', 'knee', 'freshseal'})
+        self.assertEqual(product_ids, {'furoff', 'freshseal'})
 
     def test_every_product_has_5_images(self):
         """Verify each product has at least 5 high-resolution local image files."""
@@ -39,7 +39,7 @@ class StoreQualityTests(unittest.TestCase):
                 self.assertTrue(vid_path.is_file(), f"Local video file {video_url} must exist")
 
     def test_no_empty_categories(self):
-        """Verify no category is empty. Crucially test /categories/home-organization/."""
+        """Verify no active category is empty and wellness-comfort is removed."""
         home_org = ROOT / 'categories' / 'home-organization' / 'index.html'
         self.assertTrue(home_org.is_file(), "home-organization category page must exist")
         content = home_org.read_text(encoding='utf-8')
@@ -57,22 +57,31 @@ class StoreQualityTests(unittest.TestCase):
         self.assertIn("FurOff", cleaning.read_text(encoding='utf-8'))
 
         wellness = ROOT / 'categories' / 'wellness-comfort' / 'index.html'
-        self.assertTrue(wellness.is_file(), "wellness-comfort category page must exist")
-        w_content = wellness.read_text(encoding='utf-8')
-        self.assertIn("ThermaRelief", w_content)
-        self.assertIn("KneeFlex", w_content)
+        self.assertFalse(wellness.is_file(), "wellness-comfort category must not exist on storefront")
 
     def test_index_page_integrity(self):
-        """Verify index.html showcases all 4 products with video player and pricing."""
+        """Verify index.html showcases vetted products with video player, clean encoding, and pricing."""
         index_file = ROOT / 'index.html'
         self.assertTrue(index_file.is_file())
         html = index_file.read_text(encoding='utf-8')
-        self.assertIn("FurOff&trade; Pro", html)
-        self.assertIn("ThermaRelief&trade; Pro", html)
-        self.assertIn("KneeFlex&trade; Pro", html)
-        self.assertIn("FreshSeal&trade; Pro", html)
+        self.assertIn("FurOff", html)
+        self.assertIn("FreshSeal", html)
+        self.assertNotIn("ThermaRelief", html)
+        self.assertNotIn("KneeFlex", html)
+        self.assertNotIn("&trade;&trade;", html)
         self.assertIn("<video", html, "Must contain video player")
         self.assertIn("openCheckoutModal", html, "Must support checkout modal")
+
+    def test_no_medical_products_in_html(self):
+        """Verify across all HTML files that no medical devices or corrupted tags appear."""
+        html_files = list(ROOT.glob('**/*.html'))
+        for f in html_files:
+            txt = f.read_text(encoding='utf-8', errors='replace')
+            rel = str(f.relative_to(ROOT))
+            self.assertNotIn('&trade;&trade;', txt, f"Corruption found in {rel}")
+            self.assertNotIn('thermarelief', txt.lower(), f"Medical product found in {rel}")
+            self.assertNotIn('kneeflex', txt.lower(), f"Medical product found in {rel}")
+            self.assertNotIn('/categories/wellness-comfort/', txt, f"Wellness category link found in {rel}")
 
     def test_policies_exist(self):
         """Verify all legal and compliance policy pages exist and are well-formed."""
