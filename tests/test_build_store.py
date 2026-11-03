@@ -77,6 +77,8 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn('/products/',(out/'sitemap.xml').read_text())
             for path in (out/'products').glob('*/index.html'):
                 self.assertIn('noindex,follow',path.read_text(encoding='utf-8'))
+                if path.parent.name != 'furoff-pro-household-roller':
+                    self.assertNotIn('application/ld+json',path.read_text(encoding='utf-8'))
             self.assertTrue((out/'checkout/return/index.html').is_file())
             self.assertTrue((out/'checkout/cancel/index.html').is_file())
 
