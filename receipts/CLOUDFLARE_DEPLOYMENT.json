@@ -1,0 +1,21 @@
+{
+  "status": "DEPLOYED_CHECKOUT_DISABLED",
+  "worker_name": "verveliving-order-gateway",
+  "route": "shop.askouresystems.com/api/*",
+  "worker_code_version": "00b6f5b6-cfeb-4a48-b41b-fd9b43bc6caa",
+  "admin_secret_version": "24aadef9-e932-4ce8-b5f2-82193dea72bf",
+  "database_name": "verveliving-orders",
+  "database_id": "9b063c58-8396-40f8-bc61-5d7928450b91",
+  "database_region": "WEUR",
+  "migration_applied": "0001_orders.sql",
+  "remote_tables_verified": ["checkout_intents", "orders", "lookup_limits"],
+  "remote_paid_order_count_observed": 0,
+  "checkout_enabled": false,
+  "paypal_environment": "sandbox",
+  "paypal_secrets_configured": false,
+  "admin_secret_configured": true,
+  "official_cj_template_configured": false,
+  "new_paid_plan_activated": false,
+  "health_response": {"status": "ok", "checkout_enabled": false, "mode": "sandbox"},
+  "create_probe": {"http_status": 503, "error": "checkout_disabled"}
+}

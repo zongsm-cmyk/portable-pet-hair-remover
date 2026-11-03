@@ -1,0 +1,29 @@
+{
+  "observed_at_utc": "2026-11-03T10:20:58.8159483Z",
+  "step": "order_gateway_local_verification",
+  "command": "npm test",
+  "passed": 19,
+  "total": 19,
+  "failed": 0,
+  "runtime": "Node v24.19.0",
+  "database": "in-memory SQLite using production migration",
+  "payment_provider": "mocked PayPal HTTP responses",
+  "worker_sha256": "ab6b4a034590f840d82cdc688d9ba7acf231ff1e5a6e8bb8b0571381d69327da",
+  "checkout_enabled": false,
+  "real_payments": 0,
+  "actual_paypal_sandbox_verified": false,
+  "cj_import_verified": false,
+  "coverage": [
+    "create rate limit",
+    "server-authoritative quote",
+    "supplier qualification gate",
+    "merchant amount currency references and provider order id",
+    "current quote requalification before capture",
+    "capture idempotency and ambiguous persistence recovery",
+    "recovery after supplier revocation",
+    "private customer lookup and rate limiting",
+    "authenticated paid-only fulfillment tracking update",
+    "CSV authorization and official-template gate",
+    "CSV formula injection defense"
+  ]
+}

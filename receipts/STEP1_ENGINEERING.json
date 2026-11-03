@@ -1,0 +1,20 @@
+{
+  "step": 1,
+  "status": "IMPLEMENTED_AND_LOCALLY_TESTED_CHECKOUT_DISABLED",
+  "catalog_records": 15,
+  "draft_slots": 14,
+  "preview_products": 1,
+  "qualified_for_checkout": 0,
+  "retired_products_removed": ["ThermaRelief", "KneeFlex"],
+  "category_distribution": [5, 5, 5],
+  "python_tests_passed": 12,
+  "worker_tests_passed": 19,
+  "test_database": "local SQLite with production schema",
+  "test_payment_provider": "mocked PayPal HTTP responses",
+  "actual_paypal_sandbox_tested": false,
+  "live_payments_enabled": false,
+  "real_payments_performed": 0,
+  "new_paid_plan_activated": false,
+  "build_receipt": "../build-receipt.json",
+  "worker_test_receipt": "../workers/order-gateway/LOCAL_TEST_RECEIPT.json"
+}

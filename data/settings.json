@@ -1,0 +1,9 @@
+{
+  "site_url": "https://shop.askouresystems.com",
+  "brand": "VerveLiving",
+  "tagline": "Smart Everyday Problem Solvers",
+  "support_email": "support@askouresystems.com",
+  "checkout_enabled": false,
+  "api_base": "https://shop.askouresystems.com",
+  "paypal_environment": "sandbox"
+}

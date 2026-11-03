@@ -1,0 +1,27 @@
+name = "verveliving-order-gateway"
+main = "src/index.mjs"
+compatibility_date = "2026-11-03"
+workers_dev = false
+account_id = "92605d871882fd9e88679cd2ff3e761e"
+
+[triggers]
+crons = ["0 3 * * *"]
+
+[vars]
+CHECKOUT_ENABLED = "false"
+PAYPAL_ENV = "sandbox"
+STOREFRONT_ORIGIN = "https://shop.askouresystems.com"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "verveliving-orders"
+database_id = "9b063c58-8396-40f8-bc61-5d7928450b91"
+migrations_dir = "migrations"
+
+[[routes]]
+pattern = "shop.askouresystems.com/api/*"
+zone_name = "askouresystems.com"
+
+# Set using wrangler secret put; never put values in this file:
+# PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MERCHANT_ID, ADMIN_TOKEN
+# Optional CJ_TEMPLATE_JSON secret: validated exact template mapping (see README).

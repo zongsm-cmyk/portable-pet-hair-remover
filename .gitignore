@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+node_modules/
+.wrangler/
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+*.auth-state.json
+*.csv
+coverage/
+public/
+test-results/
+playwright-report/
+!*.example

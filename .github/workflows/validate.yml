@@ -1,0 +1,23 @@
+name: Validate store and order gateway
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test catalog, page generation and checkout gates
+        run: python -m unittest discover -s tests -v
+      - name: Test payment reconciliation, privacy and fulfillment gates
+        working-directory: workers/order-gateway
+        run: node --test test/*.test.mjs

@@ -1,0 +1,16 @@
+{
+  "step": 2,
+  "status": "PENDING_VERIFIED_SUPPLIER_DATA",
+  "requested_new_products": 14,
+  "requested_existing_products_to_verify": 1,
+  "qualified_products_received": 0,
+  "verified_us_uk_shipping_quotes_received": 0,
+  "request_dispatched_to_dropshipping_chat": true,
+  "chat_id": "6ae84801-e55c-83ea-bef8-91a1f5b20e3d",
+  "chat_title": "خطة اختبار المنتج",
+  "research_completion_verified": false,
+  "unknown_commercial_data_representation": null,
+  "operating_float_usd_verified": false,
+  "float_funded_by_this_work": false,
+  "acceptance": "15 real qualified products; five per category; fresh CJ SKU, variant, stock, US/UK quotes, weight/safety and margin evidence required. Draft placeholders do not satisfy this step."
+}
