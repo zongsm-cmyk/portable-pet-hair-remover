@@ -1,0 +1,975 @@
+{
+  "observed_at_utc": "2026-11-03T11:12:32.225586+00:00",
+  "base_url": "https://shop.askouresystems.com",
+  "screens": 33,
+  "widths": [
+    390,
+    768,
+    1440
+  ],
+  "checks": {
+    "all_pages_http_200": true,
+    "no_horizontal_overflow": true,
+    "no_clipped_content": true,
+    "no_icon_or_caption_overlap": true,
+    "all_product_images_loaded": true,
+    "checkout_stays_disabled": true,
+    "svg_explicit_outline": true
+  },
+  "manual_visual_review_required": true,
+  "screenshots": [
+    {
+      "page": "home",
+      "route": "/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "home-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        }
+      ],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "A thoughtful home.An easier everyday."
+    },
+    {
+      "page": "kitchen",
+      "route": "/categories/kitchen-innovations/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "kitchen-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Kitchen Innovations"
+    },
+    {
+      "page": "organization",
+      "route": "/categories/home-organization/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "organization-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Home Organization & Storage"
+    },
+    {
+      "page": "cleaning",
+      "route": "/categories/smart-cleaning-tools/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "cleaning-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Smart Cleaning Tools"
+    },
+    {
+      "page": "product",
+      "route": "/products/furoff-pro-household-roller/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "product-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-2.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-3.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "FurOff Pro Household Roller"
+    },
+    {
+      "page": "sourcing",
+      "route": "/products/kitchen-innovations-01/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "sourcing-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Details coming after verification."
+    },
+    {
+      "page": "shipping",
+      "route": "/policies/shipping/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "shipping-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Shipping Policy"
+    },
+    {
+      "page": "refunds",
+      "route": "/policies/refunds/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "refunds-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Refund & Return Policy"
+    },
+    {
+      "page": "privacy",
+      "route": "/policies/privacy/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "privacy-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Privacy Policy"
+    },
+    {
+      "page": "terms",
+      "route": "/policies/terms/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "terms-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Terms of Service"
+    },
+    {
+      "page": "contact",
+      "route": "/policies/contact/",
+      "width": 390,
+      "status": 200,
+      "screenshot": "contact-390.png",
+      "viewport": 390,
+      "documentWidth": 390,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Here to help."
+    },
+    {
+      "page": "home",
+      "route": "/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "home-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        }
+      ],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "A thoughtful home.An easier everyday."
+    },
+    {
+      "page": "kitchen",
+      "route": "/categories/kitchen-innovations/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "kitchen-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Kitchen Innovations"
+    },
+    {
+      "page": "organization",
+      "route": "/categories/home-organization/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "organization-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Home Organization & Storage"
+    },
+    {
+      "page": "cleaning",
+      "route": "/categories/smart-cleaning-tools/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "cleaning-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Smart Cleaning Tools"
+    },
+    {
+      "page": "product",
+      "route": "/products/furoff-pro-household-roller/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "product-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-2.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-3.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "FurOff Pro Household Roller"
+    },
+    {
+      "page": "sourcing",
+      "route": "/products/kitchen-innovations-01/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "sourcing-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Details coming after verification."
+    },
+    {
+      "page": "shipping",
+      "route": "/policies/shipping/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "shipping-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Shipping Policy"
+    },
+    {
+      "page": "refunds",
+      "route": "/policies/refunds/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "refunds-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Refund & Return Policy"
+    },
+    {
+      "page": "privacy",
+      "route": "/policies/privacy/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "privacy-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Privacy Policy"
+    },
+    {
+      "page": "terms",
+      "route": "/policies/terms/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "terms-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Terms of Service"
+    },
+    {
+      "page": "contact",
+      "route": "/policies/contact/",
+      "width": 768,
+      "status": 200,
+      "screenshot": "contact-768.png",
+      "viewport": 768,
+      "documentWidth": 768,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Here to help."
+    },
+    {
+      "page": "home",
+      "route": "/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "home-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 36,
+          "height": 36,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        },
+        {
+          "width": 88,
+          "height": 88,
+          "fill": "none",
+          "stroke": "rgb(109, 46, 59)",
+          "explicit": true
+        }
+      ],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "A thoughtful home.An easier everyday."
+    },
+    {
+      "page": "kitchen",
+      "route": "/categories/kitchen-innovations/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "kitchen-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Kitchen Innovations"
+    },
+    {
+      "page": "organization",
+      "route": "/categories/home-organization/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "organization-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Home Organization & Storage"
+    },
+    {
+      "page": "cleaning",
+      "route": "/categories/smart-cleaning-tools/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "cleaning-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Smart Cleaning Tools"
+    },
+    {
+      "page": "product",
+      "route": "/products/furoff-pro-household-roller/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "product-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-pro.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-2.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        },
+        {
+          "src": "/assets/furoff-3.jpg",
+          "loaded": true,
+          "naturalWidth": 1500
+        }
+      ],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "FurOff Pro Household Roller"
+    },
+    {
+      "page": "sourcing",
+      "route": "/products/kitchen-innovations-01/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "sourcing-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Details coming after verification."
+    },
+    {
+      "page": "shipping",
+      "route": "/policies/shipping/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "shipping-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Shipping Policy"
+    },
+    {
+      "page": "refunds",
+      "route": "/policies/refunds/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "refunds-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Refund & Return Policy"
+    },
+    {
+      "page": "privacy",
+      "route": "/policies/privacy/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "privacy-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Privacy Policy"
+    },
+    {
+      "page": "terms",
+      "route": "/policies/terms/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "terms-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Terms of Service"
+    },
+    {
+      "page": "contact",
+      "route": "/policies/contact/",
+      "width": 1440,
+      "status": 200,
+      "screenshot": "contact-1440.png",
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "stylesheet": "/assets/store.css?v=3e83733a7b94",
+      "script": "/assets/store.js?v=448f0c01b1fa",
+      "images": [],
+      "svg": [],
+      "outside": [],
+      "enabledCheckoutButtons": 0,
+      "overlap": {
+        "heroCaptionOverImage": false,
+        "benefitIconOverText": false
+      },
+      "mainHeading": "Here to help."
+    }
+  ],
+  "interactions": [
+    {
+      "width": 390,
+      "gallery_photos": 3,
+      "video": {
+        "ready": 4,
+        "duration": 54.36,
+        "width": 540,
+        "height": 960,
+        "error": null
+      },
+      "back_to_photo": true
+    },
+    {
+      "width": 390,
+      "category_navigation_clicked": 3
+    },
+    {
+      "width": 768,
+      "gallery_photos": 3,
+      "video": {
+        "ready": 4,
+        "duration": 54.36,
+        "width": 540,
+        "height": 960,
+        "error": null
+      },
+      "back_to_photo": true
+    },
+    {
+      "width": 768,
+      "category_navigation_clicked": 3
+    },
+    {
+      "width": 1440,
+      "gallery_photos": 3,
+      "video": {
+        "ready": 4,
+        "duration": 54.36,
+        "width": 540,
+        "height": 960,
+        "error": null
+      },
+      "back_to_photo": true
+    },
+    {
+      "width": 1440,
+      "category_navigation_clicked": 3
+    }
+  ]
+}

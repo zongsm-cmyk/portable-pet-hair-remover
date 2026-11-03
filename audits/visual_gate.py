@@ -45,6 +45,8 @@ async def capture(args):
                 await page.screenshot(path=str(output/f'{name}-{width}.png'),full_page=True,animations='disabled')
                 metrics = await page.evaluate('''() => ({
                     viewport:innerWidth, documentWidth:document.documentElement.scrollWidth,
+                    stylesheet:document.querySelector('link[rel=stylesheet]')?.getAttribute('href'),
+                    script:document.querySelector('script[src]')?.getAttribute('src'),
                     images:Array.from(document.images).map(i=>({src:i.getAttribute('src'),loaded:i.complete&&i.naturalWidth>0,naturalWidth:i.naturalWidth})),
                     svg:Array.from(document.querySelectorAll('svg')).map(s=>({width:s.getBoundingClientRect().width,height:s.getBoundingClientRect().height,fill:getComputedStyle(s).fill,stroke:getComputedStyle(s).stroke,explicit:['width','height','fill','stroke'].every(k=>s.hasAttribute(k))})),
                     outside:Array.from(document.querySelectorAll('main *,header *,footer *')).filter(e=>{
