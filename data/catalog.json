@@ -542,7 +542,9 @@
       "category": "smart-cleaning-tools",
       "price_usd": 34.99,
       "images": [
-        "/assets/furoff-pro.jpg"
+        "/assets/furoff-pro.jpg",
+        "/assets/furoff-2.jpg",
+        "/assets/furoff-3.jpg"
       ],
       "short_problem_solved": "A household roller concept for lifting loose hair and lint from suitable fabrics.",
       "features": [
@@ -561,7 +563,17 @@
       "draft_slot": false,
       "stock_status": "unknown",
       "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_uk_usd": 0,
+      "video": {
+        "url": "https://video-cf.cjdropshipping.com/4099ed8dcbb271eea17f6733a78e0102/0be7fbf4fd6f4f0b88a7da643458f83d-b40d303f516990964caca85728b60041-ld.mp4",
+        "rights_verified": false,
+        "matches_product_verified": true,
+        "rights_evidence_url": null,
+        "status": "OWNER_AUTHORIZED_ORIGINAL_MEDIA_RESTORE",
+        "owner_authorized_restore": true,
+        "provenance_commit": "403f0e596fb20e8c955ef778b30c169e9f73f7cd",
+        "authorization_record": "Owner explicitly instructed restoration and publication of the original FurOff video on 2026-11-03."
+      }
     }
   ]
 }

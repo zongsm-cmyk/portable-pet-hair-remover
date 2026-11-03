@@ -60,3 +60,38 @@ if (captureStatus) {
     }).catch(error => {captureStatus.textContent=`We could not confirm the payment here. ${error.message} Please do not pay again; contact support with your PayPal reference.`;});
   }
 }
+
+// Keep all preview angles accessible without altering the underlying supplier images.
+document.querySelectorAll('[data-gallery-src]').forEach(button => {
+  button.addEventListener('click', () => {
+    const gallery = button.closest('.product-gallery');
+    const image = gallery.querySelector('[data-gallery-main]');
+    image.src = button.dataset.gallerySrc;
+    gallery.querySelectorAll('[data-gallery-src]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+  });
+});
+
+document.querySelectorAll('[data-gallery-video]').forEach(button => {
+  button.addEventListener('click', () => {
+    const gallery=button.closest('.product-gallery');
+    const main=gallery.querySelector('.product-image');
+    let video=main.querySelector('video');
+    if (!video) {
+      video=document.createElement('video');
+      video.controls=true;video.playsInline=true;video.preload='metadata';
+      video.setAttribute('aria-label','Product demonstration');
+      video.poster=main.querySelector('[data-gallery-main]').src;
+      video.src=button.dataset.galleryVideo;
+      main.appendChild(video);
+    }
+    main.querySelector('[data-gallery-main]').hidden=true;video.hidden=false;
+    video.play().catch(()=>{});
+    gallery.querySelectorAll('button').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
+  });
+});
+document.querySelectorAll('[data-gallery-src]').forEach(button=>button.addEventListener('click',()=>{
+  const main=button.closest('.product-gallery').querySelector('.product-image');
+  const video=main.querySelector('video');if(video){video.pause();video.hidden=true;}
+  main.querySelector('[data-gallery-main]').hidden=false;
+  button.closest('.product-gallery').querySelectorAll('[data-gallery-video]').forEach(other=>other.setAttribute('aria-pressed','false'));
+}));

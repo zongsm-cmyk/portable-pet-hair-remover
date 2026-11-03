@@ -23,6 +23,30 @@ class BuildTests(unittest.TestCase):
         p['specs'].update(weight_g=200,contains_lithium=False,contains_liquid=False,medical=False)
         return p
 
+    def test_icons_have_outline_fallback_without_css(self):
+        for kind in ('kitchen','organize','cleaning'):
+            svg=ET.fromstring(module.icon(kind))
+            self.assertEqual(svg.attrib['width'],'36')
+            self.assertEqual(svg.attrib['height'],'36')
+            self.assertEqual(svg.attrib['fill'],'none')
+            self.assertEqual(svg.attrib['stroke'],'currentColor')
+            self.assertEqual(svg.attrib['viewBox'],'0 0 24 24')
+
+    def test_original_gallery_restored_without_enabling_checkout(self):
+        with tempfile.TemporaryDirectory() as temp:
+            module.build(output=Path(temp))
+            html=(Path(temp)/'products/furoff-pro-household-roller/index.html').read_text(encoding='utf-8')
+            self.assertEqual(html.count('data-gallery-src='),3)
+            self.assertIn('data-gallery-video=',html)
+            self.assertIn('Checkout not available yet',html)
+            self.assertNotIn('data-checkout-product=',html)
+            self.assertIn('403f0e596fb20e8c955ef778b30c169e9f73f7cd',json.dumps(self.catalog))
+
+    def test_owner_media_restore_cannot_substitute_a_different_video(self):
+        fur=next(p for p in self.catalog['products'] if p['id']=='furoff')
+        fur['video']['url']='https://example.com/different.mp4'
+        with self.assertRaises(ValueError):module.validate(self.catalog,self.settings)
+
     def test_current_catalog_is_15_drafts_five_per_category(self):
         products=module.validate(self.catalog,self.settings)
         self.assertEqual(len(products),15)
@@ -101,7 +125,8 @@ class BuildTests(unittest.TestCase):
             root=Path(temp)/'source';out=Path(temp)/'output'
             for directory in ['data','static','assets']:(root/directory).mkdir(parents=True,exist_ok=True)
             for name in ['store.css','store.js']:(root/'static'/name).write_text((ROOT/'static'/name).read_text(encoding='utf-8'),encoding='utf-8')
-            (root/'assets/furoff-pro.jpg').write_bytes((ROOT/'assets/furoff-pro.jpg').read_bytes())
+            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg']:
+                (root/'assets'/image).write_bytes((ROOT/'assets'/image).read_bytes())
             (root/'data/catalog.json').write_text(json.dumps(self.catalog),encoding='utf-8')
             (root/'data/settings.json').write_text(json.dumps(self.settings),encoding='utf-8')
             module.build(root,out)
@@ -129,7 +154,8 @@ class BuildTests(unittest.TestCase):
             root=Path(temp)/'source';out=Path(temp)/'output'
             for directory in ['data','static','assets']:(root/directory).mkdir(parents=True,exist_ok=True)
             for name in ['store.css','store.js']:(root/'static'/name).write_text((ROOT/'static'/name).read_text(encoding='utf-8'),encoding='utf-8')
-            (root/'assets/furoff-pro.jpg').write_bytes((ROOT/'assets/furoff-pro.jpg').read_bytes())
+            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg']:
+                (root/'assets'/image).write_bytes((ROOT/'assets'/image).read_bytes())
             (root/'data/catalog.json').write_text(json.dumps(self.catalog),encoding='utf-8')
             (root/'data/settings.json').write_text(json.dumps(self.settings),encoding='utf-8')
             module.build(root,out)
