@@ -2,7 +2,7 @@
 
 Storefront: https://shop.askouresystems.com · static GitHub Pages behind Cloudflare.
 
-Three collections: Kitchen Innovations, Home Organization & Storage, Smart Cleaning Tools. This repository publishes a **checkout-disabled preview**, not a qualified 15-product commercial launch. FurOff ($34.99) and FreshSeal ($24.99) are unqualified previews; thirteen structured positions await sourcing. FreshSeal retains an unresolved legacy lithium-battery claim and cannot qualify for checkout. Missing supplier evidence remains null.
+Three collections: Kitchen Innovations, Home Organization & Storage, Smart Cleaning Tools. Current tree: **15 research candidates, 13 authentic pictured previews, eight two-image galleries, two visual holds and zero qualified products**. Unqualified retail prices are null. FreshSeal and anonymous placeholders have been retired. Checkout remains disabled; no actual merchant Sandbox transaction is evidenced.
 
 ## Build and test
 
@@ -16,6 +16,12 @@ node --test workers/order-gateway/test/*.test.mjs tests/*.test.mjs
 ```
 
 `data/catalog.json` is the source of truth. `data/settings.json` holds public, non-secret settings. The build generates root HTML, three collection pages, fifteen product routes, five policy/contact pages, checkout return/cancel routes, feed, sitemap, robots, assets and Worker catalog. Use `--output <directory>` for an isolated generated preview. The deterministic `build-receipt.json` records counts and hashes.
+
+`/cart/` supports qualified products, quantities 1–10, up to 15 distinct IDs, removal, US/GB and integer-cent display estimates. Only IDs/quantities enter session storage; the Worker recalculates every order. No active payment button exists while checkout is disabled. `/track-order/` provides the existing private lookup form. Inbound support delivery and automated email notifications remain unverified/not operational.
+
+The optional `scripts/import_research_media.py` needs Pillow and the owner's external CJ research/cache. It validates all 13 originals and eight secondary images, their exact URLs, hashes, dimensions and reproducibility before writes. Missing/invalid media fails closed; it refuses to overwrite qualified commercial records. A normal site rebuild needs no external cache or Pillow and preserves all galleries. The two visual holds remain unpictured.
+
+See [supplier evidence template](data/merchant-evidence.template.json), [Sandbox acceptance runbook](docs/PAYPAL_SANDBOX_RUNBOOK.md) and [commerce completion evidence](docs/COMMERCE_COMPLETION_20261103.md). `node scripts/commerce_qa.cjs` uses installed Playwright and local Chrome to test actual files plus labelled synthetic cart fixtures; screenshot output is outside this repository and no provider connection is made.
 
 Never set `verified_for_checkout=true` without actual CJ SKU/variant, fresh stock and US/UK shipping evidence, qualified ETA/weight/safety and profitable landed costs. Validation fails on incomplete qualification. Draft pages are noindex; drafts never enter the feed. Global checkout must also be enabled before feed offers are published.
 

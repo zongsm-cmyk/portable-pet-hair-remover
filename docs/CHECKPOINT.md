@@ -1,5 +1,9 @@
 # VerveLiving expansion checkpoint — 2026-11-03
 
+## Current local commerce update (supersedes earlier pricing/placeholder notes)
+
+See `COMMERCE_COMPLETION_20261103.md` and `receipts/commerce-completion/validation.json`. Fifteen real candidates, thirteen pictured, twenty-one authenticated product images, eight two-image galleries, two visual holds, zero qualified variants and no unqualified retail prices. Reusable gated cart and `/track-order/` are implemented. 31 Python / 29 Node tests and 58 local Chrome route/viewport checks passed. Original photos and all protected Worker/D1 files remain unchanged. No actual Sandbox transaction, supplier qualification, inbound-mail acceptance, live activation or publication is proven by this work.
+
 Owner scope: single code writer Codex; Dropshipping chat owns supplier qualification. No paid subscriptions, no new billing, no fabricated supplier evidence, no payment enablement without qualification and real Sandbox validation.
 
 ## Implemented in this change

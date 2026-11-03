@@ -21,7 +21,7 @@ class BuildTests(unittest.TestCase):
 
     def verified(self):
         p=next(p for p in self.catalog['products'] if p['id']=='furoff')
-        p.update(verified_for_checkout=True,cj_variant_id='TEST-VARIANT',warehouse_origin='CN',supplier_cost_usd=2,shipping_us_usd=6,shipping_uk_usd=5,net_margin_usd=25,eta_us_days='8-14 business days',eta_uk_days='8-14 business days',supplier_verified_at=datetime.now(timezone.utc).isoformat(),stock_status='in_stock',shipping_us_line='CJPacket Ordinary',shipping_uk_line='CJPacket Ordinary')
+        p.update(price_usd=34.99,verified_for_checkout=True,cj_variant_id='TEST-VARIANT',warehouse_origin='CN',supplier_cost_usd=2,shipping_us_usd=6,shipping_uk_usd=5,net_margin_usd=25,eta_us_days='8-14 business days',eta_uk_days='8-14 business days',supplier_verified_at=datetime.now(timezone.utc).isoformat(),stock_status='in_stock',shipping_us_line='CJPacket Ordinary',shipping_uk_line='CJPacket Ordinary')
         p.update(customer_shipping_us_usd=0,customer_shipping_uk_usd=0)
         p['specs'].update(weight_g=200,contains_lithium=False,contains_liquid=False,medical=False)
         return p
@@ -39,7 +39,7 @@ class BuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             module.build(output=Path(temp))
             html=(Path(temp)/'products/furoff-pro-household-roller/index.html').read_text(encoding='utf-8')
-            self.assertEqual(html.count('data-gallery-src='),1)
+            self.assertEqual(html.count('data-gallery-src='),2)
             self.assertNotIn('data-gallery-video=',html)
             self.assertIn('Buying unavailable',html)
             self.assertNotIn('data-checkout-product=',html)
@@ -144,7 +144,7 @@ class BuildTests(unittest.TestCase):
             html='\n'.join(path.read_text(encoding='utf-8') for path in Path(temp).rglob('*.html'))
             for marker in ['ThermaRelief','KneeFlex','paypal.me','Verified Buyer','Only 14 units','localStorage']:
                 self.assertNotIn(marker,html)
-            self.assertIn('$34.99',html)
+            self.assertNotIn('$34.99',html)
             self.assertNotIn('data-checkout-product=',html)
 
     def test_script_and_html_escaping(self):
@@ -213,7 +213,7 @@ class BuildTests(unittest.TestCase):
             html=(out/'products/furoff-pro-household-roller/index.html').read_text(encoding='utf-8')
             self.assertIn('8-14 business days',html)
             self.assertIn('USD total for one item',html)
-            self.assertIn('data-checkout-product=furoff',html)
+            self.assertIn('data-add-cart="furoff"',html)
             self.assertNotIn('contains_lithium',html)
 
 if __name__=='__main__':unittest.main()

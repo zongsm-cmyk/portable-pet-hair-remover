@@ -20,6 +20,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "ice-tray",
+      "cj_sku": "CJYD202604601AZ",
+      "listing_url": "https://cjdropshipping.com/product/ice-cube-mold-household-ice-maker-food-grade-press-ice-tray-ice-cube-maker-ice-tray-mold-with-storage-box-kitchen-gadget-p-1785940589914107904.html",
+      "file": "/assets/products/press-release-ice-tray-02.webp",
+      "original_url": "https://oss-cf.cjdropshipping.com/product/2024/05/02/07/91a70db3-3c5c-4626-a887-80608c5690ab_trans.jpeg",
+      "source_sha256": "08d4dc54a43ef5f1548e04246c19999aad7ca7484917d00316f37661a3a4c259",
+      "source_format": "JPEG",
+      "sha256": "f12d537055855da270611639976d093d617304074855c818e794de53ff942398",
+      "source_dimensions": [
+        800,
+        800
+      ],
+      "width": 800,
+      "height": 800,
+      "bytes": 63032,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -42,6 +64,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "fruit-colander",
+      "cj_sku": "CJYD208536601AZ",
+      "listing_url": "https://cjdropshipping.com/product/fruit-drain-basket-with-lid-vegetable-washing-bowl-foldable-handle-cleaning-colander-plastic-refrigerator-crisper-kitchen-box-kitchen-gadgets-p-2407160828401622500.html",
+      "file": "/assets/products/fruit-rinse-storage-bowl-02.webp",
+      "original_url": "https://oss-cf.cjdropshipping.com/product/2024/08/12/03/e409ca67-9428-4549-966a-dd4f1cfea071.jpg",
+      "source_sha256": "89390ce84bf9d71b80d1af45e62df6ea9fa76b0b65112a4082e0f5a565dabee3",
+      "source_format": "JPEG",
+      "sha256": "13e50747decbf48103df16c0326e8a7de357df823a24c78d5ca41dae0e4418b9",
+      "source_dimensions": [
+        800,
+        800
+      ],
+      "width": 800,
+      "height": 800,
+      "bytes": 55844,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -64,6 +108,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "faucet-caddy",
+      "cj_sku": "CJYD207339601AZ",
+      "listing_url": "https://cjdropshipping.com/product/kitchen-space-aluminum-sink-faucet-storage-rack-dishwasher-vegetable-sink-supplies-household-drain-basket-bathroom-accessories-p-2407020239431617500.html",
+      "file": "/assets/products/rotating-sink-caddy-02.webp",
+      "original_url": "https://cf.cjdropshipping.com/quick/product/cc4d2dde-1d1c-408b-aba7-6d87bc8bd2ee.jpg",
+      "source_sha256": "c2b6fdd805843847cfb03bd841b49548e130426c2756395bde053e442068e029",
+      "source_format": "JPEG",
+      "sha256": "37a8eceb175f6fb98170f7fc5ed2a186499799b31004c0d29f4fec724990a45d",
+      "source_dimensions": [
+        800,
+        800
+      ],
+      "width": 800,
+      "height": 800,
+      "bytes": 101728,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -86,6 +152,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "garlic-press",
+      "cj_sku": "CJCJ170137301AZ",
+      "listing_url": "https://cjdropshipping.com/product/garlic-crusher-onion-chopper-multipeler-vegetables-chopper-manual-garlic-press-machine-garlic-squeezer-kitchen-gadget-p-1633393678565781504.html",
+      "file": "/assets/products/push-down-garlic-chopper-02.webp",
+      "original_url": "https://cf.cjdropshipping.com/770dbc8b-3f71-49ae-b6f6-063caea2ba75.jpg",
+      "source_sha256": "3ec40a91cb5a1c473cd04e951fc7b4df2f7f2102d1f35d60302310dd6f1d739e",
+      "source_format": "JPEG",
+      "sha256": "6fa14d860c92409736d8b19a19670318ac3d67616898420ef4abf6db97586b1b",
+      "source_dimensions": [
+        800,
+        800
+      ],
+      "width": 800,
+      "height": 800,
+      "bytes": 63228,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -108,6 +196,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "9hole-hanger",
+      "cj_sku": "CJJT132431901AZ",
+      "listing_url": "https://www.cjdropshipping.com/product/9-hole-clothes-hanger-organizer-space-saving-hanger-multi-function-folding-magic-hangers-drying-racks-scarf-clothes-storage-p-1450401413535502336.html",
+      "file": "/assets/products/space-saving-nine-hole-hanger-02.webp",
+      "original_url": "https://oss-cf.cjdropshipping.com/product/2025/05/26/08/d7de057b-024f-4ac5-8a5a-5b7e76ac97f6.jpg",
+      "source_sha256": "e928667d238de801eb7769e516c5ffad4e2f4b83ff17374b4e0921f278053907",
+      "source_format": "JPEG",
+      "sha256": "1b8153c45672bce2941f1c2acaa237195f950ef3048591107190fe3863a8a01c",
+      "source_dimensions": [
+        1001,
+        1001
+      ],
+      "width": 900,
+      "height": 900,
+      "bytes": 64724,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -130,6 +240,7 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -152,6 +263,7 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -174,6 +286,7 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -196,6 +309,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "furoff",
+      "cj_sku": "CJJT174982701AZ",
+      "listing_url": "https://cjdropshipping.com/product/portable-washable-hair-remover-with-adhesive-roller-p-1653949161269637120.html",
+      "file": "/assets/products/furoff-pro-household-roller-02.webp",
+      "original_url": "https://oss-cf.cjdropshipping.com/product/2023/12/12/07/8f28e659-30b6-4f3c-9252-86389bda686c.jpg",
+      "source_sha256": "0cb802a7552058213647acbe1599636ff608375a6bac16fb910ba67cbe56b71a",
+      "source_format": "JPEG",
+      "sha256": "a3fb9909f9cdb1af48859516af271eefb408b18f4faecf6b0535b5354f20e783",
+      "source_dimensions": [
+        1000,
+        1000
+      ],
+      "width": 900,
+      "height": 900,
+      "bytes": 49840,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -218,6 +353,7 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -240,6 +376,7 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded PNG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -262,6 +399,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "bottle-brush",
+      "cj_sku": "CJYD224256101AZ",
+      "listing_url": "https://cjdropshipping.com/product/multi-purpose-five-in-one-cup-washing-device-household-multifunctional-cup-brush-water-cup-insulation-cup-brush-milk-bottle-kitchen-gadgets-p-2412130400351606600.html",
+      "file": "/assets/products/five-in-one-bottle-cleaning-brush-02.webp",
+      "original_url": "https://oss-cf.cjdropshipping.com/product/2024/12/23/06/6427d1e4-6bca-493a-83f2-0dde99253609.jpg",
+      "source_sha256": "99c53759b0dd563e6ab35c5c7964c08c1cab21ed66226710b26d537481c3c2b0",
+      "source_format": "JPEG",
+      "sha256": "2b73a057398348e9a2faf3807544abc785d812576ab587a68f48e4c2b35f0678",
+      "source_dimensions": [
+        800,
+        800
+      ],
+      "width": 800,
+      "height": 800,
+      "bytes": 54494,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     },
@@ -284,6 +443,28 @@
       "validation": "Decoded original magic and dimensions; exact reproducible WEBP; subject visually inspected by Codex",
       "http_status": "Cache downloader curl --fail reported success; no response headers retained; no fresh network verification",
       "content_type": "Original headers not retained; MIME inferred from decoded JPEG",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
+      "usage": "Only to promote this exact CJ product; no unrelated reuse",
+      "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
+    },
+    {
+      "product_id": "mini-mop",
+      "cj_sku": "CJQX1743143-1Mop",
+      "listing_url": "https://cjdropshipping.com/product/new-portable-self-nsqueeze-mini-mop-lazy-hand-wash-free-strong-absorbent-mop-multifunction-portable-squeeze-cleaning-mop-desk-window-glass-cleaner-kitchen-car-sponge-cleaning-mop-home-cleaning-tools-p-1650408451954593792.html",
+      "file": "/assets/products/self-squeezing-mini-mop-02.webp",
+      "original_url": "https://cf.cjdropshipping.com/9d64018f-834a-4166-a6b0-c48011fc84d6.jpg",
+      "source_sha256": "2a018c1e87e63e067e18d3785880afcb4b29fb0b8538a8e594c3b959fd02bd82",
+      "source_format": "JPEG",
+      "sha256": "e8131a9664bf455b6a85959d001f4fe1becd3f19c5598fb80c756339a4a83cac",
+      "source_dimensions": [
+        800,
+        800
+      ],
+      "width": 800,
+      "height": 800,
+      "bytes": 110626,
+      "validation": "Owner supplied exact CJ URL and visually matched secondary photo; decoded original and exact reproducible WEBP; hash and dimensions checked",
+      "license": "CJ product promotional usage only; no independent copyright license grant evidenced",
       "usage": "Only to promote this exact CJ product; no unrelated reuse",
       "rights_reference": "https://blog.cjdropshipping.com/detail/cj-drop-shipping-policy"
     }

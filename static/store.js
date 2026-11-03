@@ -13,6 +13,114 @@ document.querySelectorAll('[data-product-search]').forEach(input => {
 });
 const config = document.querySelector('#store-config');
 const settings = config ? JSON.parse(config.textContent) : {checkout_enabled:false,api_base:''};
+const CART_KEY = 'verveliving.cart.v1';
+function qualifiedCatalog(products, now = Date.now()) {
+  return (Array.isArray(products) ? products : []).filter(p => {
+    const timestamp = Date.parse(p.supplier_verified_at);
+    return typeof p.id === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.id) &&
+      Number.isFinite(timestamp) && timestamp <= now && now - timestamp <= 7 * 86400000 &&
+      ['price_usd','customer_shipping_us_usd','customer_shipping_uk_usd'].every(key =>
+        typeof p[key] === 'number' && Number.isFinite(p[key]) && p[key] >= 0 && Number.isSafeInteger(Math.round(p[key]*100)) && Math.abs(p[key]*100-Math.round(p[key]*100)) < 1e-6) && p.price_usd > 0;
+  });
+}
+function normalizeCart(value, products) {
+  if (!Array.isArray(value)) return [];
+  const ids = new Set(products.map(p=>p.id)), seen = new Set(), result=[];
+  for (const line of value) {
+    if (result.length >= 15) break;
+    if (!line || !ids.has(line.id) || seen.has(line.id) || !Number.isInteger(line.quantity) || line.quantity < 1 || line.quantity > 10) continue;
+    seen.add(line.id); result.push({id:line.id,quantity:line.quantity});
+  }
+  return result;
+}
+function cartEstimate(items, country, products) {
+  if (!['US','GB'].includes(country)) throw new Error('Choose the United States or United Kingdom.');
+  const clean = normalizeCart(items,products);
+  if (JSON.stringify(items) !== JSON.stringify(clean)) throw new Error('Your cart contains unavailable items. Review it before continuing.');
+  return clean.reduce((total,line)=>{
+    const p=products.find(p=>p.id===line.id);
+    return total+(Math.round(p.price_usd*100)+Math.round(p[country==='US'?'customer_shipping_us_usd':'customer_shipping_uk_usd']*100))*line.quantity;
+  },0);
+}
+function approvalDestination(value, environment) {
+  const url = new URL(value);
+  const origin = environment === 'sandbox' ? 'https://www.sandbox.paypal.com' : environment === 'live' ? 'https://www.paypal.com' : '';
+  if (url.origin !== origin || url.username || url.password) throw new Error('Payment approval destination could not be verified.');
+  return url.href;
+}
+function readCart() {
+  try { return normalizeCart(JSON.parse(window.sessionStorage.getItem(CART_KEY)),qualifiedCatalog(settings.catalog)); }
+  catch { return []; }
+}
+function writeCart(items) {
+  const clean=normalizeCart(items,qualifiedCatalog(settings.catalog));
+  try { window.sessionStorage.setItem(CART_KEY,JSON.stringify(clean)); }
+  catch { throw new Error('Session storage is unavailable. Allow session storage to use the cart.'); }
+  document.querySelectorAll('[data-cart-count]').forEach(node=>node.textContent=String(clean.reduce((n,l)=>n+l.quantity,0)));
+  return clean;
+}
+function cartMessage(message) {
+  const node=document.querySelector('[data-cart-status]') || document.querySelector('[data-checkout-message]') || document.querySelector('[data-cart-feedback]');
+  if(node) node.textContent=message;
+}
+function renderCart() {
+  const container=document.querySelector('[data-cart-items]');
+  if (!container) return;
+  const products=qualifiedCatalog(settings.catalog), items=readCart();
+  container.replaceChildren();
+  if (!items.length) {
+    const empty=document.createElement('p');empty.textContent='Your cart is empty. Products can be added after supplier validation.';container.append(empty);
+  }
+  items.forEach(line=>{
+    const p=products.find(p=>p.id===line.id), row=document.createElement('div');row.className='cart-line';
+    const link=document.createElement('a');link.href='/products/'+p.slug+'/';link.textContent=p.title;
+    const label=document.createElement('label');label.textContent='Quantity for '+p.title;
+    const input=document.createElement('input');input.type='number';input.min='1';input.max='10';input.step='1';input.value=String(line.quantity);
+    input.addEventListener('change',()=>{
+      const qty=Number(input.value);
+      if (!Number.isInteger(qty)||qty<1||qty>10) {input.value=String(line.quantity);cartMessage('Choose a whole quantity between 1 and 10.');return;}
+      try {writeCart(readCart().map(l=>l.id===line.id?{id:l.id,quantity:qty}:l));renderCart();cartMessage('Cart updated.');}catch(error){cartMessage(error.message);}
+    });
+    label.append(input);
+    const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label','Remove '+p.title);
+    remove.addEventListener('click',()=>{try{writeCart(readCart().filter(l=>l.id!==line.id));renderCart();cartMessage('Item removed.');}catch(error){cartMessage(error.message);}});
+    row.append(link,label,remove);container.append(row);
+  });
+  const country=document.querySelector('#cart-country').value;
+  const total=cartEstimate(items,country,products);
+  document.querySelector('[data-cart-total]').textContent=items.length?`Estimated total: $${(total/100).toFixed(2)} USD (items and listed shipping)`:'No qualified items in your cart.';
+  const payment=document.querySelector('[data-cart-payment]');payment.replaceChildren();
+  if (!settings.checkout_enabled || !products.length || !settings.api_base) {cartMessage('Checkout is paused while supplier and payment verification are completed. No orders or payments can be created here.');return;}
+  if (!items.length) {cartMessage('Add a qualified product before continuing.');return;}
+  if(total>200000){cartMessage('This cart exceeds the $2,000 order limit. Reduce quantities before continuing.');return;}
+  cartMessage('Review your destination and quantities. PayPal will show the final server-calculated amount.');
+  const button=document.createElement('button');button.type='button';button.className='button';button.textContent='Continue to PayPal';
+  button.addEventListener('click',async()=>{
+    button.disabled=true;
+    // Disable edits during creation. Never silently retry an uncertain provider operation.
+    container.querySelectorAll('input,button').forEach(node=>node.disabled=true);
+    document.querySelector('#cart-country').disabled=true;
+    try {
+      const current=readCart(), valid=qualifiedCatalog(settings.catalog);
+      if(!settings.checkout_enabled || !current.length || cartEstimate(current,country,valid)>200000) throw new Error('Cart is no longer available for checkout.');
+      const result=await api('/api/orders/create',{items:current,country});
+      window.location.assign(approvalDestination(result.approval_url,settings.paypal_environment));
+    }catch(error){cartMessage(`Checkout could not be opened. ${error.message} Do not submit again if an approval or payment may already exist; contact support with the original PayPal reference.`);}
+  });
+  payment.append(button);
+}
+document.querySelectorAll('[data-add-cart]').forEach(button=>button.addEventListener('click',()=>{
+  const products=qualifiedCatalog(settings.catalog), id=button.dataset.addCart;
+  if (!products.some(p=>p.id===id)) {cartMessage('This product is not qualified for ordering.');return;}
+  const quantity=Number(document.querySelector('#quantity')?.value || 1), items=readCart(), existing=items.find(l=>l.id===id);
+  if(!Number.isInteger(quantity)||quantity<1||quantity>10||(existing?.quantity||0)+quantity>10){cartMessage('Choose a whole quantity; the cart limit is 10 per product.');return;}
+  if(!existing && items.length>=15){cartMessage('The cart can hold up to 15 different products.');return;}
+  if(existing)existing.quantity+=quantity;else items.push({id,quantity});
+  try{writeCart(items);cartMessage('Added to your cart. Use the Cart link to review quantities and delivery country.');}catch(error){cartMessage(error.message);}
+}));
+document.querySelectorAll('[data-cart-count]').forEach(node=>node.textContent=String(readCart().reduce((n,l)=>n+l.quantity,0)));
+document.querySelector('#cart-country')?.addEventListener('change',renderCart);
+renderCart();
 function endpoint(path) { return settings.api_base.replace(/\/$/, '') + path; }
 async function api(path, body) {
   const response = await fetch(endpoint(path), {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),credentials:'omit',cache:'no-store'});
@@ -20,21 +128,6 @@ async function api(path, body) {
   if (!response.ok) throw new Error(result.error || 'The service is temporarily unavailable. Please contact support.');
   return result;
 }
-document.querySelectorAll('[data-checkout-product]').forEach(button => {
-  button.addEventListener('click', async () => {
-    const status = document.querySelector('[data-checkout-message]');
-    if (!settings.checkout_enabled || !settings.api_base) { status.textContent='Online checkout is not available yet.'; return; }
-    const qty = Number(document.querySelector('#quantity').value);
-    if (!Number.isInteger(qty) || qty < 1 || qty > 10) { status.textContent='Choose a quantity between 1 and 10.'; return; }
-    button.disabled = true;
-    try {
-      const result = await api('/api/orders/create', {items:[{id:button.dataset.checkoutProduct,quantity:qty}],country:document.querySelector('#country').value});
-      const approval = new URL(result.approval_url);
-      if (!['https://www.paypal.com','https://www.sandbox.paypal.com'].includes(approval.origin)) throw new Error('Payment approval destination could not be verified.');
-      window.location.assign(approval.href);
-    } catch (error) { status.textContent=error.message;button.disabled=false; }
-  });
-});
 const lookup = document.querySelector('#order-lookup');
 if (lookup) lookup.addEventListener('submit', async event => {
   event.preventDefault();
@@ -57,6 +150,7 @@ if (captureStatus) {
     api('/api/orders/capture',{paypal_order_id:token}).then(result => {
       if (result.payment_status !== 'COMPLETED' || typeof result.order_id !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(result.order_id)) throw new Error('Verified capture receipt is missing.');
       captureStatus.textContent=`Payment confirmed. Your order number is ${result.order_id}. Keep this number for order lookup.`;
+      try {writeCart([]);} catch { /* A confirmed server receipt remains valid if browser storage is unavailable. */ }
       window.history.replaceState({},'',window.location.pathname);
     }).catch(error => {captureStatus.textContent=`We could not confirm the payment here. ${error.message} Please do not pay again; contact support with your PayPal reference.`;});
   }

@@ -1,5 +1,15 @@
 # Remaining acceptance work
 
+## Local shopping UX completed, 3 November 2026
+
+- [x] Qualified-only reusable cart, quantity/removal/country estimates, privacy-safe session storage and disabled payment gate.
+- [x] Eight authentic two-image galleries, preserved original thirteen photographs and repeatable fail-closed import.
+- [x] Discoverable order lookup route, consistent checkout routes, coherent hero and product-specific fit/variant FAQ.
+- [x] Merchant evidence template and repeatable Sandbox acceptance runbook; no fabricated acceptance.
+- [x] 31 Python tests, 29 Node tests, 58 local Chrome route/viewport checks; external screenshots and validation receipt.
+
+The remaining external gates below are still open; local UX completion does not qualify inventory or activate payments.
+
 - [ ] 15 evidence-backed catalog entries, including supplier media rights and actual stock.
 - [ ] Official CJ template download and successful import validation.
 - [ ] Real PayPal Sandbox order lifecycle with merchant/buyer credentials.

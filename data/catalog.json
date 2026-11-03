@@ -27,13 +27,14 @@
       "category": "kitchen-innovations",
       "cj_sku": "CJYD202604601AZ",
       "cj_product_url": "https://cjdropshipping.com/product/ice-cube-mold-household-ice-maker-food-grade-press-ice-tray-ice-cube-maker-ice-tray-mold-with-storage-box-kitchen-gadget-p-1785940589914107904.html",
-      "short_problem_solved": "Press to release ice cubes instead of twisting the tray.",
+      "short_problem_solved": "Release ice from a handheld cylindrical mould into a glass.",
       "features": [
-        "Press-release mechanism",
-        "Ice tray with storage box"
+        "Handheld cylindrical ice mould",
+        "Press-release design shown in supplier photos"
       ],
       "images": [
-        "/assets/products/press-release-ice-tray.webp"
+        "/assets/products/press-release-ice-tray.webp",
+        "/assets/products/press-release-ice-tray-02.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -80,7 +81,8 @@
         "Built-in removable drainage"
       ],
       "images": [
-        "/assets/products/fruit-rinse-storage-bowl.webp"
+        "/assets/products/fruit-rinse-storage-bowl.webp",
+        "/assets/products/fruit-rinse-storage-bowl-02.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -127,7 +129,8 @@
         "Draining holder"
       ],
       "images": [
-        "/assets/products/rotating-sink-caddy.webp"
+        "/assets/products/rotating-sink-caddy.webp",
+        "/assets/products/rotating-sink-caddy-02.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -174,7 +177,8 @@
         "Stainless steel cutting blades"
       ],
       "images": [
-        "/assets/products/push-down-garlic-chopper.webp"
+        "/assets/products/push-down-garlic-chopper.webp",
+        "/assets/products/push-down-garlic-chopper-02.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -266,7 +270,8 @@
         "Horizontal or vertical configuration"
       ],
       "images": [
-        "/assets/products/space-saving-nine-hole-hanger.webp"
+        "/assets/products/space-saving-nine-hole-hanger.webp",
+        "/assets/products/space-saving-nine-hole-hanger-02.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -470,7 +475,7 @@
       "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
     },
     {
-      "price_usd": 34.99,
+      "price_usd": null,
       "compare_at_usd": null,
       "supplier_cost_usd": null,
       "shipping_us_usd": null,
@@ -499,7 +504,8 @@
         "Reusable roller design"
       ],
       "images": [
-        "/assets/products/furoff-pro-household-roller.webp"
+        "/assets/products/furoff-pro-household-roller.webp",
+        "/assets/products/furoff-pro-household-roller-02.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -640,7 +646,8 @@
         "Handheld plastic and nylon"
       ],
       "images": [
-        "/assets/products/five-in-one-bottle-cleaning-brush.webp"
+        "/assets/products/five-in-one-bottle-cleaning-brush.webp",
+        "/assets/products/five-in-one-bottle-cleaning-brush-02.webp"
       ],
       "specs": {
         "dimensions": null,
@@ -687,7 +694,8 @@
         "Compact sponge head"
       ],
       "images": [
-        "/assets/products/self-squeezing-mini-mop.webp"
+        "/assets/products/self-squeezing-mini-mop.webp",
+        "/assets/products/self-squeezing-mini-mop-02.webp"
       ],
       "specs": {
         "dimensions": null,

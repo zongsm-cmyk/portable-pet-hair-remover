@@ -102,7 +102,7 @@ class StoreQualityTests(unittest.TestCase):
                         'shipping_us_usd', 'shipping_uk_usd'):
                 self.assertIsNone(p.get(key), (p['id'], key))
         by_id = {p['id']: p for p in products}
-        self.assertEqual(by_id['furoff']['price_usd'], 34.99)
+        self.assertIsNone(by_id['furoff']['price_usd'])
         self.assertNotIn('freshseal',by_id)
         self.assertEqual(sum(bool(p['images']) for p in products),13)
         self.assertEqual(sum(p['visual_hold'] for p in products),2)
