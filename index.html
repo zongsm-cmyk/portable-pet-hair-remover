@@ -1601,7 +1601,7 @@
       if(!alreadyOpen) {body.classList.add('open');headerEl.querySelector('span:last-child').textContent='−';}
     }
     function openCheckoutModal() {
-      document.getElementById('summaryProduct').textContent=activeProduct.name+' — '+activeProduct.bundleName+' ('+activeProduct.currentQty+' units)';
+      document.getElementById('summaryProduct').textContent=activeProduct.name+' — '+activeProduct.bundleName+' ('+activeProduct.currentQty+' '+(activeProduct.currentQty===1?'unit':'units')+')';
       document.getElementById('summaryPrice').textContent='$'+activeProduct.currentPrice.toFixed(2);
       document.getElementById('summaryTotal').textContent='$'+activeProduct.currentPrice.toFixed(2)+' USD';
       document.getElementById('checkoutModal').classList.add('active');
