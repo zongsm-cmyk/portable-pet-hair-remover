@@ -1,0 +1,171 @@
+{
+  "result": "LOCAL_P0_RECOVERY_VERIFIED_PUBLICATION_BLOCKED",
+  "timestamp_utc": "2026-11-03T18:16:55.922359+00:00",
+  "baseline_sha": "ce19957b46de4fa8ac82a77b6eb2c1a085385423",
+  "after_commit_sha": null,
+  "head_sha_unchanged": "ce19957b46de4fa8ac82a77b6eb2c1a085385423",
+  "initial_worktree_clean": true,
+  "restored_safe_sources_from": "a485047",
+  "root_cause": "Later commits replaced generator, static controller and catalog with legacy sources, while prior safety documentation/tests and disabled Worker remained. Publishing root therefore served legacy HTML.",
+  "backup_location": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag",
+  "backup_archive_sha256": "5e7445a0cbf3792c6289d1356a53441168be5244b8eca2669f02bf38ea9db98e",
+  "requested_backup_location": "C:/Users/askgs/Documents/dropshipping/backups/verveliving-p0-20261103-incident",
+  "requested_backup_error": "Access denied; used writable system TEMP outside repository before edits.",
+  "verification": {
+    "python_tests": {
+      "pass": 22,
+      "fail": 0
+    },
+    "node_tests": {
+      "pass": 23,
+      "fail": 0,
+      "gateway_mock_tests": 20,
+      "ui_vm_tests": 3
+    },
+    "syntax_checks": 4,
+    "generator_output_equivalence": "PASS byte-for-byte including Worker catalog and build receipt",
+    "local_html_routes": 27,
+    "local_links_and_sitemap": "PASS",
+    "feed_items": 0,
+    "checkout_enabled": false,
+    "paypal_environment": "sandbox",
+    "qualified_products": 0,
+    "slots": 15,
+    "placeholder_slots": 13,
+    "lighthouse": "NOT RUN"
+  },
+  "checks": [
+    {
+      "command": "C:/ComfyUI_windows_portable/python_embeded/python.exe -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "log": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag\\check-1.log",
+      "output_sha256": "91e484650197d349e1a77dcf729901f1a9af0e146405745c3d848e6defa62355"
+    },
+    {
+      "command": "node --test tests/store_ui.test.mjs workers/order-gateway/test/gateway.test.mjs",
+      "exit_code": 0,
+      "log": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag\\check-2.log",
+      "output_sha256": "83f85b1d8e26b3e6cb729b4a29d5aeff0c29727a893b056a5a5df6ac3af5304e"
+    },
+    {
+      "command": "node --check static/store.js",
+      "exit_code": 0,
+      "log": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag\\check-3.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node --check assets/store.js",
+      "exit_code": 0,
+      "log": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag\\check-4.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node --check workers/order-gateway/src/index.mjs",
+      "exit_code": 0,
+      "log": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag\\check-5.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "C:/ComfyUI_windows_portable/python_embeded/python.exe -m py_compile scripts/build_store.py",
+      "exit_code": 0,
+      "log": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag\\check-6.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag\\check-7.log",
+      "output_sha256": "a5917365a8a34a9b1d1c797f47cacc2f3e2f499f5aa63775b674e3cdb32812ba"
+    }
+  ],
+  "live_before": {
+    "owner_reported": "2026-11-03 ~18:03 UTC HTTP 200 with false confirmation and reviews",
+    "independently_reverified_this_execution": false
+  },
+  "live_after": {
+    "verified": false,
+    "home_get": "WinError 10013 socket forbidden",
+    "health_get": "WinError 10013 socket forbidden",
+    "web_fallback": "Site inaccessible via web tool",
+    "create_post": "NOT SENT: health could not confirm live disabled gate; no live D1 writes allowed",
+    "live_503": "NOT VERIFIED",
+    "cache_purge": "NOT PERFORMED",
+    "deployment": "NOT PERFORMED"
+  },
+  "git": {
+    "fetch": "FAILED: .git/FETCH_HEAD permission denied",
+    "ls_remote": "FAILED: GitHub network connection blocked",
+    "remote_latest": "NOT VERIFIED; origin/main cache equals local baseline",
+    "stage_commit": "FAILED: .git/index.lock permission denied",
+    "push": "NOT ATTEMPTED: no local commit and network unavailable",
+    "force_push": false
+  },
+  "worker_checks": {
+    "config_disabled_sandbox": true,
+    "server_pricing": "mock tested",
+    "capture_replay_idempotence_and_D1_recovery": "mock tested with in-memory SQLite, not live D1",
+    "private_tracking": "mock tested",
+    "invalid_create_capture": "mock tested",
+    "disabled_create_capture_503_no_service_access": "mock tested",
+    "worker_source_and_configuration_changed": false,
+    "worker_generated_catalog_changed": true,
+    "provider_sandbox_purchase": "NOT RUN",
+    "request_level_create_replay_idempotence": "NOT PROVEN by capture replay tests"
+  },
+  "prohibited_actions_performed": [],
+  "blockers": [
+    "Publish commit from an environment permitted to write this repository .git and reach GitHub; fetch and inspect latest main before integrating. No force push.",
+    "Verify normal and cache-bypassed live homepage displays checkout paused and no legacy claims; verify health sandbox/disabled and create returns 503 before any transaction.",
+    "All commercial stop gates remain: exact variant, fresh stock, actual US/UK shipment quotes, real PayPal Sandbox capture/replay, merchant eligibility, working support inbox, documented operating float and supplier workflow.",
+    "FreshSeal SKU unverified; legacy lithium claim unresolved. FurOff public SKU existence does not qualify exact variant, stock or shipping."
+  ],
+  "changed_paths": [
+    ".github/workflows/validate.yml",
+    "README.md",
+    "assets/store.css",
+    "assets/store.js",
+    "build-receipt.json",
+    "categories/home-organization/index.html",
+    "categories/kitchen-innovations/index.html",
+    "categories/smart-cleaning-tools/index.html",
+    "checkout/cancel/index.html",
+    "checkout/index.html",
+    "checkout/return/index.html",
+    "data/catalog.json",
+    "docs/CHECKPOINT.md",
+    "docs/P0-INCIDENT-RECEIPT-20261103.json",
+    "docs/P0-backup-location.json",
+    "feed.xml",
+    "index.html",
+    "policies/contact/index.html",
+    "policies/privacy/index.html",
+    "policies/refunds/index.html",
+    "policies/shipping/index.html",
+    "policies/terms/index.html",
+    "products/freshseal-pro/index.html",
+    "products/furoff-pro-household-roller/index.html",
+    "products/furoff-pro/index.html",
+    "products/home-organization-01/index.html",
+    "products/home-organization-02/index.html",
+    "products/home-organization-03/index.html",
+    "products/home-organization-04/index.html",
+    "products/home-organization-05/index.html",
+    "products/kitchen-innovations-02/index.html",
+    "products/kitchen-innovations-03/index.html",
+    "products/kitchen-innovations-04/index.html",
+    "products/kitchen-innovations-05/index.html",
+    "products/smart-cleaning-tools-01/index.html",
+    "products/smart-cleaning-tools-02/index.html",
+    "products/smart-cleaning-tools-03/index.html",
+    "products/smart-cleaning-tools-04/index.html",
+    "scripts/build_store.py",
+    "sitemap.xml",
+    "static/store.css",
+    "static/store.js",
+    "tests/store_ui.test.mjs",
+    "tests/test_build_store.py",
+    "tests/test_store_quality.py",
+    "workers/order-gateway/catalog.generated.json",
+    "workers/order-gateway/test/gateway.test.mjs"
+  ]
+}

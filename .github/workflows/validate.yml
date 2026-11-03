@@ -21,3 +21,5 @@ jobs:
       - name: Test payment reconciliation, privacy and fulfillment gates
         working-directory: workers/order-gateway
         run: node --test test/*.test.mjs
+      - name: Test browser payment receipt and disabled checkout behavior
+        run: node --test tests/*.test.mjs

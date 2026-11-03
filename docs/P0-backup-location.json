@@ -1,0 +1,12 @@
+{
+  "baseline_sha": "ce19957b46de4fa8ac82a77b6eb2c1a085385423",
+  "git_status": "",
+  "backup": "C:\\Users\\askgs\\AppData\\Local\\Temp\\verveliving-p0-20261103-incident-bhdqavag",
+  "requested_backup": "denied by filesystem policy",
+  "sha256": {
+    "index.html": "1444fe6ddcc63a5337e396f7f20bcf75e98110df38456e4de256ae3dd8d468fb",
+    "assets/store.js": "0ab902986da6cad669b7b8b297c86906cc84ccc3e8b4b7e493b1a8bae58b911c",
+    "data/catalog.json": "264f38da846b8ed15e39bd47fda73c1e85d8743590a63d0e1677e436a8fab771",
+    "scripts/build_store.py": "3b9856a2e7ab2c560256565faf7eb7a0d2a0d2bb6e4ea01ad16ae68c1814a5bb"
+  }
+}

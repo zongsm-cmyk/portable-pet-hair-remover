@@ -28,3 +28,7 @@ Cloudflare account `92605d871882fd9e88679cd2ff3e761e`, free D1 `verveliving-orde
 ## Recovery
 
 Prior local mobile/text fixes were backed up under `C:\Users\askgs\Documents\dropshipping\backups\pre-expansion-20261103` and committed before reconciling `origin/main`. Do not force-push or reset over newer work. To stop commerce keep `CHECKOUT_ENABLED=false`; the catalog and static pages alone cannot accept a payment. Never re-create a payment when capture outcome is uncertain; recover the original PayPal order ID.
+
+## P0 recovery boundary, 2026-11-03
+
+Root pages and their source generator had regressed after the earlier gated build. Current local recovery restores 15 slots (FurOff and FreshSeal previews plus 13 placeholders), with zero qualified products. FreshSeal supplier SKU and lithium specification remain unverified. Publication and current public HTTP are blocked in this restricted execution environment; consult the P0 receipt before making live-state claims. All original commercial stop gates remain in effect.

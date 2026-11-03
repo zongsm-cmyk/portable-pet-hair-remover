@@ -2,7 +2,7 @@
 
 Storefront: https://shop.askouresystems.com · static GitHub Pages behind Cloudflare.
 
-Three collections: Kitchen Innovations, Home Organization & Storage, Smart Cleaning Tools. This repository publishes a **checkout-disabled preview**, not a qualified 15-product commercial launch. FurOff is an indicative $34.99 preview; fourteen structured positions await sourcing. Missing supplier evidence remains null.
+Three collections: Kitchen Innovations, Home Organization & Storage, Smart Cleaning Tools. This repository publishes a **checkout-disabled preview**, not a qualified 15-product commercial launch. FurOff ($34.99) and FreshSeal ($24.99) are unqualified previews; thirteen structured positions await sourcing. FreshSeal retains an unresolved legacy lithium-battery claim and cannot qualify for checkout. Missing supplier evidence remains null.
 
 ## Build and test
 
@@ -12,7 +12,7 @@ Python standard library; Node 24+ for gateway tests with built-in SQLite:
 python scripts/build_store.py
 python -m unittest discover -s tests -v
 node --check assets/store.js
-node --test workers/order-gateway/test/*.test.mjs
+node --test workers/order-gateway/test/*.test.mjs tests/*.test.mjs
 ```
 
 `data/catalog.json` is the source of truth. `data/settings.json` holds public, non-secret settings. The build generates root HTML, three collection pages, fifteen product routes, five policy/contact pages, checkout return/cancel routes, feed, sitemap, robots, assets and Worker catalog. Use `--output <directory>` for an isolated generated preview. The deterministic `build-receipt.json` records counts and hashes.
@@ -23,7 +23,7 @@ Never set `verified_for_checkout=true` without actual CJ SKU/variant, fresh stoc
 
 `workers/order-gateway/` contains the Cloudflare Worker, D1 migration and tests. The production route is `shop.askouresystems.com/api/*`. `CHECKOUT_ENABLED=false` and `PAYPAL_ENV=sandbox` are deliberate. Prices are calculated server-side. Capture validates the actual PayPal response and persists an idempotent paid-order record. No PayPal credentials are in this repository or browser code.
 
-The deployed service provides health, disabled order creation/capture, private lookup, protected fulfillment updates, and protected CJ CSV export. Export remains gated until the actual CJ account template is downloaded and mapped. Tests mock PayPal; they do not prove real Sandbox purchase or CJ import.
+The Worker code supports health, disabled order creation/capture, private lookup, protected fulfillment updates, and protected CJ CSV export. Current deployment must be independently verified; local tests do not prove the live state. Export remains gated until the actual CJ account template is downloaded and mapped. Tests mock PayPal; they do not prove real Sandbox purchase or CJ import.
 
 See [gateway operations](workers/order-gateway/README.md), [checkpoint](docs/CHECKPOINT.md), [backlog](docs/BACKLOG.md) and JSON receipts for current evidence and remaining acceptance work.
 
@@ -34,3 +34,7 @@ GitHub Pages publishes committed root static files from main. The existing Pages
 To stop payments keep both storefront and Worker gates false. Preserve newer owner changes and the private database when rolling back. Recover ambiguous captures using the original PayPal order ID; never create a replacement charge.
 
 Free-tier infrastructure has quotas. It does not remove PayPal fees, supplier purchase costs, operating float or returns costs. No paid plan, live purchase or financial transfer was made by this implementation.
+
+## P0 incident recovery, 3 November 2026
+
+Later commits replaced the gated generator, static controller and catalog with legacy sources while retaining the earlier safety documentation and gateway. The P0 change restores the generator from a485047, preserves both unqualified product previews, and regenerates the actual root pages. CI now compares every generated file (including the Worker catalog) against committed output and tests browser receipt handling. See `docs/P0-INCIDENT-RECEIPT-20261103.json` for execution evidence and publication blockers.

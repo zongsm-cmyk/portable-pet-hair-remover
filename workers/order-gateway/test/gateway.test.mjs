@@ -48,6 +48,24 @@ test('quote rejects fractional/negative quantities, duplicates and unsupported c
 test('global payment gate stays disabled without explicit environment activation',async()=>{
   const response=await makeWorker([product()]).fetch(req('/api/orders/create',{items:[{id:'furoff',quantity:1}],country:'US'}),{});assert.equal(response.status,503);assert.equal((await response.json()).error,'checkout_disabled');
 });
+
+test('deployed disabled configuration rejects create and capture before any DB or provider access',async()=>{
+  const config = readFileSync(new URL('../wrangler.toml',import.meta.url),'utf8');
+  assert.match(config,/CHECKOUT_ENABLED\s*=\s*"false"/);
+  assert.match(config,/PAYPAL_ENV\s*=\s*"sandbox"/);
+  const products = JSON.parse(readFileSync(new URL('../catalog.generated.json',import.meta.url),'utf8')).products;
+  assert.equal(products.length,15);
+  assert.ok(products.every(p=>p.verified_for_checkout===false));
+  let calls = 0;
+  const deny = ()=>{calls++;throw new Error('disabled checkout touched a service');};
+  const env = {CHECKOUT_ENABLED:'false',PAYPAL_ENV:'sandbox',DB:{prepare:deny,batch:deny},TEST_FETCH:deny};
+  for (const path of ['/api/orders/create','/api/orders/capture']) {
+    const response = await makeWorker(products).fetch(req(path,{}),env);
+    assert.equal(response.status,503);
+    assert.equal((await response.json()).error,'checkout_disabled');
+  }
+  assert.equal(calls,0);
+});
 test('untrusted origin and invalid JSON rejected',async()=>{
   const {env}=environment(), worker=makeWorker([product()]);
   assert.equal((await worker.fetch(req('/api/orders/create',{}, {Origin:'https://evil.test'}),env)).status,403);

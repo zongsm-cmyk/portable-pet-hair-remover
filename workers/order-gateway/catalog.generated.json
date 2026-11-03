@@ -1,13 +1,13 @@
 {
   "products": [
     {
-      "price_usd": null,
+      "price_usd": 24.99,
       "compare_at_usd": null,
       "supplier_cost_usd": null,
       "shipping_us_usd": null,
       "shipping_uk_usd": null,
       "net_margin_usd": null,
-      "cj_sku": null,
+      "cj_sku": "CJJT149810201AZ",
       "cj_variant_id": null,
       "cj_product_url": null,
       "warehouse_origin": null,
@@ -16,26 +16,35 @@
       "supplier_verified_at": null,
       "shipping_us_line": null,
       "shipping_uk_line": null,
-      "id": "kitchen-innovations-01",
-      "slug": "kitchen-innovations-01",
-      "title": "Kitchen sourcing slot 01",
+      "id": "freshseal",
+      "slug": "freshseal-pro",
+      "title": "FreshSeal Pro Bag Sealer and Cutter",
       "category": "kitchen-innovations",
-      "images": [],
-      "short_problem_solved": "Product sourcing and supplier verification in progress. This is not a product offer.",
-      "features": [],
+      "images": [
+        "/assets/freshseal-pro.jpg"
+      ],
+      "short_problem_solved": "Bag sealer and cutter concept. Supplier listing, exact variant and specifications have not been verified.",
+      "features": [
+        "Unqualified product preview; not available to order.",
+        "Existing source describes a lithium battery; safety and transport qualification remain unresolved."
+      ],
       "specs": {
         "dimensions": null,
         "weight_g": null,
         "materials": null,
-        "contains_lithium": null,
+        "contains_lithium": true,
         "contains_liquid": null,
-        "medical": null
+        "medical": null,
+        "lithium_evidence": "Legacy catalog claim only; not independently verified."
       },
       "verified_for_checkout": false,
-      "draft_slot": true,
+      "draft_slot": false,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null,
+      "supplier_evidence_note": "SKU has not been verified. No stock or shipping evidence."
     },
     {
       "price_usd": null,
@@ -71,8 +80,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -108,8 +119,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -145,8 +158,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -182,8 +197,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -219,8 +236,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -256,8 +275,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -293,8 +314,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -330,8 +353,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -367,8 +392,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -404,8 +431,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -441,8 +470,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -478,8 +509,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "price_usd": null,
@@ -515,8 +548,10 @@
       "verified_for_checkout": false,
       "draft_slot": true,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
+      "rating": null,
+      "review_count": null
     },
     {
       "compare_at_usd": null,
@@ -524,7 +559,7 @@
       "shipping_us_usd": null,
       "shipping_uk_usd": null,
       "net_margin_usd": null,
-      "cj_sku": null,
+      "cj_sku": "CJJT174982701AZ",
       "cj_variant_id": null,
       "cj_product_url": null,
       "warehouse_origin": null,
@@ -559,8 +594,8 @@
       "verified_for_checkout": false,
       "draft_slot": false,
       "stock_status": "unknown",
-      "customer_shipping_us_usd": 0,
-      "customer_shipping_uk_usd": 0,
+      "customer_shipping_us_usd": null,
+      "customer_shipping_uk_usd": null,
       "video": {
         "url": "https://video-cf.cjdropshipping.com/4099ed8dcbb271eea17f6733a78e0102/0be7fbf4fd6f4f0b88a7da643458f83d-b40d303f516990964caca85728b60041-ld.mp4",
         "rights_verified": false,
@@ -570,7 +605,10 @@
         "owner_authorized_restore": true,
         "provenance_commit": "403f0e596fb20e8c955ef778b30c169e9f73f7cd",
         "authorization_record": "Owner explicitly instructed restoration and publication of the original FurOff video on 2026-11-03."
-      }
+      },
+      "rating": null,
+      "review_count": null,
+      "supplier_evidence_note": "Public SKU existence reported by owner; exact variant, current stock and US/UK quotes are not verified."
     }
   ]
 }

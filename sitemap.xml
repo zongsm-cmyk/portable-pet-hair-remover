@@ -1,14 +1,2 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://shop.askouresystems.com/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/categories/home-organization/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/categories/kitchen-innovations/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/categories/smart-cleaning-tools/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/policies/shipping/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/policies/refunds/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/policies/privacy/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/policies/terms/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/policies/contact/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/products/furoff-pro/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://shop.askouresystems.com/products/freshseal-pro/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-</urlset>
+<?xml version='1.0' encoding='utf-8'?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://shop.askouresystems.com/</loc></url><url><loc>https://shop.askouresystems.com/categories/kitchen-innovations/</loc></url><url><loc>https://shop.askouresystems.com/categories/home-organization/</loc></url><url><loc>https://shop.askouresystems.com/categories/smart-cleaning-tools/</loc></url><url><loc>https://shop.askouresystems.com/policies/shipping/</loc></url><url><loc>https://shop.askouresystems.com/policies/refunds/</loc></url><url><loc>https://shop.askouresystems.com/policies/privacy/</loc></url><url><loc>https://shop.askouresystems.com/policies/terms/</loc></url><url><loc>https://shop.askouresystems.com/policies/contact/</loc></url></urlset>

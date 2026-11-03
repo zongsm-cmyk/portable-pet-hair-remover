@@ -20,6 +20,7 @@ class BuildTests(unittest.TestCase):
     def verified(self):
         p=self.catalog['products'][-1]
         p.update(verified_for_checkout=True,cj_sku='TEST-SKU',cj_variant_id='TEST-VARIANT',cj_product_url='https://www.cjdropshipping.com/product/test.html',warehouse_origin='CN',supplier_cost_usd=2,shipping_us_usd=6,shipping_uk_usd=5,net_margin_usd=25,eta_us_days='8-14 business days',eta_uk_days='8-14 business days',supplier_verified_at=datetime.now(timezone.utc).isoformat(),stock_status='in_stock',shipping_us_line='CJPacket Ordinary',shipping_uk_line='CJPacket Ordinary')
+        p.update(customer_shipping_us_usd=0,customer_shipping_uk_usd=0)
         p['specs'].update(weight_g=200,contains_lithium=False,contains_liquid=False,medical=False)
         return p
 
@@ -51,7 +52,7 @@ class BuildTests(unittest.TestCase):
         products=module.validate(self.catalog,self.settings)
         self.assertEqual(len(products),15)
         self.assertFalse(any(p['verified_for_checkout'] for p in products))
-        self.assertEqual(sum(bool(p.get('draft_slot')) for p in products),14)
+        self.assertEqual(sum(bool(p.get('draft_slot')) for p in products),13)
 
     def test_flag_alone_cannot_enable_checkout(self):
         self.catalog['products'][-1]['verified_for_checkout']=True
@@ -101,7 +102,7 @@ class BuildTests(unittest.TestCase):
             self.assertNotIn('/products/',(out/'sitemap.xml').read_text())
             for path in (out/'products').glob('*/index.html'):
                 self.assertIn('noindex,follow',path.read_text(encoding='utf-8'))
-                if path.parent.name != 'furoff-pro-household-roller':
+                if path.parent.name not in ('furoff-pro-household-roller','freshseal-pro'):
                     self.assertNotIn('application/ld+json',path.read_text(encoding='utf-8'))
             self.assertTrue((out/'checkout/return/index.html').is_file())
             self.assertTrue((out/'checkout/cancel/index.html').is_file())
@@ -125,7 +126,7 @@ class BuildTests(unittest.TestCase):
             root=Path(temp)/'source';out=Path(temp)/'output'
             for directory in ['data','static','assets']:(root/directory).mkdir(parents=True,exist_ok=True)
             for name in ['store.css','store.js']:(root/'static'/name).write_text((ROOT/'static'/name).read_text(encoding='utf-8'),encoding='utf-8')
-            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg']:
+            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg','freshseal-pro.jpg']:
                 (root/'assets'/image).write_bytes((ROOT/'assets'/image).read_bytes())
             (root/'data/catalog.json').write_text(json.dumps(self.catalog),encoding='utf-8')
             (root/'data/settings.json').write_text(json.dumps(self.settings),encoding='utf-8')
@@ -154,7 +155,7 @@ class BuildTests(unittest.TestCase):
             root=Path(temp)/'source';out=Path(temp)/'output'
             for directory in ['data','static','assets']:(root/directory).mkdir(parents=True,exist_ok=True)
             for name in ['store.css','store.js']:(root/'static'/name).write_text((ROOT/'static'/name).read_text(encoding='utf-8'),encoding='utf-8')
-            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg']:
+            for image in ['furoff-pro.jpg','furoff-2.jpg','furoff-3.jpg','freshseal-pro.jpg']:
                 (root/'assets'/image).write_bytes((ROOT/'assets'/image).read_bytes())
             (root/'data/catalog.json').write_text(json.dumps(self.catalog),encoding='utf-8')
             (root/'data/settings.json').write_text(json.dumps(self.settings),encoding='utf-8')

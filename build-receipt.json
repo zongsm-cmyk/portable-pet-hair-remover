@@ -1,15 +1,51 @@
 {
-  "build_time": "2026-11-03T15:35:00Z",
-  "product_count": 2,
-  "products": [
-    "furoff",
-    "freshseal"
-  ],
-  "categories_built": [
-    "home-organization",
-    "kitchen-innovations",
-    "smart-cleaning-tools"
-  ],
-  "empty_categories": 0,
-  "pages_generated": 12
+  "step": 1,
+  "result": "BUILT_CHECKOUT_PAUSED",
+  "catalog_records": 15,
+  "verified_products": 0,
+  "draft_slots": 13,
+  "category_counts": {
+    "kitchen-innovations": 5,
+    "home-organization": 5,
+    "smart-cleaning-tools": 5
+  },
+  "product_pages": 15,
+  "merchant_feed_items": 0,
+  "merchant_feed_gate": "verified_for_checkout AND global checkout_enabled",
+  "checkout_enabled": false,
+  "real_sandbox_tested": false,
+  "files": {
+    "assets/store.css": "5793f87f69863d9c2d9904452c54efb3fc680389adfb43dcac1ed78ab9842e30",
+    "assets/store.js": "92842260ea0a5d14a643768f12931c653fe7565dbdf7509fde371872396b3291",
+    "categories/home-organization/index.html": "8c6ae7ab71317c35e6b956b7e8563b7b4cccdd1155d8c07656894869599974cf",
+    "categories/kitchen-innovations/index.html": "ca6e5a338df410c3cacbad99248c76d254f4eac5394c20cb34d2e500bebc1961",
+    "categories/smart-cleaning-tools/index.html": "510b258fca092d9ecf892eb016472bb98e4105e9a21ba5e2b90e05ed0c8844ec",
+    "checkout/cancel/index.html": "2d0b23eb5bf15c61571caec91a772b8d8ee36a3baa771e031261c6ec5807b0ba",
+    "checkout/index.html": "0583c562daafd8a0933aa8168b700d28df0e181a133df2f414f826a38066a1c9",
+    "checkout/return/index.html": "1730162113e694dab65c2770a2d6f6e126730e4eb202e16d0e81a19dee652981",
+    "feed.xml": "e9945374397cb8c8eafece14ab3e58f083d117edba66230b49dea797af1ccd4f",
+    "index.html": "8311e5017303ca57a1739e35c435605c4dd2ce36aeb101c3232154f7632ec1e8",
+    "policies/contact/index.html": "d1968cd391df38bd7e860e6c65ad58b299e62ae482e315c3db6d4de423ef38dd",
+    "policies/privacy/index.html": "567d08a9a09955bd59f7fc68ca4ca11162c80f35b8fdedbd1550c5ace607d691",
+    "policies/refunds/index.html": "96835df17a64bf4df5bcde39d8c6d221dabe762101883347f8818a0e46538467",
+    "policies/shipping/index.html": "296cb1b835ef1e9312cf32908c5866b8b1a963e217f0cf670e57a48d382e6698",
+    "policies/terms/index.html": "2f7d83eea2f7d30d29a57caa1d416085fe8887d4e02dc3dee72cbe742abb5892",
+    "products/freshseal-pro/index.html": "346c2abd76710ce317d13d128a6a8c433f031dd923845ea6315bb95c439f61ec",
+    "products/furoff-pro-household-roller/index.html": "003bf2e945a3f4f1ebe784a14e521ce30bd325213683b68ba2b2aac81aefa202",
+    "products/home-organization-01/index.html": "bdf87c0208cb0a53a4b02d4f6b2f4d7227c776b042da2d26fe3bb4e55c234b28",
+    "products/home-organization-02/index.html": "c8339725a30a181fe8560a8c3b19954dd919f83bf6c08e24fdde621b3318421f",
+    "products/home-organization-03/index.html": "b170646365e7bda17a703d9e8560b85fe842e15eef45009f342e7134f58e7963",
+    "products/home-organization-04/index.html": "f4c49268788f370528d853b903a705e18e6ccc1b98b900b8d1a334826a7a3e89",
+    "products/home-organization-05/index.html": "eef8b6b4632862005a3c81ca58196b6d0150bab722469051d69d9faad6d41d9a",
+    "products/kitchen-innovations-02/index.html": "7325cc21f8efca6fc89046c3edd365d550be4fae531bf9af515a8f65c2f015f7",
+    "products/kitchen-innovations-03/index.html": "43f6bdc0ffac531599144dc2a8c3b46b33165d8424ae07974d94a2027606efce",
+    "products/kitchen-innovations-04/index.html": "ffd0103a9f7583629a863e478789377b96f2aef46513a92812dff6a96cebc398",
+    "products/kitchen-innovations-05/index.html": "544b9b78b8477114f29abcbb301ee2022623a3722ef6140d6df49de823a1ece2",
+    "products/smart-cleaning-tools-01/index.html": "4c7f3e2c28765bb97dcbd45d134eb95c982daee5cf392e66156dd8af701f4698",
+    "products/smart-cleaning-tools-02/index.html": "b006b4d6ab6749e1995468160aeb4860aaa147d53c7e03b439e155761dbae73f",
+    "products/smart-cleaning-tools-03/index.html": "b67376bced44698cc932e7f29c0bb220e76ea35798d7e6f29eedb4cf75396ac5",
+    "products/smart-cleaning-tools-04/index.html": "623d4dee20f0d8ef018d8ba74a049a6aebb819fdd72fa47622f626d45a785f0d",
+    "robots.txt": "dd19510722057b78be4c1a85504c1f9efc6877f7dd345f32ef2bee5db82a8349",
+    "sitemap.xml": "c7ab77c5dea5eb513e41e24acc61fddf7f0fd1d1c7f8469627cdb52a5688b708"
+  }
 }
