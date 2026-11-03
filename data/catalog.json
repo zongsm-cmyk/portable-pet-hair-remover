@@ -49,7 +49,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 29.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -97,7 +99,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 54.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -145,7 +149,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 39.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -193,7 +199,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 34.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -238,7 +246,9 @@
       "draft_slot": false,
       "visual_hold": true,
       "visual_status": "VISUAL_HOLD_NO_AUTHENTIC_IMAGE",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": null,
+      "pricing_status": "NOT_EVALUATED"
     },
     {
       "price_usd": null,
@@ -286,7 +296,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 24.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -333,7 +345,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 39.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -380,7 +394,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 34.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -425,7 +441,9 @@
       "draft_slot": false,
       "visual_hold": true,
       "visual_status": "VISUAL_HOLD_NO_AUTHENTIC_IMAGE",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": null,
+      "pricing_status": "NOT_EVALUATED"
     },
     {
       "price_usd": null,
@@ -472,7 +490,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 29.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -520,7 +540,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 34.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -567,7 +589,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 29.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -614,7 +638,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 29.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -662,7 +688,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 29.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     },
     {
       "price_usd": null,
@@ -710,7 +738,9 @@
       "draft_slot": false,
       "visual_hold": false,
       "visual_status": "MATCHED_CJ_RESEARCH_PHOTO",
-      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION"
+      "source_status": "PUBLIC_PRODUCT_PAGE_FOUND_NO_VARIANT_STOCK_SHIPPING_VERIFICATION",
+      "target_launch_price_usd": 39.99,
+      "pricing_status": "NONBINDING_PREVIEW_TARGET"
     }
   ]
 }

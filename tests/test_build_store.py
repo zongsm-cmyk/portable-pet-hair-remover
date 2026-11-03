@@ -144,7 +144,10 @@ class BuildTests(unittest.TestCase):
             html='\n'.join(path.read_text(encoding='utf-8') for path in Path(temp).rglob('*.html'))
             for marker in ['ThermaRelief','KneeFlex','paypal.me','Verified Buyer','Only 14 units','localStorage']:
                 self.assertNotIn(marker,html)
-            self.assertNotIn('$34.99',html)
+            # Numeric nonbinding targets are now intentional; payment offers remain absent.
+            self.assertIn('$34.99',html)
+            self.assertIn('Provisional launch target — not a payable price',html)
+            self.assertNotIn('"offers"',html)
             self.assertNotIn('data-checkout-product=',html)
 
     def test_script_and_html_escaping(self):
