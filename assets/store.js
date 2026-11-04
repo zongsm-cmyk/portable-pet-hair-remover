@@ -153,11 +153,17 @@ const launchButton = document.querySelector('[data-launch-buy]');
 if (launchButton && settings.launch_offer_enabled && settings.paypal_environment === 'live') {
   const status = document.querySelector('[data-launch-status]');
   const phone = document.querySelector('[data-launch-phone]');
+  const quantityInput = document.querySelector('[data-launch-quantity]');
+  document.querySelectorAll('[data-bundle-option]').forEach(option => {
+    option.addEventListener('change', () => {
+      if (option.checked && quantityInput) quantityInput.value = option.value;
+    });
+  });
   fetch(endpoint('/api/health'), {cache:'no-store'}).then(response => response.json()).then(health => {
     if (!health.checkout_enabled || health.mode !== 'live' || health.launch_offer_available !== true) return;
     launchButton.hidden = false;
     phone.closest('label').hidden = false;
-    status.textContent = 'One pack, $10.99 total including standard shipping.';
+    status.textContent = 'Select your set, then enter a US delivery phone to continue securely with PayPal.';
     document.querySelector('[data-launch-preview]')?.setAttribute('hidden', '');
   }).catch(() => {});
   launchButton.addEventListener('click', async () => {
@@ -168,10 +174,15 @@ if (launchButton && settings.launch_offer_enabled && settings.paypal_environment
       phone.focus();
       return;
     }
+    const quantity = Number(quantityInput?.value || 1);
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 3) {
+      status.textContent = 'Select 1, 2, or 3 packs to continue.';
+      return;
+    }
     launchButton.disabled = true;
     try {
-      const result = await api('/api/orders/create', {items:[{id:'home-car-glove-duo',quantity:1}],country:'US',delivery_phone:deliveryPhone});
-      if (result.currency !== 'USD' || result.total_usd !== '10.99') throw new Error('Unexpected checkout total.');
+      const result = await api('/api/orders/create', {items:[{id:'home-car-glove-duo',quantity}],country:'US',delivery_phone:deliveryPhone});
+      if (result.currency !== 'USD' || result.total_usd !== (10.99 * quantity).toFixed(2)) throw new Error('Unexpected checkout total.');
       window.location.assign(approvalDestination(result.approval_url,'live'));
     } catch {
       status.textContent = 'Could not open PayPal. Contact support if you already have a PayPal order reference.';
