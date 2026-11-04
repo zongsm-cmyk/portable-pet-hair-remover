@@ -334,11 +334,19 @@ def build(root=ROOT, output=None):
         '<div class="hero-scene-caption"><span>01 / KITCHEN STORIES</span><b>'+enc(hero_product["title"])+'</b></div>'
         '</div></section>'
     )
-    home += '<section class="collection sales-collection" aria-label="Available products"><h2>Ordering is paused</h2>'+(''.join(card(p) for p in approved) if settings['checkout_enabled'] and approved else '<p>No qualified products are available to order.</p>')+'</section>'
+    if settings.get('launch_offer_enabled') and settings.get('paypal_environment') == 'live':
+        home += ('<section class="collection sales-collection" aria-label="Shop VerveLiving US offer">'
+                 '<span class="eyebrow">VERVELIVING / US OFFER</span>'
+                 '<h2>Shop the Home + Car Pet Hair Glove Duo</h2>'
+                 '<p>Two reusable mesh gloves for car upholstery and home fabrics. $10.99 USD, including shipping within the contiguous United States. Availability is confirmed at checkout.</p>'
+                 '<a class="button" href="/guides/remove-pet-hair-from-car-seats/#home-car-glove-duo">Shop the two-glove set &#8599;</a>'
+                 '</section>')
+    else:
+        home += '<section class="collection sales-collection" aria-label="Available products"><h2>Ordering is paused</h2>'+(''.join(card(p) for p in approved) if settings['checkout_enabled'] and approved else '<p>No qualified products are available to order.</p>')+'</section>'
     pet_interest_banner = ('<section class="promise pet-interest" aria-label="Home and car glove set preview">'
-        '<span class="eyebrow">US OFFER PREVIEW</span>'
+        '<span class="eyebrow">US HOME + CAR SET</span>'
         '<h2>Pet hair on the sofa or car seats?</h2>'
-        '<p>See the Home + Car glove set, planned price and estimated US shipping time.</p>'
+        '<p>Two reusable gloves, $10.99 including shipping to the contiguous United States. Confirm availability at checkout.</p>'
         '<a class="button button-outline" href="/guides/remove-pet-hair-from-car-seats/#home-car-glove-duo">View the two-glove set &#8599;</a>'
         '</section>')
     home += pet_interest_banner
@@ -478,6 +486,27 @@ def build(root=ROOT, output=None):
         for path,content in generated.items():
             if path.endswith('.html'):
                 for old,new in replacements.items():content=content.replace(old,new)
+                generated[path]=content
+    if settings.get('launch_offer_enabled') and not settings['checkout_enabled']:
+        launch_replacements = {
+            'ONLINE CHECKOUT CURRENTLY PAUSED':'US HOME + CAR GLOVE DUO ? PAY WITH PAYPAL',
+            'Product availability is being verified. No payments are currently accepted.':'Our Home + Car glove duo is offered to eligible contiguous US addresses through PayPal; other products remain research previews.',
+            'Our initial delivery markets are the United States and United Kingdom. Online ordering is currently paused while supplier availability, carrier pricing and delivery estimates are verified.':'We currently accept orders only for the Home + Car glove duo within the contiguous United States. Standard shipping is included in its $10.99 total. Estimated delivery is 3?10 days including processing, not a guaranteed arrival date. Other products are research previews and cannot be purchased.',
+            'Online ordering is currently paused. For an existing order,':'For an existing order,',
+            'No additional voluntary return window or money-back guarantee is currently offered while ordering is paused.':'No separate voluntary return window or unconditional money-back guarantee is offered. Mandatory consumer rights are not affected.',
+            'We are currently preparing the collection and are not accepting online payments.':'Our Home + Car glove duo has a dedicated PayPal Live checkout for eligible contiguous US destinations. Other products are research previews, not available to order.',
+            'We are checking exact variants, stock and delivery costs before opening orders.':'We are checking exact variants, stock and delivery costs for our remaining research previews.',
+            'Ordering is not yet open.':'The Home + Car glove duo has a US-only checkout; other items are research previews.',
+            'Checkout is paused. This page alone does not confirm an order. No payment is requested.':'The general cart has no orderable products. Use the dedicated Home + Car glove duo offer page for PayPal checkout.',
+            'Before ordering opens':'About research previews',
+            'Merchant approval and an actual PayPal Sandbox transaction remain unverified.':'Only the separately listed Home + Car glove duo has a dedicated PayPal Live checkout; previews cannot be purchased.',
+            'Checkout is paused. Payment is pending verification unless a completed capture receipt is verified by the server.':'Payment is pending verification unless a completed capture receipt is verified by the server.',
+            'Last updated: 3 November 2026.':'Last updated: 4 November 2026.'
+        }
+        for path,content in generated.items():
+            if path.endswith('.html'):
+                for old,new in launch_replacements.items():
+                    content=content.replace(old,new)
                 generated[path]=content
     # Only a previous build's named output files may be removed. Never walk or
     # recursively delete directories, and never consider source/catalog/images.
