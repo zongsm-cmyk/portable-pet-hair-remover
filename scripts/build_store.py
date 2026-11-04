@@ -29,7 +29,10 @@ def build(root=ROOT, output=None):
     price=usd(offer["price_usd"])
     css=(root/"static/store.css").read_text(encoding="utf-8")
     js=(root/"static/store.js").read_text(encoding="utf-8")
+    vivid_css=(root/"static/vivid.css").read_text(encoding="utf-8")
+    vivid_js=(root/"static/vivid.js").read_text(encoding="utf-8")
     cv=hashlib.sha256(css.encode()).hexdigest()[:10]; jv=hashlib.sha256(js.encode()).hexdigest()[:10]
+    vv=hashlib.sha256(vivid_css.encode()).hexdigest()[:10]; vm=hashlib.sha256(vivid_js.encode()).hexdigest()[:10]
     client={"checkout_enabled":False,"api_base":config["api_base"],"paypal_environment":"live",
             "launch_offer_enabled":True,"catalog":[]}
     client_json=json.dumps(client,separators=(",",":")).replace("<","\\u003c")
@@ -67,16 +70,18 @@ def build(root=ROOT, output=None):
                               "price":str(offer["price_usd"]),"availability":"https://schema.org/InStock"}}
             ld='<script type="application/ld+json">'+json.dumps(schema,separators=(",",":"))+'</script>'
         return ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
-          '<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#143f39">'
+          '<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#254cde">'
           '<title>'+e(title)+' | VerveLiving</title><meta name="description" content="'+e(desc)+'">'
           '<link rel="canonical" href="'+site+url+'"><meta name="robots" content="'+('noindex,follow' if noindex else 'index,follow')+'">'
           '<meta property="og:title" content="'+e(title)+'"><meta property="og:description" content="'+e(desc)+'">'
           '<meta property="og:image" content="'+site+PHOTO+'"><meta property="og:url" content="'+site+url+'">'
           '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
           '<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">'
-          '<link rel="stylesheet" href="/assets/store.css?v='+cv+'">'+ld+'</head><body>'+nav
+          '<link rel="stylesheet" href="/assets/store.css?v='+cv+'">'
+          '<link rel="stylesheet" href="/assets/vivid.css?v='+vv+'">'+ld+'</head><body>'+nav
           +'<main id="main">'+content+'</main>'+footer+'<script type="application/json" id="store-config">'
-          +client_json+'</script><script src="/assets/store.js?v='+jv+'" defer></script></body></html>')
+          +client_json+'</script><script src="/assets/store.js?v='+jv+'" defer></script>'
+          '<script src="/assets/vivid.js?v='+vm+'" defer></script></body></html>')
     def buybox():
         return ('<section class="buybox" id="home-car-glove-duo" aria-label="Purchase the reusable glove set">'
           '<span class="kicker">THE HOME + CAR ESSENTIAL</span>'
@@ -115,21 +120,33 @@ def build(root=ROOT, output=None):
           '<div><b>02 / Car seats</b><p>A quick pass before the next journey.</p></div>'
           '<div><b>03 / Floor mats</b><p>Help tidy pet-friendly interiors.</p></div></div>'
           '<a class="arrow-link" href="'+link+'">Explore the glove duo ↗</a></div></div></section>')
-    hero=('<section class="hero"><div class="wrap hero-grid"><div class="hero-copy">'
-          '<span class="kicker kicker-line">THE VERVELIVING EDIT / NO. 001</span>'
-          '<h1>A softer home.<br><em>Less pet hair.</em></h1>'
-          '<p>Meet the reusable glove duo for the places your pet loves most — from your sofa to your car.</p>'
-          '<div class="hero-actions"><a class="cta" href="'+link+'">Shop the glove duo <span>↗</span></a>'
-          '<a class="quiet-link" href="'+GUIDE+'">Explore the care guide ↗</a></div>'
-          '<div class="hero-foot"><span>Reusable</span><span>Two gloves</span><span>US tracked shipping</span></div>'
+    hero=('<section class="hero" data-scene="0" aria-label="Meet the VerveLiving glove duo">'
+          '<div class="wrap hero-grid"><div class="hero-copy">'
+          '<span class="kicker kicker-line">THE EVERYDAY ESSENTIAL / NO. 001</span>'
+          '<h1>LOVE THE PET.<br><em>LOSE THE FUR.</em></h1>'
+          '<p>For every sofa cuddle, car ride and little moment in between. Meet the reusable Home + Car glove duo.</p>'
+          '<div class="hero-actions"><a class="cta" href="'+link+'">GET YOUR DUO <span>↗</span></a>'
+          '<a class="quiet-link" href="'+GUIDE+'">SEE HOW IT WORKS ↗</a></div>'
+          '<div class="hero-foot"><span>2 gloves per pack</span><span>Reusable mesh</span><span>Tracked US shipping</span></div>'
           '</div><div class="hero-media"><div class="hero-image">'+image_eager+'</div>'
-          '<div class="floating-tag"><small>HOME + CAR</small><b>Made for the little messes.</b></div>'
-          '<div class="hero-index">01 — VERVELIVING</div></div></div></section>')
+          '<div class="floating-tag"><small>HOME + CAR</small><b>Easy tools. Happier spaces.</b></div>'
+          '<div class="scene-marker" data-scene-label>A HOME WITH PETS</div>'
+          '<div class="scene-picker" role="group" aria-label="Change feature background">'
+          '<button type="button" aria-label="Blue scene" data-scene-to="0" aria-pressed="true"></button>'
+          '<button type="button" aria-label="Purple scene" data-scene-to="1" aria-pressed="false"></button>'
+          '<button type="button" aria-label="Pink scene" data-scene-to="2" aria-pressed="false"></button>'
+          '<span>CHOOSE YOUR MOOD</span></div>'
+          '<div class="hero-index">01 / 03 — VERVELIVING</div></div></div></section>')
+    marquee=('<section class="color-marquee" aria-label="Reusable home-care essentials">'
+          '<div class="marquee-track">'
+          '<span>EVERYDAY MAGIC <i>✳</i> LESS LOOSE FUR <i>✳</i> MORE TIME TO PLAY <i>✳</i> HOME + CAR <i>✳</i></span>'
+          '<span aria-hidden="true">EVERYDAY MAGIC <i>✳</i> LESS LOOSE FUR <i>✳</i> MORE TIME TO PLAY <i>✳</i> HOME + CAR <i>✳</i></span>'
+          '</div></section>')
     feature=('<section class="feature wrap" id="shop"><div class="feature-heading">'
           '<span class="kicker">ONE GOOD FIND, MANY USES</span><h2>Considered for <em>real life.</em></h2>'
           '<p>A focused, verified offer instead of an endless catalog of uncertain products.</p></div>'
           '<div class="feature-grid"><div class="feature-media">'+img+'<span>TWO GLOVES / ONE PACK</span></div>'+buybox()+'</div></section>')
-    home=(hero+benefits+story+feature+
+    home=(hero+marquee+benefits+story+feature+
           '<section class="manifesto"><div class="wrap"><span class="kicker">OUR APPROACH</span>'
           '<h2>Less noise. More of what <em>works.</em></h2>'
           '<p>Useful essentials, clearly explained. Straightforward prices. A secure checkout and support when you need it.</p>'
@@ -193,7 +210,9 @@ def build(root=ROOT, output=None):
       "cart/index.html":page("Choose your set","Shop the VerveLiving glove duo.","/cart/",cart,noindex=True),
       "checkout/index.html":page("Secure checkout","Shop the VerveLiving glove duo.","/checkout/",cart,noindex=True),
       "assets/store.css":css,
-      "assets/store.js":js
+      "assets/store.js":js,
+      "assets/vivid.css":vivid_css,
+      "assets/vivid.js":vivid_js
     }
     for slug,(title,_) in policies.items():
         generated["policies/"+slug+"/index.html"]=page(title,title+" from VerveLiving.","/policies/"+slug+"/",policy(slug))
