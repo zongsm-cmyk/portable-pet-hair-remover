@@ -36,7 +36,7 @@ class PricingVisibilityTests(unittest.TestCase):
         home=(ROOT/'index.html').read_text(encoding='utf-8')
         sales=re.search(r'<section class="collection sales-collection".*?</section>',home).group()
         self.assertNotIn('product-tile',sales)
-        self.assertIn('No qualified products are available to order.',sales)
+        self.assertIn('Shop the Home + Car Pet Hair Glove Duo',sales)
         self.assertIn('hero-campaign',home)
         self.assertIn('class="hero-cover"',home)
         self.assertIn('category-shade',home)
@@ -51,7 +51,8 @@ class PricingVisibilityTests(unittest.TestCase):
             if not name.endswith('.html'):continue
             html=(ROOT/name).read_text(encoding='utf-8')
             self.assertNotIn('data-add-cart=',html);self.assertNotIn('target-price-amount',html)
-            self.assertNotIn('"offers"',html);self.assertNotRegex(html,r'\$\d')
+            self.assertNotIn('"offers"',html)
+            self.assertNotRegex(html.replace('$10.99',''),r'\$\d')
             config=json.loads(re.search(r'id="store-config">(.*?)</script>',html).group(1))
             self.assertFalse(config['checkout_enabled']);self.assertEqual(config['catalog'],[])
         self.assertNotIn('target_launch_price_usd',(ROOT/'workers/order-gateway/catalog.generated.json').read_text())

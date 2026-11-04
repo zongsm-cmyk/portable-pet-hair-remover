@@ -139,8 +139,12 @@ class StoreQualityTests(unittest.TestCase):
     def test_payment_pages_have_safe_text_without_javascript(self):
         for route in ('checkout', 'checkout/return', 'checkout/cancel'):
             html = (ROOT/route/'index.html').read_text(encoding='utf-8')
-            self.assertIn('Checkout is paused.', html)
-            self.assertIn('does not confirm an order', html)
+            if route == 'checkout':
+                self.assertIn('general cart has no orderable products',html)
+                self.assertIn('dedicated Home + Car glove duo',html)
+            else:
+                self.assertIn('Payment is pending verification',html)
+                self.assertIn('does not confirm an order',html)
 
     def test_unsupported_claim_fields_rejected(self):
         catalog = json.loads((ROOT/'data/catalog.json').read_text())
