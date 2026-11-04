@@ -32,8 +32,10 @@ function qualifiedCatalog(products, now = Date.now()) {
     const timestamp = Date.parse(p.supplier_verified_at);
     return typeof p.id === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.id) &&
       Number.isFinite(timestamp) && timestamp <= now && now - timestamp <= 7 * 86400000 &&
+      typeof p.supplier_id === 'string' && ['cj','eprolo','hypersku','wiio'].includes(p.supplier_id) &&
       ['price_usd','customer_shipping_us_usd','customer_shipping_uk_usd'].every(key =>
-        typeof p[key] === 'number' && Number.isFinite(p[key]) && p[key] >= 0 && Number.isSafeInteger(Math.round(p[key]*100)) && Math.abs(p[key]*100-Math.round(p[key]*100)) < 1e-6) && p.price_usd > 0;
+        p[key] === null || (typeof p[key] === 'number' && Number.isFinite(p[key]) && p[key] >= 0 && Number.isSafeInteger(Math.round(p[key]*100)) && Math.abs(p[key]*100-Math.round(p[key]*100)) < 1e-6)) &&
+      p.price_usd > 0 && ['customer_shipping_us_usd','customer_shipping_uk_usd'].some(key=>typeof p[key] === 'number');
   });
 }
 function normalizeCart(value, products) {
@@ -52,7 +54,9 @@ function cartEstimate(items, country, products) {
   if (JSON.stringify(items) !== JSON.stringify(clean)) throw new Error('Your cart contains unavailable items. Review it before continuing.');
   return clean.reduce((total,line)=>{
     const p=products.find(p=>p.id===line.id);
-    return total+(Math.round(p.price_usd*100)+Math.round(p[country==='US'?'customer_shipping_us_usd':'customer_shipping_uk_usd']*100))*line.quantity;
+    const shipping=p[country==='US'?'customer_shipping_us_usd':'customer_shipping_uk_usd'];
+    if(typeof shipping !== 'number') throw new Error('A product in your cart does not ship to the selected country.');
+    return total+(Math.round(p.price_usd*100)+Math.round(shipping*100))*line.quantity;
   },0);
 }
 function approvalDestination(value, environment) {
@@ -100,9 +104,11 @@ function renderCart() {
     row.append(link,label,remove);container.append(row);
   });
   const country=document.querySelector('#cart-country').value;
-  const total=cartEstimate(items,country,products);
-  document.querySelector('[data-cart-total]').textContent=items.length?`Estimated total: $${(total/100).toFixed(2)} USD (items and listed shipping)`:'No qualified items in your cart.';
   const payment=document.querySelector('[data-cart-payment]');payment.replaceChildren();
+  let total=0;
+  try{total=cartEstimate(items,country,products);}
+  catch(error){document.querySelector('[data-cart-total]').textContent='Destination not available for this cart.';cartMessage(error.message);return;}
+  document.querySelector('[data-cart-total]').textContent=items.length?`Estimated total: $${(total/100).toFixed(2)} USD (items and listed shipping)`:'No qualified items in your cart.';
   if (!settings.checkout_enabled || !products.length || !settings.api_base) {cartMessage('Checkout is paused while supplier and payment verification are completed. No orders or payments can be created here.');return;}
   if (!items.length) {cartMessage('Add a qualified product before continuing.');return;}
   if(total>200000){cartMessage('This cart exceeds the $2,000 order limit. Reduce quantities before continuing.');return;}
@@ -128,6 +134,8 @@ document.querySelectorAll('[data-add-cart]').forEach(button=>button.addEventList
   const quantity=Number(document.querySelector('#quantity')?.value || 1), items=readCart(), existing=items.find(l=>l.id===id);
   if(!Number.isInteger(quantity)||quantity<1||quantity>10||(existing?.quantity||0)+quantity>10){cartMessage('Choose a whole quantity; the cart limit is 10 per product.');return;}
   if(!existing && items.length>=15){cartMessage('The cart can hold up to 15 different products.');return;}
+  const supplier=products.find(p=>p.id===id).supplier_id;
+  if(items.some(line=>products.find(p=>p.id===line.id)?.supplier_id!==supplier)){cartMessage('Products from different fulfillment providers require separate checkouts.');return;}
   if(existing)existing.quantity+=quantity;else items.push({id,quantity});
   try{writeCart(items);cartMessage('Added to your cart. Use the Cart link to review quantities and delivery country.');}catch(error){cartMessage(error.message);}
 }));

@@ -5,7 +5,7 @@ import vm from 'node:vm';
 const source=readFileSync(new URL('../static/store.js',import.meta.url),'utf8');
 const context=vm.createContext({document:{querySelectorAll:()=>[],querySelector:()=>null},window:{},URL});
 vm.runInContext(source,context);
-const fixture=Array.from({length:16},(_,i)=>({id:'item-'+i,price_usd:12.25,customer_shipping_us_usd:2.10,customer_shipping_uk_usd:3.45,supplier_verified_at:new Date().toISOString()}));
+const fixture=Array.from({length:16},(_,i)=>({id:'item-'+i,price_usd:12.25,supplier_id:'cj',customer_shipping_us_usd:2.10,customer_shipping_uk_usd:3.45,supplier_verified_at:new Date().toISOString()}));
 const normalize=(value)=>JSON.parse(JSON.stringify(context.normalizeCart(value,fixture)));
 test('cart strips identity, address and injected properties; preserves only ID and quantity',()=>{
   assert.deepEqual(normalize([{id:'item-0',quantity:2,name:'PRIVATE',address:'PRIVATE',price:0}]),[{id:'item-0',quantity:2}]);
@@ -26,10 +26,14 @@ test('display estimate uses integer cents and destination shipping per unit',()=
   assert.throws(()=>context.cartEstimate([{id:'not-qualified',quantity:1}],'US',fixture));
 });
 test('stale, future, missing and invalid price display records cannot enter cart',()=>{
-  for(const patch of [{supplier_verified_at:new Date(Date.now()-8*86400000).toISOString()},{supplier_verified_at:new Date(Date.now()+86400000).toISOString()},{supplier_verified_at:null},{price_usd:0},{price_usd:1.001},{customer_shipping_us_usd:null}]){
+  for(const patch of [{supplier_verified_at:new Date(Date.now()-8*86400000).toISOString()},{supplier_verified_at:new Date(Date.now()+86400000).toISOString()},{supplier_verified_at:null},{price_usd:0},{price_usd:1.001},{customer_shipping_us_usd:null,customer_shipping_uk_usd:null},{supplier_id:'unknown'}]){
     assert.equal(context.qualifiedCatalog([{...fixture[0],...patch}]).length,0);
   }
   assert.equal(context.qualifiedCatalog(fixture).length,16);
+  const usOnly={...fixture[0],customer_shipping_uk_usd:null};
+  assert.equal(context.qualifiedCatalog([usOnly]).length,1);
+  assert.equal(context.cartEstimate([{id:usOnly.id,quantity:1}],'US',[usOnly]),1435);
+  assert.throws(()=>context.cartEstimate([{id:usOnly.id,quantity:1}],'GB',[usOnly]),/does not ship/);
 });
 test('provider redirect requires exact environment domain without embedded credentials',()=>{
   assert.equal(context.approvalDestination('https://www.sandbox.paypal.com/checkoutnow?token=TEST','sandbox'),'https://www.sandbox.paypal.com/checkoutnow?token=TEST');

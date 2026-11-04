@@ -61,6 +61,35 @@ def eta_valid(value):
     match = re.fullmatch(r'(\d+)\s*-\s*(\d+) (?:business )?days', value)
     return bool(match and 0 < int(match[1]) <= int(match[2]) <= 12)
 
+SUPPORTED_SUPPLIER_DOMAINS = {
+    'cj': 'cjdropshipping.com',
+    'eprolo': 'eprolo.com',
+    'hypersku': 'hypersku.com',
+    'wiio': 'wiio.io'
+}
+OFFICIAL_IMAGE_DOMAINS = {
+    'cj': {'cf.cjdropshipping.com', 'oss-cf.cjdropshipping.com', 'cc-west-usa.oss-accelerate.aliyuncs.com'},
+    'eprolo': {'eprolo.com', 'www.eprolo.com'},
+    'hypersku': {'hypersku.com', 'www.hypersku.com'},
+    'wiio': {'wiio.io', 'www.wiio.io'}
+}
+
+def sourcing_identity(p):
+    source = p.get('fulfillment_provider')
+    if source is None:
+        source = {'id': 'cj', 'sku': p.get('cj_sku'),
+                  'variant_id': p.get('cj_variant_id'), 'product_url': p.get('cj_product_url')}
+    if not isinstance(source, dict):
+        raise ValueError('Supplier must be a structured record')
+    vendor = source.get('id')
+    hostname = SUPPORTED_SUPPLIER_DOMAINS.get(vendor)
+    address = urlparse(source.get('product_url') or '')
+    if (not hostname or address.scheme != 'https' or address.username or address.password or
+            not (address.hostname == hostname or (address.hostname or '').endswith('.'+hostname))):
+        raise ValueError('Unapproved supplier site or unsafe sourcing URL')
+    return {'id': vendor, 'sku': source.get('sku'), 'variant_id': source.get('variant_id'),
+            'url': source['product_url']}
+
 def qualified_photo_count(p, provenance):
     """Count individually reviewed distinct originals, never crops or composites."""
     rows = [provenance[i] for i in p['images']]
@@ -82,7 +111,10 @@ def validate_sellable_evidence(p, provenance):
     if not number(e.get('processing_hours'), positive=True) or e['processing_hours'] > 48:
         raise ValueError('Verified processing must be <=48 hours')
     margins = []
-    for country, dest in (('US', 'us'), ('GB', 'uk')):
+    active_markets = [(c,d) for c,d in (('US','us'),('GB','uk')) if p.get(f'shipping_{d}_usd') is not None]
+    if not active_markets:
+        raise ValueError('No verified destination eligible for checkout')
+    for country, dest in active_markets:
         market = (e.get('markets') or {}).get(country) or {}
         comparison = market.get('market_competitor') or {}
         if (comparison.get('same_variant_verified') is not True or not comparison.get('reference')
@@ -133,12 +165,20 @@ def validate(catalog, settings, root=ROOT):
                 raise ValueError(f"Images must be existing local assets: {p['id']}")
             media = provenance.get(value)
             raw = (root/value.lstrip('/')).read_bytes()
-            if not media or media['product_id'] != p['id'] or media['cj_sku'] != p['cj_sku'] or media['listing_url'] != p['cj_product_url'] or media['sha256'] != hashlib.sha256(raw).hexdigest():
+            source_info = sourcing_identity(p)
+            media_vendor = media.get('supplier_id', 'cj') if media else None
+            media_sku = media.get('supplier_sku', media.get('cj_sku')) if media else None
+            if (not media or media['product_id'] != p['id'] or media_vendor != source_info['id']
+                    or media_sku != source_info['sku'] or media['listing_url'] != source_info['url']
+                    or media['sha256'] != hashlib.sha256(raw).hexdigest()):
                 raise ValueError(f"Image must match product-specific provenance and hash: {p['id']}")
             if len(raw) >= 256000 or raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
                 raise ValueError('Preview media must be an optimized real WEBP')
             source = urlparse(media.get('original_url', ''))
-            if (source.scheme != 'https' or source.hostname not in {'cf.cjdropshipping.com', 'oss-cf.cjdropshipping.com', 'cc-west-usa.oss-accelerate.aliyuncs.com'}
+            source_domain = source.hostname or ''
+            trusted_origins = OFFICIAL_IMAGE_DOMAINS[source_info['id']]
+            if (source.scheme != 'https' or (source_domain not in trusted_origins and
+                    not (source_info['id'] != 'cj' and source_domain.endswith('.'+SUPPORTED_SUPPLIER_DOMAINS[source_info['id']])))
                     or source.username or source.password or not re.fullmatch(r'[a-f0-9]{64}', media.get('source_sha256', ''))
                     or media.get('bytes') != len(raw) or min(media.get('width', 0), media.get('height', 0)) < 250):
                 raise ValueError('Gallery requires exact official CJ source, original SHA and dimensions')
@@ -162,29 +202,40 @@ def validate(catalog, settings, root=ROOT):
             if p.get('stock_status') != 'unknown' or p['price_usd'] is not None:
                 raise ValueError('Unqualified product cannot claim stock or an unsupported retail price')
             continue
-        for key in ('price_usd','supplier_cost_usd','shipping_us_usd','shipping_uk_usd','net_margin_usd'):
+        for key in ('price_usd','supplier_cost_usd','net_margin_usd'):
             if not number(p[key], positive=key=='price_usd'):
                 raise ValueError(f"Verified product requires numeric {key}: {p['id']}")
             if Decimal(str(p[key])) * 100 != (Decimal(str(p[key])) * 100).to_integral_value():
                 raise ValueError(f"Money must use at most two decimal places: {key}")
-        for key in ('cj_sku','cj_variant_id','cj_product_url','warehouse_origin','supplier_verified_at','stock_status','shipping_us_line','shipping_uk_line'):
+        chosen_source = sourcing_identity(p)
+        if not chosen_source['sku'] or not isinstance(chosen_source['sku'], str) or not chosen_source['variant_id'] or not isinstance(chosen_source['variant_id'], str):
+            raise ValueError('Verified product must specify an exact supplier SKU and variant')
+        for key in ('warehouse_origin','supplier_verified_at','stock_status'):
             if not p.get(key) or not isinstance(p[key],str):
                 raise ValueError(f"Verified product requires {key}: {p['id']}")
-        url = urlparse(p['cj_product_url'])
-        if url.scheme != 'https' or not (url.hostname == 'cjdropshipping.com' or (url.hostname or '').endswith('.cjdropshipping.com')):
-            raise ValueError('Verified supplier must be CJ HTTPS URL')
         verified = datetime.fromisoformat(p['supplier_verified_at'].replace('Z','+00:00'))
         if verified.tzinfo is None or not 0 <= (now - verified).total_seconds() <= 7*86400 or p['stock_status'] != 'in_stock':
             raise ValueError('Verified supplier stock evidence must be no older than 7 days')
-        if not p['images'] or not eta_valid(p['eta_us_days']) or not eta_valid(p['eta_uk_days']):
-            raise ValueError('Verified product requires images and US/UK delivery <=12 days')
+        if not p['images']:
+            raise ValueError('Verified product requires authenticated product images')
+        supported = 0
+        for dest in ('us', 'uk'):
+            fields = (p.get(f'shipping_{dest}_usd'),p.get(f'customer_shipping_{dest}_usd'),
+                      p.get(f'eta_{dest}_days'),p.get(f'shipping_{dest}_line'))
+            if all(v is None for v in fields):
+                continue
+            if (any(v is None for v in fields) or not number(fields[0]) or
+                    not number(fields[1]) or not eta_valid(fields[2]) or
+                    not isinstance(fields[3],str) or not fields[3].strip()):
+                raise ValueError('Incomplete or ineligible shipping destination')
+            for value in fields[:2]:
+                if Decimal(str(value))*100 != (Decimal(str(value))*100).to_integral_value():
+                    raise ValueError('Shipping amounts must have at most two decimal places')
+            supported += 1
+        if supported == 0:
+            raise ValueError('Verified product requires at least one serviceable market')
         if not number(p['specs'].get('weight_g'),positive=True) or p['specs']['weight_g'] >= 500 or any(p['specs'].get(key) is not False for key in ('contains_lithium','contains_liquid','medical')):
             raise ValueError('Verified product requires under-500g weight and confirmed safe specification')
-        for key in ('customer_shipping_us_usd','customer_shipping_uk_usd'):
-            if not number(p.get(key)):
-                raise ValueError('Customer shipping must be explicit and numeric')
-            if Decimal(str(p[key])) * 100 != (Decimal(str(p[key])) * 100).to_integral_value():
-                raise ValueError('Customer shipping must use at most two decimal places')
         validate_sellable_evidence(p, provenance)
         if p['compare_at_usd'] is not None:
             raise ValueError('Compare-at pricing is disabled until historical-price evidence is implemented')
@@ -225,7 +276,7 @@ def build(root=ROOT, output=None):
     nav = nav.replace('CONSIDERED TOOLS. EVERYDAY POSSIBILITIES. &nbsp; · &nbsp; ONLINE CHECKOUT CURRENTLY PAUSED', 'THE EVERYDAY EDIT &nbsp; / &nbsp; GOOD DESIGN FOR REAL LIFE')
     footer = footer.replace('<h4>Good to know</h4>', '<h4>Good to know</h4><a href="/cart/">Your cart</a><a href="/track-order/">Track an order</a>')
     public_settings = {key:settings[key] for key in ('checkout_enabled','api_base','paypal_environment')}
-    public_settings['catalog'] = [{key:p[key] for key in ('id','slug','title','price_usd','images','customer_shipping_us_usd','customer_shipping_uk_usd','supplier_verified_at')} for p in approved]
+    public_settings['catalog'] = [{**{key:p[key] for key in ('id','slug','title','price_usd','images','customer_shipping_us_usd','customer_shipping_uk_usd','supplier_verified_at')}, 'supplier_id':sourcing_identity(p)['id']} for p in approved]
     # Hash the same normalized UTF-8 bytes that we publish, on Windows and Linux.
     static_assets = {name: (root/'static'/name).read_text(encoding='utf-8')
                      for name in ('store.css', 'store.js')}
@@ -298,7 +349,7 @@ def build(root=ROOT, output=None):
     for key,(name,subtitle,desc,kind) in CATEGORIES.items():
         members = [p for p in visible if p['category']==key]
         home += f'<section class="collection-group" id="{key}"><div class="group-heading"><h2>{enc(name)}</h2><p>{len(members)} photographed previews / 5 researched candidates</p></div><div class="product-list">'+''.join(card(p) for p in members)+'</div></section>'
-    home += '</section><section class="promise"><span class="eyebrow">Considered before it reaches you</span><h2>A clear picture, from the start.</h2><p>We are checking exact variants, stock and delivery costs before opening orders. Photography is supplied by CJ for the corresponding product; pictured colours and configurations may vary. Two additional candidates are held back until matching photography is confirmed.</p><a class="text-link" href="/policies/contact/">A question about the collection? Get in touch ↗</a></section>'
+    home += '</section><section class="promise"><span class="eyebrow">Considered before it reaches you</span><h2>A clear picture, from the start.</h2><p>We are checking exact variants, stock and delivery costs before opening orders. Photography is provided by the corresponding supplier; pictured colours and configurations may vary. Two additional candidates are held back until matching photography is confirmed.</p><a class="text-link" href="/policies/contact/">A question about the collection? Get in touch ↗</a></section>'
     home = home.replace('<h2>A clear picture, from the start.</h2>', '<h2>A clear picture, from the start.</h2><div class="selection-steps"><p><b>Look at the everyday.</b> We group researched tools around kitchen routines, storage and household cleaning.</p><p><b>Look closer at the product.</b> We retain the supplier photographs and identify specifications that still need checking.</p><p><b>Verify before offering.</b> Exact variants, media rights, supplier checks, costs and checkout evidence must be confirmed before ordering opens.</p></div>')
     generated['index.html'] = page('Practical finds for a thoughtful home','Explore photographed product previews for kitchen rituals, home organization and everyday cleaning.', '/', home, image=hero_product['images'][3])
     sitemap_paths = ['/']
@@ -327,13 +378,13 @@ def build(root=ROOT, output=None):
             sitemap_paths.append(path)
         breadcrumb = f'<div class="breadcrumb"><a href="/">Home</a> / <a href="/categories/{p["category"]}/">{enc(CATEGORIES[p["category"]][0])}</a> / {enc(p["title"])}</div>'
         if p.get('visual_hold') or p.get('draft_slot'):
-            body = breadcrumb+f'<section class="visual-hold"><span class="eyebrow">Sourcing validation / visual hold</span><h1>{enc(p["title"])}</h1><p>{enc(p["short_problem_solved"])}</p><p>Matching supplier photography has not been confirmed. Buying unavailable — sourcing verification pending.</p><a class="text-link" href="{enc(p["cj_product_url"])}" rel="nofollow noopener" target="_blank">View sourcing reference</a><p>This external supplier reference is CJ, a separate website from VerveLiving.</p></section>'
+            body = breadcrumb+f'<section class="visual-hold"><span class="eyebrow">Sourcing validation / visual hold</span><h1>{enc(p["title"])}</h1><p>{enc(p["short_problem_solved"])}</p><p>Matching supplier photography has not been confirmed. Buying unavailable — sourcing verification pending.</p><a class="text-link" href="{enc(sourcing_identity(p)["url"])}" rel="nofollow noopener" target="_blank">View sourcing reference</a><p>This external supplier reference is separate from VerveLiving.</p></section>'
 
         else:
             active = p['verified_for_checkout'] and settings['checkout_enabled']
             delivery = ''
             if p['verified_for_checkout']:
-                delivery = '<section class="notice"><strong>Delivery options</strong><p>' + '<br>'.join(f'{country}: {enc(p[f"eta_{dest}_days"])} · ${p[f"customer_shipping_{dest}_usd"]:.2f} USD shipping per item · ${p["price_usd"]+p[f"customer_shipping_{dest}_usd"]:.2f} USD total for one item' for country,dest in [('United States','us'),('United Kingdom','uk')])+'</p></section>'
+                delivery = '<section class="notice"><strong>Delivery options</strong><p>' + '<br>'.join(f'{country}: {enc(p[f"eta_{dest}_days"])} · ${p[f"customer_shipping_{dest}_usd"]:.2f} USD shipping per item · ${p["price_usd"]+p[f"customer_shipping_{dest}_usd"]:.2f} USD total for one item' for country,dest in [('United States','us'),('United Kingdom','uk')] if p.get(f'shipping_{dest}_usd') is not None)+'</p></section>'
             checkout = unavailable(p)
             if active:
                 checkout = delivery + f'<div class="product-actions"><label for="quantity">Quantity</label><input id="quantity" type="number" min="1" max="10" step="1" value="1"><button type="button" class="button" data-add-cart="{enc(p["id"])}">Add to cart</button><a class="text-link" href="/cart/">View cart</a></div><p data-checkout-message role="status"></p>'
@@ -349,7 +400,7 @@ def build(root=ROOT, output=None):
                 video_button = '<button class="video-thumbnail" type="button" data-gallery-video="'+enc(video['url'])+'" aria-label="Watch product demonstration" aria-pressed="false">▶<span>Watch demo</span></button>'
                 gallery = gallery.replace('</div></div>',video_button+'</div></div>')
             display_price = f'${p["price_usd"]:.2f} USD' if p['verified_for_checkout'] else preview_price(p, detail=True)
-            body = breadcrumb+f'<section class="product-layout">{gallery}<div class="product-copy"><span class="eyebrow">{enc(CATEGORIES[p["category"]][0])}</span><h1>{enc(p["title"])}</h1><p class="lead">{enc(p["short_problem_solved"])}</p><div class="price">{display_price}</div>{checkout}<span class="pill">{"Details confirmed" if p["verified_for_checkout"] else "Details being confirmed"}</span><ul>{features}</ul><div class="notice">{"Delivery estimates and any charges are shown before payment." if p["verified_for_checkout"] else "This is a product preview. Exact specifications, supplier stock, delivery timing and shipping costs are being confirmed. No payment is requested."}</div><a class="text-link" href="mailto:{enc(email)}?subject={enc(enquiry_subject)}">Ask us about this product ↗</a><details><summary>Product details</summary><p>{specs_text}</p></details><details><summary>Delivery &amp; returns</summary><p>Initial markets: United States and United Kingdom. Confirmed product-specific delivery estimates will appear when ordering opens. <a href="/policies/shipping/">Shipping policy</a> · <a href="/policies/refunds/">Return policy</a>.</p></details><details><summary>Photography &amp; sourcing</summary><p>Supplier photography from the corresponding CJ listing. Pictured options may differ from the final selected variant. No stock or delivery commitment is implied.</p><a href="{enc(p["cj_product_url"])}" target="_blank" rel="nofollow noopener">View sourcing reference</a><p>CJ is the supplier website, separate from VerveLiving.</p></details><details><summary>Secure payments</summary><p>Online payments are currently paused. When enabled, PayPal will process payment; Buyer Protection may apply to eligible transactions under PayPal’s terms.</p></details></div></section>'
+            body = breadcrumb+f'<section class="product-layout">{gallery}<div class="product-copy"><span class="eyebrow">{enc(CATEGORIES[p["category"]][0])}</span><h1>{enc(p["title"])}</h1><p class="lead">{enc(p["short_problem_solved"])}</p><div class="price">{display_price}</div>{checkout}<span class="pill">{"Details confirmed" if p["verified_for_checkout"] else "Details being confirmed"}</span><ul>{features}</ul><div class="notice">{"Delivery estimates and any charges are shown before payment." if p["verified_for_checkout"] else "This is a product preview. Exact specifications, supplier stock, delivery timing and shipping costs are being confirmed. No payment is requested."}</div><a class="text-link" href="mailto:{enc(email)}?subject={enc(enquiry_subject)}">Ask us about this product ↗</a><details><summary>Product details</summary><p>{specs_text}</p></details><details><summary>Delivery &amp; returns</summary><p>Initial markets: United States and United Kingdom. Confirmed product-specific delivery estimates will appear when ordering opens. <a href="/policies/shipping/">Shipping policy</a> · <a href="/policies/refunds/">Return policy</a>.</p></details><details><summary>Photography &amp; sourcing</summary><p>Supplier photography from the corresponding CJ listing. Pictured options may differ from the final selected variant. No stock or delivery commitment is implied.</p><a href="{enc(sourcing_identity(p)["url"])}" target="_blank" rel="nofollow noopener">View sourcing reference</a><p>The supplier website is separate from VerveLiving.</p></details><details><summary>Secure payments</summary><p>Online payments are currently paused. When enabled, PayPal will process payment; Buyer Protection may apply to eligible transactions under PayPal’s terms.</p></details></div></section>'
         if p.get('visual_hold') or p.get('draft_slot'):
             body = body.replace('</h1>', '</h1><p>Price being verified</p><p>Additional product photos under verification</p>'+unavailable(p), 1)
         faq = f'<section class="product-faq"><h2>Fit &amp; product questions</h2><details open><summary>Will it fit my setup?</summary><p>{enc(FIT_NOTES[p["id"]])}</p></details><details><summary>Which option will I receive?</summary><p>Colours, sizes and pictured accessories may represent different supplier variants. The exact variant and included pieces must be confirmed before a product is offered for sale.</p></details><details><summary>When can it ship?</summary><p>There is no confirmed shipping quote for this preview. Available destinations, shipping charges, import-charge terms and delivery estimates must be established for the selected variant before ordering opens. <a href="/policies/shipping/">Read shipping information</a>.</p></details></section>'

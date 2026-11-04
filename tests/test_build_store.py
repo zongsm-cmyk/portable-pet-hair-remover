@@ -225,4 +225,23 @@ class BuildTests(unittest.TestCase):
             self.assertIn('data-add-cart="furoff"',html)
             self.assertNotIn('contains_lithium',html)
 
+    def test_qualified_us_only_product_is_not_forced_to_offer_unverified_uk_shipping(self):
+        p=self.verified()
+        for key in ('shipping_uk_usd','customer_shipping_uk_usd','eta_uk_days','shipping_uk_line'):
+            p[key]=None
+        p['qualification_evidence']['markets'].pop('GB')
+        qualified=module.validate(self.catalog,self.settings)
+        self.assertTrue(next(x for x in qualified if x['id']=='furoff')['verified_for_checkout'])
+        p['shipping_us_usd']=None
+        p['customer_shipping_us_usd']=None
+        p['eta_us_days']=None
+        p['shipping_us_line']=None
+        with self.assertRaises(ValueError):module.validate(self.catalog,self.settings)
+
+    def test_approved_supplier_url_rejects_untrusted_origins(self):
+        p={'fulfillment_provider':{'id':'eprolo','sku':'E-PET','variant_id':'E-2','product_url':'https://eprolo.com/app/product/1'}}
+        self.assertEqual(module.sourcing_identity(p)['id'],'eprolo')
+        p['fulfillment_provider']['product_url']='https://eprolo.com.attacker.invalid/product'
+        with self.assertRaises(ValueError):module.sourcing_identity(p)
+
 if __name__=='__main__':unittest.main()
