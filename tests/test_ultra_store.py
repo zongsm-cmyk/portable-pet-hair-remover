@@ -48,7 +48,7 @@ class UltraTests(unittest.TestCase):
             self.assertIn(amount,html)
         self.assertIn('"paypal_environment":"live"',html)
         self.assertIn('"launch_offer_enabled":true',html)
-        self.assertIn('checkout/return/',(ROOT/"assets/store.js").read_text())
+        self.assertIn('approvalDestination',(ROOT/"assets/store.js").read_text())
 
     def test_product_page_is_discoverable(self):
         home=(ROOT/"index.html").read_text()
