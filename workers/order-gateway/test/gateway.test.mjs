@@ -17,12 +17,13 @@ function db() {
 }
 function environment() {
   const env={DB:db(),CHECKOUT_ENABLED:'true',PAYPAL_ENV:'sandbox',STOREFRONT_ORIGIN:'https://shop.askouresystems.com',PAYPAL_CLIENT_ID:'test-id',PAYPAL_CLIENT_SECRET:'test-secret',PAYPAL_MERCHANT_ID:'MERCHANT-TEST',ADMIN_TOKEN:'abcdefghijklmnopqrstuvwxyz0123456789'};
-  let order, captureCalls=0, lastCreate, lastCaptureKey;
+  let order, captureCalls=0, lastCreate, lastCaptureKey, testOrderSequence=0;
   env.TEST_FETCH = async (url, options) => {
     if(url.endsWith('/v1/oauth2/token'))return Response.json({access_token:'test-token'});
     if(url.endsWith('/v2/checkout/orders') && options.method==='POST') {
       lastCreate=JSON.parse(options.body);
-      order={id:'PAYPAL-ORDER-123',intent:'CAPTURE',status:'APPROVED',purchase_units:lastCreate.purchase_units,payer:{email_address:'Buyer@Example.com'}};
+      testOrderSequence++;
+      order={id:'PAYPAL-ORDER-'+(122+testOrderSequence),intent:'CAPTURE',status:'APPROVED',purchase_units:lastCreate.purchase_units,payer:{email_address:'Buyer@Example.com'}};
       order.purchase_units[0].shipping={name:{full_name:'Buyer Example'},address:{address_line_1:'1 Main St',admin_area_2:'New York',admin_area_1:'NY',postal_code:'10001',country_code:'US'}};
       return Response.json({...order,links:[{rel:'payer-action',href:'https://www.sandbox.paypal.com/checkoutnow?token=TEST'}]});
     }
