@@ -233,7 +233,7 @@ test('only one operator can claim a CJ order and its supplier reference is durab
 });
 
 
-test('launch offer requires a valid delivery phone and allows only one funded capture', async () => {
+test('US launch offer accepts repeat orders and multiple packs without capture replay', async () => {
   const f = environment();
   const offer = {...product(),id:'home-car-glove-duo',price_usd:10.99};
   const worker = makeWorker([offer]);
@@ -251,7 +251,8 @@ test('launch offer requires a valid delivery phone and allows only one funded ca
   assert.equal((await capture()).status,200);
   assert.equal((await capture()).status,200);
   assert.equal(f.captureCalls,1);
-  assert.equal((await worker.fetch(req('/api/orders/create',{...cart,delivery_phone:'+12025550123'}),f.env)).status,409);
+  assert.equal((await worker.fetch(req('/api/orders/create',{...cart,delivery_phone:'+12025550123'}),f.env)).status,201);
+  assert.equal((await worker.fetch(req('/api/orders/create',{...cart,items:[{id:offer.id,quantity:2}],delivery_phone:'+12025550123'}),f.env)).status,201);
   const saved = f.env.DB.sqlite.prepare('SELECT shipping_address FROM orders').get();
   assert.equal(JSON.parse(saved.shipping_address).phone,'+12025550123');
 });
