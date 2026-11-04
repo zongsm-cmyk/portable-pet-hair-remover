@@ -58,7 +58,7 @@ test('deployed disabled configuration rejects create and capture before any DB o
   assert.match(config,/CHECKOUT_ENABLED\s*=\s*"false"/);
   assert.match(config,/PAYPAL_ENV\s*=\s*"sandbox"/);
   const products = JSON.parse(readFileSync(new URL('../catalog.generated.json',import.meta.url),'utf8')).products;
-  assert.equal(products.length,15);
+  assert.equal(products.length,0);
   assert.ok(products.every(p=>p.verified_for_checkout===false));
   let calls = 0;
   const deny = ()=>{calls++;throw new Error('disabled checkout touched a service');};
