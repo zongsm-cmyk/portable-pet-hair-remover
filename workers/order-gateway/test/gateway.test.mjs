@@ -1,14 +1,15 @@
-import {test} from 'node:test';
+﻿import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
-import {makeWorker,quote,verifyPayment,csvCell} from '../src/index.mjs';
+import {makeWorker,quote,sourceFor,verifyPayment,csvCell} from '../src/index.mjs';
 
-const product = () => ({id:'furoff',title:'FurOff',price_usd:34.99,verified_for_checkout:true,cj_sku:'CJ-TEST',cj_variant_id:'VARIANT-TEST',cj_product_url:'https://cjdropshipping.com/product/test',warehouse_origin:'CN',supplier_cost_usd:2,shipping_us_usd:5,shipping_uk_usd:6,eta_us_days:'8-14 business days',eta_uk_days:'8-14 business days',stock_status:'in_stock',supplier_verified_at:new Date().toISOString(),specs:{weight_g:301,contains_lithium:false,contains_liquid:false,medical:false}});
+const product = () => ({id:'furoff',title:'FurOff',price_usd:34.99,verified_for_checkout:true,cj_sku:'CJ-TEST',cj_variant_id:'VARIANT-TEST',cj_product_url:'https://cjdropshipping.com/product/test',warehouse_origin:'CN',supplier_cost_usd:2,shipping_us_usd:5,shipping_uk_usd:6,eta_us_days:'8-12 business days',eta_uk_days:'8-12 business days',stock_status:'in_stock',supplier_verified_at:new Date().toISOString(),specs:{weight_g:301,contains_lithium:false,contains_liquid:false,medical:false}});
 const req = (path, body, headers={}) => new Request('https://shop.askouresystems.com'+path,{method:body===undefined?'GET':'POST',headers:{'Content-Type':'application/json',...headers},...(body===undefined?{}:{body:JSON.stringify(body)})});
 function db() {
   const sqlite = new DatabaseSync(':memory:');
   sqlite.exec(readFileSync(new URL('../migrations/0001_orders.sql',import.meta.url),'utf8'));
+  sqlite.exec(readFileSync(new URL('../migrations/0002_multi_supplier.sql',import.meta.url),'utf8'));
   const prepare = (sql) => ({bind(...args){return {async run(){return sqlite.prepare(sql).run(...args);},async first(){return sqlite.prepare(sql).get(...args)||null;},async all(){return {results:sqlite.prepare(sql).all(...args)};},sql,args};}});
   return {sqlite,prepare,async batch(statements){sqlite.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
 }
@@ -156,4 +157,48 @@ test('authenticated fulfillment updates tracking for paid orders without externa
   response=await w.fetch(req('/api/orders/track',{order_id:created.order_id,email:'buyer@example.com'}),f.env);assert.equal((await response.json()).tracking_number,'TRACK123456');
   assert.equal((await w.fetch(req('/api/orders/fulfillment',{...data,fulfillment_status:'delivered'},headers),f.env)).status,200);
   assert.equal((await w.fetch(req('/api/orders/fulfillment',data,headers),f.env)).status,409);assert.equal(f.captureCalls,1);
+});
+
+test('approved nonexclusive providers can be quoted without CJ API; unknown and spoofed sources are rejected',()=>{
+  const valid = {...product(),fulfillment_provider:{id:'eprolo',sku:'EPROLO-GLOVE-2P',variant_id:'EPROLO-2P-BLACK',product_url:'https://eprolo.com/app/product/example'}};
+  const q=quote([{id:'furoff',quantity:1}],'US',[valid]);
+  assert.equal(q.items[0].supplier_id,'eprolo');
+  assert.equal(q.items[0].supplier_sku,'EPROLO-GLOVE-2P');
+  assert.equal(q.items[0].cj_sku,null);
+  for(const bad of [
+    {id:'eprolo',sku:'X',variant_id:'1',product_url:'https://eprolo.com.evil.test/p'},
+    {id:'unknown',sku:'X',variant_id:'1',product_url:'https://eprolo.com/p'},
+    {id:'eprolo',sku:'X',variant_id:'1',product_url:'http://eprolo.com/p'},
+    {id:'eprolo',sku:'X',variant_id:'1',product_url:'https://user:pw@eprolo.com/p'},
+  ])assert.throws(()=>quote([{id:'furoff',quantity:1}],'US',[{...product(),fulfillment_provider:bad}]));
+});
+test('supplier metadata is persisted, provider-specific export is admin-only, and CJ export excludes non-CJ',async()=>{
+  const f=environment(),p={...product(),fulfillment_provider:{id:'hypersku',sku:'HS-GLOVE',variant_id:'HS-2PK',product_url:'https://app.hypersku.com/product/123'}},w=makeWorker([p]);
+  let r=await w.fetch(req('/api/orders/create',{items:[{id:'furoff',quantity:1}],country:'US'}),f.env);
+  assert.equal(r.status,201);const created=await r.json();
+  r=await w.fetch(req('/api/orders/capture',{paypal_order_id:created.paypal_order_id}),f.env);
+  assert.equal(r.status,200);
+  const row=f.env.DB.sqlite.prepare('SELECT supplier_id,supplier_sku,supplier_variant_id,cj_sku FROM orders').get();
+  assert.equal(row.supplier_id,'hypersku');assert.equal(row.supplier_sku,'HS-GLOVE');assert.equal(row.cj_sku,'');
+  assert.equal((await w.fetch(req('/api/orders/export-supplier-json?provider=hypersku'),f.env)).status,401);
+  r=await w.fetch(req('/api/orders/export-supplier-json?provider=hypersku',undefined,{Authorization:'Bearer '+f.env.ADMIN_TOKEN}),f.env);
+  assert.equal(r.status,200);const data=await r.json();assert.equal(data.orders.length,1);assert.equal(data.orders[0].items[0].supplier_sku,'HS-GLOVE');
+  assert.equal((await w.fetch(req('/api/orders/export-supplier-json?provider=evil',undefined,{Authorization:'Bearer '+f.env.ADMIN_TOKEN}),f.env)).status,422);
+  f.env.CJ_TEMPLATE_JSON=JSON.stringify({verified_at:'2026-11-04',source_url:'https://cjdropshipping.com/export',columns:[{header:'Order',field:'order_id',required:true}]});
+  r=await w.fetch(req('/api/orders/export-cj-csv',undefined,{Authorization:'Bearer '+f.env.ADMIN_TOKEN}),f.env);
+  assert.equal(r.status,200);assert.equal((await r.text()).trim().split(/\r?\n/).length,1); // Header only; no cross-supplier orders.
+});
+test('changing an approved supplier route invalidates pending capture before funds',async()=>{
+  const f=environment(),p={...product(),fulfillment_provider:{id:'eprolo',sku:'E-PET',variant_id:'E-2',product_url:'https://eprolo.com/app/product/1'}},w=makeWorker([p]);
+  const created=await (await w.fetch(req('/api/orders/create',{items:[{id:'furoff',quantity:1}],country:'US'}),f.env)).json();
+  p.fulfillment_provider={...p.fulfillment_provider,sku:'DIFFERENT-SKU'};
+  assert.equal((await w.fetch(req('/api/orders/capture',{paypal_order_id:created.paypal_order_id}),f.env)).status,409);
+  assert.equal(f.captureCalls,0);
+});
+
+
+test('mixed-supplier carts fail closed rather than misrouting an order to the first vendor',()=>{
+ const cj=product();
+ const eprolo={...product(),id:'other',fulfillment_provider:{id:'eprolo',sku:'E-PET',variant_id:'E-2',product_url:'https://eprolo.com/app/product/1'}};
+ assert.throws(()=>quote([{id:'furoff',quantity:1},{id:'other',quantity:1}],'US',[cj,eprolo]));
 });

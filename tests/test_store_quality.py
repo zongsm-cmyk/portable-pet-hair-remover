@@ -81,7 +81,7 @@ class StoreQualityTests(unittest.TestCase):
                      'submitorder', 'opencheckoutmodal', 'confirm order &',
                      'medical-grade', '3 years', 'countdown', 'priority air',
                      '7-12 business days', 'marcus b', 'david l', 'elena r')
-        for path in ROOT.rglob('*.html'):
+        for path in (h for h in ROOT.rglob('*.html') if not any(part in {'node_modules','.wrangler','receipts','.git'} for part in h.relative_to(ROOT).parts)):
             html = path.read_text(encoding='utf-8')
             self.assertIn('Product previews · Ordering unavailable.', html, str(path))
             self.assertIn('"checkout_enabled":false', html, str(path))
@@ -110,7 +110,7 @@ class StoreQualityTests(unittest.TestCase):
             if p['id'] != 'furoff': self.assertIsNone(p['price_usd'])
 
     def test_all_local_links_and_sitemap_routes_exist(self):
-        for path in ROOT.rglob('*.html'):
+        for path in (h for h in ROOT.rglob('*.html') if not any(part in {'node_modules','.wrangler','receipts','.git'} for part in h.relative_to(ROOT).parts)):
             parser = Links(); parser.feed(path.read_text(encoding='utf-8'))
             for url in parser.urls:
                 parsed = urlsplit(url)

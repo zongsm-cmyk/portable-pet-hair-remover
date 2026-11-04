@@ -1,4 +1,4 @@
-import catalog from '../catalog.generated.json' with { type: 'json' };
+﻿import catalog from '../catalog.generated.json' with { type: 'json' };
 
 class HttpError extends Error {
   constructor(status, code) { super(code); this.status = status; this.code = code; }
@@ -12,6 +12,30 @@ const emailKey = s => typeof s === 'string' ? s.trim().toLowerCase() : '';
 const query = (db, sql, ...args) => db.prepare(sql).bind(...args);
 const paypalBase = env => env.PAYPAL_ENV === 'live' ? 'https://api-m.paypal.com' : env.PAYPAL_ENV === 'sandbox' ? 'https://api-m.sandbox.paypal.com' : fail(503, 'paypal_environment_unconfigured');
 
+const APPROVED_SUPPLIER_HOSTS = Object.freeze({
+  cj: 'cjdropshipping.com',
+  eprolo: 'eprolo.com',
+  hypersku: 'hypersku.com',
+  wiio: 'wiio.io'
+});
+export function sourceFor(p) {
+  // Legacy CJ listings remain supported; new supplier routes require explicit verified fields.
+  const raw = p?.fulfillment_provider === undefined
+    ? {id:'cj', sku:p?.cj_sku, variant_id:p?.cj_variant_id, product_url:p?.cj_product_url}
+    : p.fulfillment_provider;
+  if (!raw || typeof raw !== 'object') fail(422, 'product_not_verified');
+  const host = APPROVED_SUPPLIER_HOSTS[raw.id];
+  let url;
+  try { url = new URL(raw.product_url); } catch { /* Invalid supplier link must fail. */ }
+  if (!host || !raw.sku || !raw.variant_id || typeof raw.sku !== 'string' ||
+      typeof raw.variant_id !== 'string' || url?.protocol !== 'https:' ||
+      url.username || url.password ||
+      !(url.hostname === host || url.hostname.endsWith('.' + host)))
+    fail(422, 'product_not_verified');
+  return {id:raw.id,sku:raw.sku,variant_id:raw.variant_id,url:raw.product_url};
+}
+
+
 export function quote(items, country, products = catalog.products) {
   if (!['US','GB'].includes(country) || !Array.isArray(items) || items.length < 1 || items.length > 15) fail(422, 'invalid_cart');
   const seen = new Set();
@@ -21,20 +45,28 @@ export function quote(items, country, products = catalog.products) {
     seen.add(item.id);
     const p = products.find(p => p.id === item.id);
     const suffix = country === 'US' ? 'us' : 'uk';
-    let supplierURL;
-    try { supplierURL = new URL(p?.cj_product_url); } catch { /* Invalid supplier URL fails below. */ }
+    const source = sourceFor(p);
     const verifiedAt = Date.parse(p?.supplier_verified_at);
-    if (!p || p.verified_for_checkout !== true || !p.cj_sku || !p.cj_variant_id || supplierURL?.protocol !== 'https:' || !/(^|\.)cjdropshipping\.com$/.test(supplierURL?.hostname || '') || !p.warehouse_origin || !p[`eta_${suffix}_days`] || typeof p[`shipping_${suffix}_usd`] !== 'number' || typeof p.supplier_cost_usd !== 'number' || p.stock_status !== 'in_stock' || !Number.isFinite(verifiedAt) || verifiedAt > Date.now() || Date.now()-verifiedAt > 7*86400000 || !(p.specs?.weight_g > 0 && p.specs.weight_g < 500) || p.specs.contains_lithium !== false || p.specs.contains_liquid !== false || p.specs.medical !== false) fail(422, 'product_not_verified');
+    if (!p || p.verified_for_checkout !== true || !p.warehouse_origin ||
+        !p[`eta_${suffix}_days`] || typeof p[`shipping_${suffix}_usd`] !== 'number' ||
+        typeof p.supplier_cost_usd !== 'number' || p.stock_status !== 'in_stock' ||
+        !Number.isFinite(verifiedAt) || verifiedAt > Date.now() ||
+        Date.now()-verifiedAt > 7*86400000 ||
+        !(p.specs?.weight_g > 0 && p.specs.weight_g < 500) ||
+        p.specs.contains_lithium !== false ||
+        p.specs.contains_liquid !== false || p.specs.medical !== false)
+      fail(422, 'product_not_verified');
     cents(p.supplier_cost_usd);
     const eta = /^(\d{1,2})\s*-\s*(\d{1,2})\s+(?:business\s+)?days$/.exec(p[`eta_${suffix}_days`]);
-    if (!eta || +eta[1] < 1 || +eta[2] < +eta[1] || +eta[2] > 14) fail(422,'delivery_not_qualified');
+    if (!eta || +eta[1] < 1 || +eta[2] < +eta[1] ||  +eta[2] > 12) fail(422,'delivery_not_qualified');
     cents(p[`shipping_${suffix}_usd`]);
     const unit = cents(p.price_usd);
     const shipping = cents(p[`customer_shipping_${suffix}_usd`] ?? 0);
     if (!unit) fail(422, 'invalid_catalog_money');
     total += (unit + shipping) * item.quantity;
-    return {id:p.id, title:p.title, cj_sku:p.cj_sku, cj_variant_id:p.cj_variant_id, quantity:item.quantity, unit_cents:unit, shipping_cents:shipping};
+    return {id:p.id, title:p.title, supplier_id:source.id, supplier_sku:source.sku, supplier_variant_id:source.variant_id, cj_sku:source.id==='cj' ? source.sku : null, cj_variant_id:source.id==='cj' ? source.variant_id : null, quantity:item.quantity, unit_cents:unit, shipping_cents:shipping};
   });
+  if (new Set(lines.map(line=>line.supplier_id)).size > 1) fail(422, 'mixed_supplier_cart_requires_separate_orders');
   if (total > 200000) fail(422, 'cart_limit_exceeded');
   return {items:lines, country, total_cents:total};
 }
@@ -117,7 +149,7 @@ async function capture(request, env, products) {
     if (Date.now()-Date.parse(intent.created_at) > 30*60*1000) fail(409,'checkout_expired');
     const snapshot = JSON.parse(intent.items_json);
     const current = quote(snapshot.map(line=>({id:line.id,quantity:line.quantity})),intent.country,products);
-    if (current.total_cents !== intent.total_cents || current.items.some((line,index)=>line.cj_sku!==snapshot[index].cj_sku || line.cj_variant_id!==snapshot[index].cj_variant_id || line.unit_cents!==snapshot[index].unit_cents || line.shipping_cents!==snapshot[index].shipping_cents)) fail(409,'checkout_quote_changed');
+    if (current.total_cents !== intent.total_cents || current.items.some((line,index)=>line.supplier_id!==snapshot[index].supplier_id || line.supplier_sku!==snapshot[index].supplier_sku || line.supplier_variant_id!==snapshot[index].supplier_variant_id || line.unit_cents!==snapshot[index].unit_cents || line.shipping_cents!==snapshot[index].shipping_cents)) fail(409,'checkout_quote_changed');
     // Validate merchant, reference, amount and destination BEFORE capturing funds.
     const unit = order.purchase_units?.[0];
     if (order.intent !== 'CAPTURE' || order.purchase_units?.length !== 1 || unit?.custom_id !== intent.order_id || unit?.reference_id !== intent.order_id || unit?.payee?.merchant_id !== env.PAYPAL_MERCHANT_ID || unit?.amount?.currency_code !== 'USD' || unit?.amount?.value !== usd(intent.total_cents) || unit?.shipping?.address?.country_code !== intent.country) fail(422,'approval_mismatch');
@@ -129,7 +161,7 @@ async function capture(request, env, products) {
   const checked = verifyPayment(order, intent, env.PAYPAL_MERCHANT_ID);
   const items = JSON.parse(intent.items_json), first = items[0];
   await env.DB.batch([
-    query(env.DB, `INSERT INTO orders (order_id,paypal_order_id,paypal_capture_id,customer_name,email,shipping_address,items_json,cj_sku,cj_variant_id,quantity,total_paid_usd,payment_status,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(order_id) DO NOTHING`, intent.order_id, body.paypal_order_id, checked.capture.id, checked.shipping.name.full_name, checked.email, JSON.stringify(checked.shipping.address), intent.items_json, first.cj_sku, first.cj_variant_id, items.reduce((n,i)=>n+i.quantity,0), usd(intent.total_cents), 'COMPLETED', new Date().toISOString()),
+    query(env.DB, `INSERT INTO orders (order_id,paypal_order_id,paypal_capture_id,customer_name,email,shipping_address,items_json,cj_sku,cj_variant_id,quantity,total_paid_usd,payment_status,created_at,supplier_id,supplier_sku,supplier_variant_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(order_id) DO NOTHING`, intent.order_id, body.paypal_order_id, checked.capture.id, checked.shipping.name.full_name, checked.email, JSON.stringify(checked.shipping.address), intent.items_json, first.cj_sku || '', first.cj_variant_id || '', items.reduce((n,i)=>n+i.quantity,0), usd(intent.total_cents), 'COMPLETED', new Date().toISOString(),first.supplier_id,first.supplier_sku,first.supplier_variant_id),
     query(env.DB, 'UPDATE checkout_intents SET state=? WHERE order_id=?', 'paid', intent.order_id)
   ]);
   return json({order_id:intent.order_id,payment_status:'COMPLETED',fulfillment_status:'unfulfilled'});
@@ -168,7 +200,7 @@ async function exportCsv(request, env) {
   try { template = JSON.parse(env.CJ_TEMPLATE_JSON || 'null'); } catch { fail(503,'cj_template_unverified'); }
   const allowed = new Set(['order_id','customer_name','email','address_line_1','address_line_2','city','state','postcode','country','cj_sku','cj_variant_id','quantity','total_paid_usd','phone']);
   if (!template?.verified_at || !template.source_url?.startsWith('https://') || !Array.isArray(template.columns) || !template.columns.length || template.columns.some(c=>typeof c.header!=='string'||!allowed.has(c.field))) fail(503,'cj_template_unverified');
-  const result = await query(env.DB, "SELECT * FROM orders WHERE payment_status='COMPLETED' AND fulfillment_status='unfulfilled' ORDER BY created_at LIMIT 501").all();
+  const result = await query(env.DB, "SELECT * FROM orders WHERE payment_status='COMPLETED' AND fulfillment_status='unfulfilled' AND supplier_id='cj' ORDER BY created_at LIMIT 501").all();
   if (result.results.length > 500) fail(409,'export_batch_too_large');
   const rows = [template.columns.map(c=>csvCell(c.header)).join(',')];
   for (const order of result.results) {
@@ -180,6 +212,21 @@ async function exportCsv(request, env) {
     }
   }
   return new Response('\uFEFF' + rows.join('\r\n') + '\r\n', {headers:{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="cj-unfulfilled.csv"','Cache-Control':'no-store'}});
+}
+
+
+async function exportSupplierJson(request,env,url) {
+  await admin(request,env);
+  const provider = url.searchParams.get('provider');
+  if (!['cj','eprolo','hypersku','wiio'].includes(provider)) fail(422,'invalid_supplier');
+  const result = await query(env.DB, "SELECT * FROM orders WHERE payment_status='COMPLETED' AND fulfillment_status='unfulfilled' AND supplier_id=? ORDER BY created_at LIMIT 501",provider).all();
+  if (result.results.length > 500) fail(409,'export_batch_too_large');
+  return json({provider,format:'owner_manual_order_entry_v1',orders:result.results.map(o=>({
+    order_id:o.order_id,customer_name:o.customer_name,email:o.email,
+    shipping_address:JSON.parse(o.shipping_address),
+    items:JSON.parse(o.items_json).filter(i=>i.supplier_id===provider),
+    total_paid_usd:o.total_paid_usd,fulfillment_status:o.fulfillment_status
+  }))});
 }
 
 async function rateLimit(request,env,scope,limit) {
@@ -216,6 +263,7 @@ export function makeWorker(products = catalog.products) {
         if (url.pathname === '/api/orders/capture' && request.method === 'POST') return await capture(request,env,products);
         if (url.pathname === '/api/orders/fulfillment' && request.method === 'POST') return await fulfillment(request,env);
         if (url.pathname === '/api/orders/export-cj-csv' && request.method === 'GET') return await exportCsv(request,env);
+        if (url.pathname === '/api/orders/export-supplier-json' && request.method === 'GET') return await exportSupplierJson(request,env,url);
         if (url.pathname === '/api/orders/track' && ['GET','POST'].includes(request.method)) return await track(request,env,url);
         return json({error:'not_found'},404);
       } catch (error) {
