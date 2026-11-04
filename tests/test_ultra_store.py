@@ -53,7 +53,12 @@ class UltraTests(unittest.TestCase):
     def test_product_page_is_discoverable(self):
         home=(ROOT/"index.html").read_text()
         self.assertIn("/products/home-car-glove-duo/#home-car-glove-duo",home)
-        self.assertIn("A softer home.",home)
+        self.assertIn("LOVE THE PET.",home)
+        self.assertIn("LOSE THE FUR.",home)
+        self.assertIn('data-scene="0"',home)
+        self.assertIn('class="color-marquee"',home)
+        self.assertIn('/assets/vivid.css?v=',home)
+        self.assertIn('/assets/vivid.js?v=',home)
         self.assertIn('class="feature-grid"',home)
         self.assertNotIn("Ordering is paused",home)
         self.assertNotIn("Product previews",home)
