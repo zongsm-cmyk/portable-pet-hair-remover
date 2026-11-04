@@ -48,8 +48,8 @@ export function quote(items, country, products = catalog.products) {
     if (!item || seen.has(item.id) || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 10) fail(422, 'invalid_cart');
     seen.add(item.id);
     const p = products.find(p => p.id === item.id);
-    if (item.id === launchOffer.id && (country !== 'US' || item.quantity !== 1 || items.length !== 1))
-      fail(422, 'launch_offer_one_us_pack_only');
+    if (item.id === launchOffer.id && country !== 'US')
+      fail(422, 'launch_offer_us_only');
     const suffix = country === 'US' ? 'us' : 'uk';
     const source = sourceFor(p);
     const verifiedAt = Date.parse(p?.supplier_verified_at);
@@ -117,13 +117,10 @@ async function create(request, env, products) {
   checkoutGate(env);
   await rateLimit(request,env,'create',10);
   const body = await readBody(request), cart = quote(body.items, body.country, products);
-  const isLaunchOffer = cart.items[0].id === launchOffer.id;
+  const isLaunchOffer = cart.items.some(item => item.id === launchOffer.id);
   const phone = isLaunchOffer ? body.delivery_phone : null;
   if (isLaunchOffer && (typeof phone !== 'string' || !/^\+1[2-9]\d{2}[2-9]\d{6}$/.test(phone)))
     fail(422,'valid_us_delivery_phone_required');
-  if (isLaunchOffer && await query(env.DB,
-    'SELECT order_id FROM launch_order_claim WHERE offer_id=?', launchOffer.id).first())
-    fail(409,'launch_offer_unavailable');
   const id = crypto.randomUUID(), now = new Date().toISOString();
   await query(env.DB, 'INSERT INTO checkout_intents (order_id,country,items_json,total_cents,state,created_at) VALUES (?,?,?,?,?,?)', id, cart.country, JSON.stringify(cart.items), cart.total_cents, 'creating', now).run();
   if (isLaunchOffer) await query(env.DB, 'UPDATE checkout_intents SET delivery_phone=? WHERE order_id=?', phone, id).run();
@@ -169,14 +166,9 @@ async function capture(request, env, products) {
     if (order.intent !== 'CAPTURE' || order.purchase_units?.length !== 1 || unit?.custom_id !== intent.order_id || unit?.reference_id !== intent.order_id || unit?.payee?.merchant_id !== env.PAYPAL_MERCHANT_ID || unit?.amount?.currency_code !== 'USD' || unit?.amount?.value !== usd(intent.total_cents) || unit?.shipping?.address?.country_code !== intent.country) fail(422,'approval_mismatch');
     const address = unit.shipping?.address;
     if (!address?.address_line_1 || !address.admin_area_2 || !address.postal_code || !unit.shipping?.name?.full_name || !emailKey(order.payer?.email_address)) fail(422,'approval_shipping_incomplete');
-    if (snapshot[0].id === launchOffer.id) {
+    if (snapshot.some(item => item.id === launchOffer.id)) {
       if (!launchStates.has(address.admin_area_1) || !/^\d{5}(?:-\d{4})?$/.test(address.postal_code))
         fail(422,'launch_offer_contiguous_us_only');
-      const claim = await query(env.DB, `INSERT INTO launch_order_claim(offer_id,order_id) VALUES(?,?)
-        ON CONFLICT(offer_id) DO UPDATE SET order_id=excluded.order_id
-        WHERE launch_order_claim.order_id=excluded.order_id RETURNING order_id`,
-        launchOffer.id,intent.order_id).first();
-      if (!claim) fail(409,'launch_offer_unavailable');
     }
     await paypal(env, '/v2/checkout/orders/' + encodeURIComponent(body.paypal_order_id) + '/capture', 'POST', {}, 'cap-' + intent.order_id.replaceAll('-',''));
     order = await paypal(env, '/v2/checkout/orders/' + encodeURIComponent(body.paypal_order_id));
@@ -319,8 +311,7 @@ export function makeWorker(products = [...catalog.products, launchOffer]) {
           const health = {status:'ok',checkout_enabled:enabled,mode:env.PAYPAL_ENV || 'unconfigured'};
           if (enabled && env.PAYPAL_ENV === 'live' && products.some(product => product.id === launchOffer.id)) {
             const age = Date.now() - Date.parse(launchOffer.supplier_verified_at);
-            health.launch_offer_available = age >= 0 && age <= 7 * 86400000 && !!env.DB &&
-              !(await query(env.DB, 'SELECT order_id FROM launch_order_claim WHERE offer_id=?', launchOffer.id).first());
+            health.launch_offer_available = age >= 0 && age <= 7 * 86400000 && !!env.DB;
           }
           return json(health);
         }
