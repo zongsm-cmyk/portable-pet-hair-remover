@@ -458,6 +458,7 @@ def build(root=ROOT, output=None):
     feed=ET.tostring(rss,encoding='unicode',xml_declaration=True)
     if not merchant_products: feed=feed.replace('<rss version="2.0">','<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">')
     generated['feed.xml']=feed+'\n'
+    sitemap_paths.append('/guides/remove-pet-hair-from-car-seats/')
     ET.register_namespace('','http://www.sitemaps.org/schemas/sitemap/0.9')
     sitemap=ET.Element('{http://www.sitemaps.org/schemas/sitemap/0.9}urlset')
     for path in sitemap_paths:
