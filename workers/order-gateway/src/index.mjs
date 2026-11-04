@@ -188,6 +188,39 @@ async function fulfillment(request,env) {
   return json({order_id:body.order_id,fulfillment_status:body.fulfillment_status,tracking_number:body.tracking_number,tracking_carrier:body.tracking_carrier,external_notifications_sent:false});
 }
 
+async function orderOperations(request, env, url) {
+  await admin(request, env);
+  const orderId = url.searchParams.get('order_id');
+  if (!validId(orderId)) fail(422, 'invalid_order_id');
+  const row = await query(env.DB, `SELECT o.order_id,o.paypal_capture_id,o.total_paid_usd,o.fulfillment_status,
+    h.claimed_at,h.supplier_reference FROM orders o LEFT JOIN supplier_handoffs h USING(order_id)
+    WHERE o.order_id=?`, orderId).first();
+  if (!row) fail(404, 'paid_order_not_found');
+  return json(row);
+}
+
+async function supplierHandoff(request, env) {
+  await admin(request, env);
+  const body = await readBody(request);
+  if (!validId(body?.order_id)) fail(422, 'invalid_order_id');
+
+  if (body.supplier_reference !== undefined) {
+    if (typeof body.supplier_reference !== 'string' || !/^[A-Za-z0-9-]{3,80}$/.test(body.supplier_reference)) fail(422, 'invalid_supplier_reference');
+    const saved = await query(env.DB, `UPDATE supplier_handoffs SET supplier_reference=?
+      WHERE order_id=? AND (supplier_reference IS NULL OR supplier_reference=?) RETURNING supplier_reference`,
+      body.supplier_reference, body.order_id, body.supplier_reference).first();
+    if (!saved) fail(409, 'supplier_handoff_not_claimed_or_reference_changed');
+    return json({order_id:body.order_id, supplier_reference:saved.supplier_reference});
+  }
+
+  const claimed = await query(env.DB, `INSERT INTO supplier_handoffs(order_id,claimed_at)
+    SELECT order_id,? FROM orders WHERE order_id=? AND payment_status='COMPLETED'
+      AND fulfillment_status='unfulfilled' AND supplier_id='cj'
+    ON CONFLICT(order_id) DO NOTHING RETURNING order_id`, new Date().toISOString(), body.order_id).first();
+  if (!claimed) fail(409, 'supplier_handoff_unavailable');
+  return json({order_id:claimed.order_id, supplier_order_created:false}, 201);
+}
+
 export function csvCell(value) {
   let str = value == null ? '' : String(value);
   if (/^[\s]*[=+@-]/.test(str)) str = "'" + str;
@@ -200,7 +233,7 @@ async function exportCsv(request, env) {
   try { template = JSON.parse(env.CJ_TEMPLATE_JSON || 'null'); } catch { fail(503,'cj_template_unverified'); }
   const allowed = new Set(['order_id','customer_name','email','address_line_1','address_line_2','city','state','postcode','country','cj_sku','cj_variant_id','quantity','total_paid_usd','phone']);
   if (!template?.verified_at || !template.source_url?.startsWith('https://') || !Array.isArray(template.columns) || !template.columns.length || template.columns.some(c=>typeof c.header!=='string'||!allowed.has(c.field))) fail(503,'cj_template_unverified');
-  const result = await query(env.DB, "SELECT * FROM orders WHERE payment_status='COMPLETED' AND fulfillment_status='unfulfilled' AND supplier_id='cj' ORDER BY created_at LIMIT 501").all();
+  const result = await query(env.DB, "SELECT * FROM orders WHERE payment_status='COMPLETED' AND fulfillment_status='unfulfilled' AND supplier_id='cj' AND order_id NOT IN (SELECT order_id FROM supplier_handoffs) ORDER BY created_at LIMIT 501").all();
   if (result.results.length > 500) fail(409,'export_batch_too_large');
   const rows = [template.columns.map(c=>csvCell(c.header)).join(',')];
   for (const order of result.results) {
@@ -219,7 +252,7 @@ async function exportSupplierJson(request,env,url) {
   await admin(request,env);
   const provider = url.searchParams.get('provider');
   if (!['cj','eprolo','hypersku','wiio'].includes(provider)) fail(422,'invalid_supplier');
-  const result = await query(env.DB, "SELECT * FROM orders WHERE payment_status='COMPLETED' AND fulfillment_status='unfulfilled' AND supplier_id=? ORDER BY created_at LIMIT 501",provider).all();
+  const result = await query(env.DB, "SELECT * FROM orders WHERE payment_status='COMPLETED' AND fulfillment_status='unfulfilled' AND supplier_id=? AND order_id NOT IN (SELECT order_id FROM supplier_handoffs) ORDER BY created_at LIMIT 501",provider).all();
   if (result.results.length > 500) fail(409,'export_batch_too_large');
   return json({provider,format:'owner_manual_order_entry_v1',orders:result.results.map(o=>({
     order_id:o.order_id,customer_name:o.customer_name,email:o.email,
@@ -261,6 +294,8 @@ export function makeWorker(products = catalog.products) {
         if (url.pathname === '/api/health' && request.method === 'GET') return json({status:'ok',checkout_enabled:env.CHECKOUT_ENABLED === 'true',mode:env.PAYPAL_ENV || 'unconfigured'});
         if (url.pathname === '/api/orders/create' && request.method === 'POST') return await create(request,env,products);
         if (url.pathname === '/api/orders/capture' && request.method === 'POST') return await capture(request,env,products);
+        if (url.pathname === '/api/orders/operations' && request.method === 'GET') return await orderOperations(request,env,url);
+        if (url.pathname === '/api/orders/supplier-handoff' && request.method === 'POST') return await supplierHandoff(request,env);
         if (url.pathname === '/api/orders/fulfillment' && request.method === 'POST') return await fulfillment(request,env);
         if (url.pathname === '/api/orders/export-cj-csv' && request.method === 'GET') return await exportCsv(request,env);
         if (url.pathname === '/api/orders/export-supplier-json' && request.method === 'GET') return await exportSupplierJson(request,env,url);

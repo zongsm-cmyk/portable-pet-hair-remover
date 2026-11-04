@@ -10,6 +10,7 @@ function db() {
   const sqlite = new DatabaseSync(':memory:');
   sqlite.exec(readFileSync(new URL('../migrations/0001_orders.sql',import.meta.url),'utf8'));
   sqlite.exec(readFileSync(new URL('../migrations/0002_multi_supplier.sql',import.meta.url),'utf8'));
+  sqlite.exec(readFileSync(new URL('../migrations/0003_supplier_handoff.sql',import.meta.url),'utf8'));
   const prepare = (sql) => ({bind(...args){return {async run(){return sqlite.prepare(sql).run(...args);},async first(){return sqlite.prepare(sql).get(...args)||null;},async all(){return {results:sqlite.prepare(sql).all(...args)};},sql,args};}});
   return {sqlite,prepare,async batch(statements){sqlite.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
 }
@@ -201,4 +202,31 @@ test('mixed-supplier carts fail closed rather than misrouting an order to the fi
  const cj=product();
  const eprolo={...product(),id:'other',fulfillment_provider:{id:'eprolo',sku:'E-PET',variant_id:'E-2',product_url:'https://eprolo.com/app/product/1'}};
  assert.throws(()=>quote([{id:'furoff',quantity:1},{id:'other',quantity:1}],'US',[cj,eprolo]));
+});
+
+
+test('only one operator can claim a CJ order and its supplier reference is durable', async () => {
+  const {env} = environment();
+  const worker = makeWorker([product()]);
+  const created = await (await worker.fetch(req('/api/orders/create', {items:[{id:'furoff',quantity:1}],country:'US'}), env)).json();
+  assert.equal((await worker.fetch(req('/api/orders/capture', {paypal_order_id:created.paypal_order_id}), env)).status, 200);
+
+  const admin = {Authorization:'Bearer ' + env.ADMIN_TOKEN};
+  const order = {order_id:created.order_id};
+  const handoff = '/api/orders/supplier-handoff';
+  const operations = '/api/orders/operations?order_id=' + created.order_id;
+  assert.equal((await worker.fetch(req(handoff, order), env)).status, 401);
+  const claims = await Promise.all([1, 2].map(() => worker.fetch(req(handoff, order, admin), env)));
+  assert.deepEqual(claims.map(response => response.status).sort(), [201, 409]);
+  const queue = await (await worker.fetch(req('/api/orders/export-supplier-json?provider=cj', undefined, admin), env)).json();
+  assert.deepEqual(queue.orders, []);
+  const record = async reference => worker.fetch(req(handoff, {...order,supplier_reference:reference}, admin), env);
+  assert.equal((await record('CJ-TEST-001')).status, 200);
+  assert.equal((await record('CJ-TEST-001')).status, 200);
+  assert.equal((await record('CJ-TEST-002')).status, 409);
+  assert.equal((await worker.fetch(req(operations), env)).status, 401);
+  const saved = await (await worker.fetch(req(operations, undefined, admin), env)).json();
+  assert.equal(saved.supplier_reference, 'CJ-TEST-001');
+  assert.equal(saved.paypal_capture_id, 'CAPTURE-123');
+  assert.equal(saved.email, undefined);
 });
