@@ -333,15 +333,11 @@ def build(root=ROOT, output=None):
         '</div></section>'
     )
     home += '<section class="collection sales-collection" aria-label="Available products"><h2>Ordering is paused</h2>'+(''.join(card(p) for p in approved) if settings['checkout_enabled'] and approved else '<p>No qualified products are available to order.</p>')+'</section>'
-    # One focused zero-cost intent CTA while checkout remains disabled.
-    pet_interest_subject = quote('VerveLiving | US pet-hair glove Home + Car duo availability', safe='')
-    pet_interest_banner = ('<section class="promise pet-interest" aria-label="Pet-hair duo availability enquiry">'
-        '<span class="eyebrow">IN SOURCING / NO PAYMENT REQUIRED</span>'
+    pet_interest_banner = ('<section class="promise pet-interest" aria-label="Home and car glove set preview">'
+        '<span class="eyebrow">US OFFER PREVIEW</span>'
         '<h2>Pet hair on the sofa or car seats?</h2>'
-        '<p>We are evaluating a reusable two-glove Home + Car set for US delivery. '
-        'Want the exact available version, delivered price and honest timeline when sourcing is ready? '
-        'Send us an enquiry. This is not an order, reservation or payment request.</p>'
-        '<a class="button button-outline" href="mailto:'+enc(email)+'?subject='+pet_interest_subject+'">Ask about US availability &#8599;</a>'
+        '<p>See the Home + Car glove set, planned price and estimated US shipping time.</p>'
+        '<a class="button button-outline" href="/guides/remove-pet-hair-from-car-seats/#home-car-glove-duo">View the two-glove set &#8599;</a>'
         '</section>')
     home += pet_interest_banner
     home += f'<section id="collections" class="collections"><div class="section-head"><div><span class="eyebrow">Find your next small fix</span><h2>Explore by <em>living space.</em></h2></div><p>Three considered collections, built around the ways you really live.</p></div><div class="category-grid">'+''.join(category_card(key) for key in CATEGORIES)+'</div></section>'
