@@ -37,8 +37,10 @@ class PricingVisibilityTests(unittest.TestCase):
         sales=re.search(r'<section class="collection sales-collection".*?</section>',home).group()
         self.assertNotIn('product-tile',sales)
         self.assertIn('No qualified products are available to order.',sales)
-        self.assertIn('hero-photograph',home)
-        self.assertIn('class="hero-product-photo"',home)
+        self.assertIn('hero-campaign',home)
+        self.assertIn('class="hero-cover"',home)
+        self.assertIn('category-shade',home)
+        self.assertIn('story-section',home)
         self.assertIn('Price under verification',home)
 
     def test_retired_proposals_rejected_and_never_in_commerce(self):
