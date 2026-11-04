@@ -149,6 +149,36 @@ async function api(path, body) {
   if (!response.ok) throw new Error(result.error || 'The service is temporarily unavailable. Please contact support.');
   return result;
 }
+const launchButton = document.querySelector('[data-launch-buy]');
+if (launchButton && settings.launch_offer_enabled && settings.paypal_environment === 'live') {
+  const status = document.querySelector('[data-launch-status]');
+  const phone = document.querySelector('[data-launch-phone]');
+  fetch(endpoint('/api/health'), {cache:'no-store'}).then(response => response.json()).then(health => {
+    if (!health.checkout_enabled || health.mode !== 'live' || health.launch_offer_available !== true) return;
+    launchButton.hidden = false;
+    phone.closest('label').hidden = false;
+    status.textContent = 'One pack, $10.99 total including standard shipping.';
+    document.querySelector('[data-launch-preview]')?.setAttribute('hidden', '');
+  }).catch(() => {});
+  launchButton.addEventListener('click', async () => {
+    const digits = phone.value.replace(/[^\d]/g,'');
+    const deliveryPhone = '+' + (digits.length === 10 ? '1' + digits : digits);
+    if (!/^\+1[2-9]\d{2}[2-9]\d{6}$/.test(deliveryPhone)) {
+      status.textContent = 'Enter a valid US phone number for delivery.';
+      phone.focus();
+      return;
+    }
+    launchButton.disabled = true;
+    try {
+      const result = await api('/api/orders/create', {items:[{id:'home-car-glove-duo',quantity:1}],country:'US',delivery_phone:deliveryPhone});
+      if (result.currency !== 'USD' || result.total_usd !== '10.99') throw new Error('Unexpected checkout total.');
+      window.location.assign(approvalDestination(result.approval_url,'live'));
+    } catch {
+      status.textContent = 'Could not open PayPal. Contact support if you already have a PayPal order reference.';
+      launchButton.disabled = false;
+    }
+  });
+}
 const lookup = document.querySelector('#order-lookup');
 if (lookup) lookup.addEventListener('submit', async event => {
   event.preventDefault();
@@ -165,7 +195,7 @@ if (captureStatus) {
   const token = new URLSearchParams(window.location.search).get('token');
   const cancelled = window.location.pathname.includes('/cancel/') || new URLSearchParams(window.location.search).has('cancelled');
   if (cancelled) captureStatus.textContent='Payment approval was cancelled. No order confirmation has been issued.';
-  else if (!token || !settings.checkout_enabled || !settings.api_base) captureStatus.textContent='Online checkout is currently unavailable. If you already made a payment, contact support with your PayPal transaction reference.';
+  else if (!token || !(settings.checkout_enabled || settings.launch_offer_enabled) || !settings.api_base) captureStatus.textContent='Online checkout is currently unavailable. If you already made a payment, contact support with your PayPal transaction reference.';
   else {
     captureStatus.textContent='Confirming your payment securely…';
     api('/api/orders/capture',{paypal_order_id:token}).then(result => {

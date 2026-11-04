@@ -276,6 +276,8 @@ def build(root=ROOT, output=None):
     nav = nav.replace('CONSIDERED TOOLS. EVERYDAY POSSIBILITIES. &nbsp; · &nbsp; ONLINE CHECKOUT CURRENTLY PAUSED', 'THE EVERYDAY EDIT &nbsp; / &nbsp; GOOD DESIGN FOR REAL LIFE')
     footer = footer.replace('<h4>Good to know</h4>', '<h4>Good to know</h4><a href="/cart/">Your cart</a><a href="/track-order/">Track an order</a>')
     public_settings = {key:settings[key] for key in ('checkout_enabled','api_base','paypal_environment')}
+    if settings.get('launch_offer_enabled') is True:
+        public_settings['launch_offer_enabled'] = True
     public_settings['catalog'] = [{**{key:p[key] for key in ('id','slug','title','price_usd','images','customer_shipping_us_usd','customer_shipping_uk_usd','supplier_verified_at')}, 'supplier_id':sourcing_identity(p)['id']} for p in approved]
     # Hash the same normalized UTF-8 bytes that we publish, on Windows and Linux.
     static_assets = {name: (root/'static'/name).read_text(encoding='utf-8')

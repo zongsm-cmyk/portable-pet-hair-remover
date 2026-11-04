@@ -1,5 +1,9 @@
 ﻿import catalog from '../catalog.generated.json' with { type: 'json' };
 
+import launchOffer from '../launch-offer.json' with { type: 'json' };
+
+const launchStates = new Set('AL AZ AR CA CO CT DE DC FL GA ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' '));
+
 class HttpError extends Error {
   constructor(status, code) { super(code); this.status = status; this.code = code; }
 }
@@ -44,6 +48,8 @@ export function quote(items, country, products = catalog.products) {
     if (!item || seen.has(item.id) || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 10) fail(422, 'invalid_cart');
     seen.add(item.id);
     const p = products.find(p => p.id === item.id);
+    if (item.id === launchOffer.id && (country !== 'US' || item.quantity !== 1 || items.length !== 1))
+      fail(422, 'launch_offer_one_us_pack_only');
     const suffix = country === 'US' ? 'us' : 'uk';
     const source = sourceFor(p);
     const verifiedAt = Date.parse(p?.supplier_verified_at);
@@ -111,8 +117,16 @@ async function create(request, env, products) {
   checkoutGate(env);
   await rateLimit(request,env,'create',10);
   const body = await readBody(request), cart = quote(body.items, body.country, products);
+  const isLaunchOffer = cart.items[0].id === launchOffer.id;
+  const phone = isLaunchOffer ? body.delivery_phone : null;
+  if (isLaunchOffer && (typeof phone !== 'string' || !/^\+1[2-9]\d{2}[2-9]\d{6}$/.test(phone)))
+    fail(422,'valid_us_delivery_phone_required');
+  if (isLaunchOffer && await query(env.DB,
+    'SELECT order_id FROM launch_order_claim WHERE offer_id=?', launchOffer.id).first())
+    fail(409,'launch_offer_unavailable');
   const id = crypto.randomUUID(), now = new Date().toISOString();
   await query(env.DB, 'INSERT INTO checkout_intents (order_id,country,items_json,total_cents,state,created_at) VALUES (?,?,?,?,?,?)', id, cart.country, JSON.stringify(cart.items), cart.total_cents, 'creating', now).run();
+  if (isLaunchOffer) await query(env.DB, 'UPDATE checkout_intents SET delivery_phone=? WHERE order_id=?', phone, id).run();
   const order = await paypal(env, '/v2/checkout/orders', 'POST', {
     intent:'CAPTURE', purchase_units:[{reference_id:id,custom_id:id,invoice_id:id,payee:{merchant_id:env.PAYPAL_MERCHANT_ID},amount:{currency_code:'USD',value:usd(cart.total_cents)}}],
     payment_source:{paypal:{experience_context:{brand_name:'VerveLiving',shipping_preference:'GET_FROM_FILE',user_action:'PAY_NOW',return_url:env.STOREFRONT_ORIGIN + '/checkout/return/',cancel_url:env.STOREFRONT_ORIGIN + '/checkout/cancel/'}}}
@@ -155,13 +169,22 @@ async function capture(request, env, products) {
     if (order.intent !== 'CAPTURE' || order.purchase_units?.length !== 1 || unit?.custom_id !== intent.order_id || unit?.reference_id !== intent.order_id || unit?.payee?.merchant_id !== env.PAYPAL_MERCHANT_ID || unit?.amount?.currency_code !== 'USD' || unit?.amount?.value !== usd(intent.total_cents) || unit?.shipping?.address?.country_code !== intent.country) fail(422,'approval_mismatch');
     const address = unit.shipping?.address;
     if (!address?.address_line_1 || !address.admin_area_2 || !address.postal_code || !unit.shipping?.name?.full_name || !emailKey(order.payer?.email_address)) fail(422,'approval_shipping_incomplete');
+    if (snapshot[0].id === launchOffer.id) {
+      if (!launchStates.has(address.admin_area_1) || !/^\d{5}(?:-\d{4})?$/.test(address.postal_code))
+        fail(422,'launch_offer_contiguous_us_only');
+      const claim = await query(env.DB, `INSERT INTO launch_order_claim(offer_id,order_id) VALUES(?,?)
+        ON CONFLICT(offer_id) DO UPDATE SET order_id=excluded.order_id
+        WHERE launch_order_claim.order_id=excluded.order_id RETURNING order_id`,
+        launchOffer.id,intent.order_id).first();
+      if (!claim) fail(409,'launch_offer_unavailable');
+    }
     await paypal(env, '/v2/checkout/orders/' + encodeURIComponent(body.paypal_order_id) + '/capture', 'POST', {}, 'cap-' + intent.order_id.replaceAll('-',''));
     order = await paypal(env, '/v2/checkout/orders/' + encodeURIComponent(body.paypal_order_id));
   }
   const checked = verifyPayment(order, intent, env.PAYPAL_MERCHANT_ID);
   const items = JSON.parse(intent.items_json), first = items[0];
   await env.DB.batch([
-    query(env.DB, `INSERT INTO orders (order_id,paypal_order_id,paypal_capture_id,customer_name,email,shipping_address,items_json,cj_sku,cj_variant_id,quantity,total_paid_usd,payment_status,created_at,supplier_id,supplier_sku,supplier_variant_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(order_id) DO NOTHING`, intent.order_id, body.paypal_order_id, checked.capture.id, checked.shipping.name.full_name, checked.email, JSON.stringify(checked.shipping.address), intent.items_json, first.cj_sku || '', first.cj_variant_id || '', items.reduce((n,i)=>n+i.quantity,0), usd(intent.total_cents), 'COMPLETED', new Date().toISOString(),first.supplier_id,first.supplier_sku,first.supplier_variant_id),
+    query(env.DB, `INSERT INTO orders (order_id,paypal_order_id,paypal_capture_id,customer_name,email,shipping_address,items_json,cj_sku,cj_variant_id,quantity,total_paid_usd,payment_status,created_at,supplier_id,supplier_sku,supplier_variant_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(order_id) DO NOTHING`, intent.order_id, body.paypal_order_id, checked.capture.id, checked.shipping.name.full_name, checked.email, JSON.stringify({...checked.shipping.address,...(intent.delivery_phone ? {phone:intent.delivery_phone} : {})}), intent.items_json, first.cj_sku || '', first.cj_variant_id || '', items.reduce((n,i)=>n+i.quantity,0), usd(intent.total_cents), 'COMPLETED', new Date().toISOString(),first.supplier_id,first.supplier_sku,first.supplier_variant_id),
     query(env.DB, 'UPDATE checkout_intents SET state=? WHERE order_id=?', 'paid', intent.order_id)
   ]);
   return json({order_id:intent.order_id,payment_status:'COMPLETED',fulfillment_status:'unfulfilled'});
@@ -239,7 +262,7 @@ async function exportCsv(request, env) {
   for (const order of result.results) {
     const address = JSON.parse(order.shipping_address);
     for (const item of JSON.parse(order.items_json)) {
-      const record = {...order,...item,address_line_1:address.address_line_1,address_line_2:address.address_line_2,city:address.admin_area_2,state:address.admin_area_1,postcode:address.postal_code,country:address.country_code,phone:''};
+      const record = {...order,...item,address_line_1:address.address_line_1,address_line_2:address.address_line_2,city:address.admin_area_2,state:address.admin_area_1,postcode:address.postal_code,country:address.country_code,phone:address.phone || ''};
       if (template.columns.some(c=>c.required && (record[c.field] == null || String(record[c.field]).trim()===''))) fail(409,'cj_required_data_missing');
       rows.push(template.columns.map(c=>csvCell(record[c.field])).join(','));
     }
@@ -283,7 +306,7 @@ async function track(request, env, url) {
   return json(order);
 }
 
-export function makeWorker(products = catalog.products) {
+export function makeWorker(products = [...catalog.products, launchOffer]) {
   return {
     async fetch(request, env) {
       try {
@@ -291,7 +314,16 @@ export function makeWorker(products = catalog.products) {
         const origin = request.headers.get('Origin');
         if (origin && origin !== env.STOREFRONT_ORIGIN) fail(403,'origin_forbidden');
         if (request.method === 'OPTIONS') return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':env.STOREFRONT_ORIGIN,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization','Vary':'Origin'}});
-        if (url.pathname === '/api/health' && request.method === 'GET') return json({status:'ok',checkout_enabled:env.CHECKOUT_ENABLED === 'true',mode:env.PAYPAL_ENV || 'unconfigured'});
+        if (url.pathname === '/api/health' && request.method === 'GET') {
+          const enabled = env.CHECKOUT_ENABLED === 'true';
+          const health = {status:'ok',checkout_enabled:enabled,mode:env.PAYPAL_ENV || 'unconfigured'};
+          if (enabled && env.PAYPAL_ENV === 'live' && products.some(product => product.id === launchOffer.id)) {
+            const age = Date.now() - Date.parse(launchOffer.supplier_verified_at);
+            health.launch_offer_available = age >= 0 && age <= 7 * 86400000 && !!env.DB &&
+              !(await query(env.DB, 'SELECT order_id FROM launch_order_claim WHERE offer_id=?', launchOffer.id).first());
+          }
+          return json(health);
+        }
         if (url.pathname === '/api/orders/create' && request.method === 'POST') return await create(request,env,products);
         if (url.pathname === '/api/orders/capture' && request.method === 'POST') return await capture(request,env,products);
         if (url.pathname === '/api/orders/operations' && request.method === 'GET') return await orderOperations(request,env,url);

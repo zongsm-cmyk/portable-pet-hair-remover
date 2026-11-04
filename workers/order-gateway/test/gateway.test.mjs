@@ -11,6 +11,7 @@ function db() {
   sqlite.exec(readFileSync(new URL('../migrations/0001_orders.sql',import.meta.url),'utf8'));
   sqlite.exec(readFileSync(new URL('../migrations/0002_multi_supplier.sql',import.meta.url),'utf8'));
   sqlite.exec(readFileSync(new URL('../migrations/0003_supplier_handoff.sql',import.meta.url),'utf8'));
+  sqlite.exec(readFileSync(new URL('../migrations/0004_launch_order_claim.sql',import.meta.url),'utf8'));
   const prepare = (sql) => ({bind(...args){return {async run(){return sqlite.prepare(sql).run(...args);},async first(){return sqlite.prepare(sql).get(...args)||null;},async all(){return {results:sqlite.prepare(sql).all(...args)};},sql,args};}});
   return {sqlite,prepare,async batch(statements){sqlite.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
 }
@@ -229,4 +230,28 @@ test('only one operator can claim a CJ order and its supplier reference is durab
   assert.equal(saved.supplier_reference, 'CJ-TEST-001');
   assert.equal(saved.paypal_capture_id, 'CAPTURE-123');
   assert.equal(saved.email, undefined);
+});
+
+
+test('launch offer requires a valid delivery phone and allows only one funded capture', async () => {
+  const f = environment();
+  const offer = {...product(),id:'home-car-glove-duo',price_usd:10.99};
+  const worker = makeWorker([offer]);
+  const cart = {items:[{id:offer.id,quantity:1}],country:'US'};
+  assert.equal((await worker.fetch(req('/api/orders/create',cart),f.env)).status,422);
+  assert.equal((await worker.fetch(req('/api/orders/create',{...cart,country:'GB',delivery_phone:'+12025550123'}),f.env)).status,422);
+  const started = await worker.fetch(req('/api/orders/create',{...cart,delivery_phone:'+12025550123'}),f.env);
+  assert.equal(started.status,201);
+  const intent = await started.json();
+  f.order.purchase_units[0].shipping.address.admin_area_1 = 'HI';
+  const capture = () => worker.fetch(req('/api/orders/capture',{paypal_order_id:intent.paypal_order_id}),f.env);
+  assert.equal((await capture()).status,422);
+  assert.equal(f.captureCalls,0);
+  f.order.purchase_units[0].shipping.address.admin_area_1 = 'NY';
+  assert.equal((await capture()).status,200);
+  assert.equal((await capture()).status,200);
+  assert.equal(f.captureCalls,1);
+  assert.equal((await worker.fetch(req('/api/orders/create',{...cart,delivery_phone:'+12025550123'}),f.env)).status,409);
+  const saved = f.env.DB.sqlite.prepare('SELECT shipping_address FROM orders').get();
+  assert.equal(JSON.parse(saved.shipping_address).phone,'+12025550123');
 });

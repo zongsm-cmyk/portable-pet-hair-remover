@@ -124,10 +124,11 @@ class StoreQualityTests(unittest.TestCase):
             self.assertTrue(target.is_file(), loc.text)
         self.assertEqual(ET.parse(ROOT/'feed.xml').findall('./channel/item'), [])
 
-    def test_paused_sandbox_configuration_and_no_legacy_script(self):
+    def test_catalog_remains_paused_and_only_launch_offer_uses_live_checkout(self):
         settings = json.loads((ROOT/'data/settings.json').read_text())
         self.assertFalse(settings['checkout_enabled'])
-        self.assertEqual(settings['paypal_environment'], 'sandbox')
+        self.assertEqual(settings['paypal_environment'], 'live')
+        self.assertTrue(settings['launch_offer_enabled'])
         config = (ROOT/'workers/order-gateway/wrangler.toml').read_text()
         self.assertIn('CHECKOUT_ENABLED = "false"', config)
         self.assertIn('PAYPAL_ENV = "sandbox"', config)
