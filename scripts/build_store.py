@@ -333,6 +333,17 @@ def build(root=ROOT, output=None):
         '</div></section>'
     )
     home += '<section class="collection sales-collection" aria-label="Available products"><h2>Ordering is paused</h2>'+(''.join(card(p) for p in approved) if settings['checkout_enabled'] and approved else '<p>No qualified products are available to order.</p>')+'</section>'
+    # One focused zero-cost intent CTA while checkout remains disabled.
+    pet_interest_subject = quote('VerveLiving | US pet-hair glove Home + Car duo availability', safe='')
+    pet_interest_banner = ('<section class="promise pet-interest" aria-label="Pet-hair duo availability enquiry">'
+        '<span class="eyebrow">IN SOURCING / NO PAYMENT REQUIRED</span>'
+        '<h2>Pet hair on the sofa or car seats?</h2>'
+        '<p>We are evaluating a reusable two-glove Home + Car set for US delivery. '
+        'Want the exact available version, delivered price and honest timeline when sourcing is ready? '
+        'Send us an enquiry. This is not an order, reservation or payment request.</p>'
+        '<a class="button button-outline" href="mailto:'+enc(email)+'?subject='+pet_interest_subject+'">Ask about US availability &#8599;</a>'
+        '</section>')
+    home += pet_interest_banner
     home += f'<section id="collections" class="collections"><div class="section-head"><div><span class="eyebrow">Find your next small fix</span><h2>Explore by <em>living space.</em></h2></div><p>Three considered collections, built around the ways you really live.</p></div><div class="category-grid">'+''.join(category_card(key) for key in CATEGORIES)+'</div></section>'
     story_product = next(p for p in visible if p['id']=='mini-mop')
     story_clean = next(p for p in visible if p['id']=='furoff')
@@ -365,6 +376,8 @@ def build(root=ROOT, output=None):
             '<a class="collection-landing-link" href="#products">Explore the edit <span aria-hidden="true">&#8595;</span></a></div>'
             '<div class="collection-landing-image">'+photo(category_featured,lazy=False)+'</div></section>')
         body = category_intro + '<div id="products">' + body[body.index('<div class="filter">'):]
+        if key == 'smart-cleaning-tools':
+            body += pet_interest_banner
         body += '<div class="product-list">'+''.join(card(p) for p in members)+'</div>' if members else '<section class="empty"><span class="eyebrow">Coming together</span><h2>A thoughtful collection takes care.</h2><p>We are sourcing and checking products for this collection. There are no products available to buy here yet. Please explore our other collections or contact us with a question.</p><a class="text-link" href="/">Back to the collections ↗</a></section>'
         body += '</div>'
         generated[f'categories/{key}/index.html'] = page(name,desc,f'/categories/{key}/',body)
