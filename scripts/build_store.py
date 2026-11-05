@@ -67,7 +67,14 @@ def build(root=ROOT, output=None):
                     "description":"Two reusable black mesh pet-hair gloves.",
                     "image":site+PHOTO,"sku":offer["cj_sku"],
                     "offers":{"@type":"Offer","url":site+PRODUCT,"priceCurrency":"USD",
-                              "price":str(offer["price_usd"]),"availability":"https://schema.org/InStock"}}
+                              "price":str(offer["price_usd"]),
+                              "availability":"https://schema.org/InStock",
+                              "itemCondition":"https://schema.org/NewCondition",
+                              "seller":{"@type":"Organization","name":"VerveLiving","url":site},
+                              "shippingDetails":{"@type":"OfferShippingDetails",
+                                "shippingRate":{"@type":"MonetaryAmount","value":"0","currency":"USD"},
+                                "shippingDestination":{"@type":"DefinedRegion","addressCountry":"US",
+                                  "addressRegion":["AL","AZ","AR","CA","CO","CT","DE","DC","FL","GA","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"]}}}}
             ld='<script type="application/ld+json">'+json.dumps(schema,separators=(",",":"))+'</script>'
         return ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
           '<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#254cde">'
