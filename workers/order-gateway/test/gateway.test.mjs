@@ -44,6 +44,23 @@ test('quote uses only authoritative product prices; supplier shipping is not dou
   const q=quote([{id:'furoff',quantity:2,price_usd:0.01}],'US',[product()]);assert.equal(q.total_cents,6998);
   assert.equal(quote([{id:'furoff',quantity:1}],'GB',[{...product(),customer_shipping_uk_usd:3}]).total_cents,3799);
 });
+test('checkout enforces at least 3x unit price over documented unit plus destination shipping cost',()=>{
+  const low = {...product(),price_usd:20.99};
+  assert.throws(()=>quote([{id:'furoff',quantity:1}],'US',[low]),/insufficient_landed_margin/);
+  const qualified = {...low,price_usd:21};
+  assert.equal(quote([{id:'furoff',quantity:1}],'US',[qualified]).total_cents,2100);
+});
+test('health cannot advertise an under-margin launch offer as available',async()=>{
+  const offer = {...product(),id:'home-car-glove-duo',price_usd:10.99,supplier_cost_usd:1,shipping_us_usd:2};
+  const f = environment();
+  f.env.PAYPAL_ENV = 'live';
+  const response = await makeWorker([offer]).fetch(req('/api/health'),f.env);
+  assert.equal(response.status,200);
+  const status = await response.json();
+  assert.equal(status.checkout_enabled,true);
+  assert.equal(status.launch_offer_available,false);
+});
+
 test('quote rejects fractional/negative quantities, duplicates and unsupported country',()=>{
   for(const quantity of [0,-1,1.1,11,'1'])assert.throws(()=>quote([{id:'furoff',quantity}],'US',[product()]));
   assert.throws(()=>quote([{id:'furoff',quantity:1},{id:'furoff',quantity:1}],'US',[product()]));
