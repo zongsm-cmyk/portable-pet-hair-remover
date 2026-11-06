@@ -51,7 +51,7 @@ test('checkout enforces at least 3x unit price over documented unit plus destina
   assert.equal(quote([{id:'furoff',quantity:1}],'US',[qualified]).total_cents,2100);
 });
 test('health cannot advertise an under-margin launch offer as available',async()=>{
-  const offer = {...product(),id:'home-car-glove-duo',price_usd:10.99,supplier_cost_usd:1,shipping_us_usd:2};
+  const offer = {...product(),id:'home-car-glove-duo',price_usd:10.99};
   const f = environment();
   f.env.PAYPAL_ENV = 'live';
   const response = await makeWorker([offer]).fetch(req('/api/health'),f.env);
@@ -253,7 +253,7 @@ test('only one operator can claim a CJ order and its supplier reference is durab
 
 test('US launch offer accepts repeat orders and multiple packs without capture replay', async () => {
   const f = environment();
-  const offer = {...product(),id:'home-car-glove-duo',price_usd:10.99};
+  const offer = {...product(),id:'home-car-glove-duo',price_usd:10.99,supplier_cost_usd:1,shipping_us_usd:2};
   const worker = makeWorker([offer]);
   const cart = {items:[{id:offer.id,quantity:1}],country:'US'};
   assert.equal((await worker.fetch(req('/api/orders/create',cart),f.env)).status,422);
