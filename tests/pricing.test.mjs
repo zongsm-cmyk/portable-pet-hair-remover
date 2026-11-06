@@ -9,15 +9,14 @@ test('all unqualified catalog items were purged from sellable source',()=>{
   assert.equal(products.length,0);
   assert.throws(()=>quote([{id:'fruit-colander',quantity:1}],'US',products));
 });
-test('only the qualified US offer has valid live bundle totals',()=>{
-  const catalog=[offer];
-  for(const [quantity,total] of [[1,1099],[2,2198],[3,3297]]){
-    assert.equal(quote([{id:offer.id,quantity}],'US',catalog).total_cents,total);
-  }
-  assert.throws(()=>quote([{id:offer.id,quantity:1}],'GB',catalog));
+test('the published-price US offer fails the 3x landed-cost screen',()=>{
+  assert.throws(()=>quote([{id:offer.id,quantity:1}],'US',[offer]),/insufficient_landed_margin/);
+  assert.throws(()=>quote([{id:offer.id,quantity:1}],'GB',[offer]));
 });
-test('supplier shipping is not added to the customer shipping price again',()=>{
-  const q=quote([{id:offer.id,quantity:2}],'US',[offer]);
-  assert.equal(q.total_cents,2198);
+test('synthetic profitable two-pack quote does not double-charge supplier shipping',()=>{
+  // This is a unit-test fixture, not a pricing decision or evidence of a valid supplier quote.
+  const hypothetical={...offer,price_usd:20};
+  const q=quote([{id:offer.id,quantity:2}],'US',[hypothetical]);
+  assert.equal(q.total_cents,4000);
   assert.equal(q.items[0].supplier_variant_id,offer.cj_variant_id);
 });
