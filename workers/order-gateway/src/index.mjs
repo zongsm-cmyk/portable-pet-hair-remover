@@ -62,13 +62,14 @@ export function quote(items, country, products = catalog.products) {
         p.specs.contains_lithium !== false ||
         p.specs.contains_liquid !== false || p.specs.medical !== false)
       fail(422, 'product_not_verified');
-    cents(p.supplier_cost_usd);
+    const supplierCost = cents(p.supplier_cost_usd);
     const eta = /^(\d{1,2})\s*-\s*(\d{1,2})\s+(?:business\s+)?days$/.exec(p[`eta_${suffix}_days`]);
     if (!eta || +eta[1] < 1 || +eta[2] < +eta[1] ||  +eta[2] > 12) fail(422,'delivery_not_qualified');
-    cents(p[`shipping_${suffix}_usd`]);
+    const supplierShipping = cents(p[`shipping_${suffix}_usd`]);
     const unit = cents(p.price_usd);
     const shipping = cents(p[`customer_shipping_${suffix}_usd`] ?? 0);
     if (!unit) fail(422, 'invalid_catalog_money');
+    if (unit < 3 * (supplierCost + supplierShipping)) fail(422, 'insufficient_landed_margin');
     total += (unit + shipping) * item.quantity;
     return {id:p.id, title:p.title, supplier_id:source.id, supplier_sku:source.sku, supplier_variant_id:source.variant_id, cj_sku:source.id==='cj' ? source.sku : null, cj_variant_id:source.id==='cj' ? source.variant_id : null, quantity:item.quantity, unit_cents:unit, shipping_cents:shipping};
   });
@@ -310,8 +311,14 @@ export function makeWorker(products = [...catalog.products, launchOffer]) {
           const enabled = env.CHECKOUT_ENABLED === 'true';
           const health = {status:'ok',checkout_enabled:enabled,mode:env.PAYPAL_ENV || 'unconfigured'};
           if (enabled && env.PAYPAL_ENV === 'live' && products.some(product => product.id === launchOffer.id)) {
-            const age = Date.now() - Date.parse(launchOffer.supplier_verified_at);
-            health.launch_offer_available = age >= 0 && age <= 7 * 86400000 && !!env.DB;
+            // Status is a local eligibility signal, not proof of PayPal acceptance or supplier stock.
+            let qualified = false;
+            try {
+              quote([{id: launchOffer.id, quantity: 1}], 'US', products);
+              qualified = true;
+            } catch { /* Unqualified offers must not be advertised as available. */ }
+            health.launch_offer_available = qualified && !!env.DB &&
+              !!env.PAYPAL_CLIENT_ID && !!env.PAYPAL_CLIENT_SECRET && !!env.PAYPAL_MERCHANT_ID;
           }
           return json(health);
         }
