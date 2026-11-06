@@ -159,13 +159,44 @@ if (launchButton && settings.launch_offer_enabled && settings.paypal_environment
       if (option.checked && quantityInput) quantityInput.value = option.value;
     });
   });
-  fetch(endpoint('/api/health'), {cache:'no-store'}).then(response => response.json()).then(health => {
-    if (!health.checkout_enabled || health.mode !== 'live' || health.launch_offer_available !== true) return;
-    launchButton.hidden = false;
-    phone.closest('label').hidden = false;
-    status.textContent = 'Select your set, then enter a US delivery phone to continue securely with PayPal.';
-    document.querySelector('[data-launch-preview]')?.setAttribute('hidden', '');
-  }).catch(() => {});
+  // Live availability is authoritative: do not leave a stale "checking" message,
+  // unqualified prices, or delivery promises visible when payment is disabled.
+  const buybox = launchButton.closest('.buybox');
+  const caption = buybox?.querySelector('.checkout-caption');
+  const shipping = buybox?.querySelector('.shipping-note');
+  const originalCaption = caption?.textContent;
+  const originalShipping = shipping?.textContent;
+  function showPaused(yes) {
+    launchButton.hidden = yes;
+    if (phone?.closest('label')) phone.closest('label').hidden = yes;
+    for (const selector of ['.bundle-selector', '.price', '.trust-points']) {
+      const element = buybox?.querySelector(selector);
+      if (element) element.hidden = yes;
+    }
+    if (caption) caption.textContent = yes
+      ? 'No payment or order can be submitted while availability and fulfillment are under review.'
+      : originalCaption;
+    if (shipping) shipping.textContent = yes
+      ? 'Stock levels, shipping terms and prices are being verified before checkout reopens.'
+      : originalShipping;
+    status.textContent = yes
+      ? 'Ordering is paused while we verify supplier stock, delivered pricing and secure payment.'
+      : 'Select your set, then enter a US delivery phone to continue securely with PayPal.';
+  }
+  showPaused(true);
+  fetch(endpoint('/api/health'), {cache:'no-store'})
+    .then(response => {
+      if (!response.ok) throw new Error('Availability could not be checked.');
+      return response.json();
+    })
+    .then(health => {
+      if (!health.checkout_enabled || health.mode !== 'live' || health.launch_offer_available !== true) {
+        showPaused(true);
+        return;
+      }
+      showPaused(false);
+      document.querySelector('[data-launch-preview]')?.setAttribute('hidden', '');
+    }).catch(() => showPaused(true));
   launchButton.addEventListener('click', async () => {
     const digits = phone.value.replace(/[^\d]/g,'');
     const deliveryPhone = '+' + (digits.length === 10 ? '1' + digits : digits);
