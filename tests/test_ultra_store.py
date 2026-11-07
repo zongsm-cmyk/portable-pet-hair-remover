@@ -104,7 +104,7 @@ class UltraTests(unittest.TestCase):
         self.assertEqual(home.count('class="real-product-photo"'),10)
         self.assertEqual(home.count('class="product-photo"'),10)
         self.assertEqual(home.count('<video'),6)
-        self.assertIn("Original manufacturer demonstration",home)
+        self.assertIn("UNEDITED MAKER DEMONSTRATION",home)
         self.assertIn("LILLY BRUSH",home)
         self.assertIn("FURZAPPER",home)
         self.assertIn("KURGO",home)
