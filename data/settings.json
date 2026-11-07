@@ -5,6 +5,6 @@
   "support_email": "zongsm+verveliving@gmail.com",
   "checkout_enabled": false,
   "api_base": "https://shop.askouresystems.com",
-  "paypal_environment": "live",
-  "launch_offer_enabled": true
+  "paypal_environment": "sandbox",
+  "launch_offer_enabled": false
 }
