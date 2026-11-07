@@ -1,0 +1,69 @@
+name: One-time organic IndexNow URL notification
+on:
+  push:
+    paths:
+      - '.github/workflows/indexnow-once.yml'
+permissions:
+  contents: read
+jobs:
+  indexnow-once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Prove deployed ownership file and submit only eligible editorial URLs
+        run: |
+          python - <<'PY'
+          import json
+          import time
+          import sys
+          import urllib.request
+          import urllib.error
+
+          key = "fdabe843d27b7a4063083de635c2b1d4"
+          host = "shop.askouresystems.com"
+          key_url = f"https://{host}/{key}.txt"
+          eligible = [
+              f"https://{host}/",
+              f"https://{host}/guides/remove-pet-hair-from-sofa/",
+              f"https://{host}/guides/remove-pet-hair-from-car-seats/"
+          ]
+          for attempt in range(7):
+              try:
+                  req = urllib.request.Request(key_url, headers={"User-Agent":"VerveLiving-IndexNow-OwnerProof/1.0"})
+                  with urllib.request.urlopen(req, timeout=12) as response:
+                      data = response.read(1024).decode("utf-8").strip()
+                      if response.status == 200 and data == key:
+                          print(f"INDEXNOW_OWNERSHIP_PROOF=verified, attempt={attempt+1}")
+                          break
+                      print(f"INDEXNOW_OWNERSHIP_PROOF=not_ready, status={response.status}")
+              except (urllib.error.URLError, TimeoutError, OSError) as exc:
+                  print(f"INDEXNOW_OWNERSHIP_PROOF=not_ready, error={type(exc).__name__}")
+              time.sleep(10)
+          else:
+              sys.exit("INDEXNOW_ABORT=key_file_not_deployed; nothing submitted")
+          payload = {
+              "host":host,
+              "key":key,
+              "keyLocation":key_url,
+              "urlList":eligible
+          }
+          request = urllib.request.Request(
+              "https://api.indexnow.org/indexnow",
+              data=json.dumps(payload).encode("utf-8"),
+              headers={"Content-Type":"application/json; charset=utf-8", "User-Agent":"VerveLiving-IndexNow-OwnerProof/1.0"},
+              method="POST"
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  print(f"INDEXNOW_SUBMIT_HTTP_STATUS={response.status}")
+                  print(f"INDEXNOW_URL_COUNT={len(eligible)}")
+                  if response.status not in (200, 202):
+                      sys.exit(1)
+          except urllib.error.HTTPError as exc:
+              print(f"INDEXNOW_SUBMIT_HTTP_STATUS={exc.code}")
+              print("INDEXNOW_SUBMIT_ERROR=search_endpoint_rejected")
+              sys.exit(1)
+          except (urllib.error.URLError, TimeoutError, OSError) as exc:
+              print("INDEXNOW_SUBMIT_ERROR=" + type(exc).__name__)
+              sys.exit(1)
+          PY
