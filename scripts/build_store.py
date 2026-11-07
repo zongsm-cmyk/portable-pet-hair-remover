@@ -323,6 +323,27 @@ def build(root=ROOT, output=None):
         "</main>", '''<section class="guide wrap" aria-label="Pet hair cleaning guide"><span class="kicker">FREE CLEANING GUIDE</span><h2>Pet hair on the sofa?</h2><p>Start with the fabric care label. Learn gentle, practical ways to remove loose hair without buying a new gadget.</p><a class="arrow-link" href="/guides/remove-pet-hair-from-sofa/">Read the sofa-cleaning guide ↗</a></section>'''+"</main>", 1)
     generated["sitemap.xml"] = generated["sitemap.xml"].replace(
         "</urlset>", "<url><loc>"+site+new_guide_route+"</loc></url>\n</urlset>", 1)
+    # Voluntary, non-transactional demand signal before any supplier is approved.
+    # Mailto avoids a third-party form processor and does not subscribe users to marketing.
+    if not qualified:
+        contact_subject = "VerveLiving%20pet%20hair%20cleaning%20problem"
+        research_cta = (
+            '<section class="guide wrap" aria-label="Help us prioritize useful products">'
+            '<span class="kicker">HELP SHAPE WHAT WE SOURCE</span>'
+            '<h2>What is the hardest place to remove pet hair?</h2>'
+            '<p>Tell us whether you are cleaning a sofa, car seat, clothing or carpet, and what has not worked. '
+            'We are validating real needs before offering products. This is not an order, preorder or marketing subscription.</p>'
+            '<a class="arrow-link" href="mailto:'+support+'?subject='+contact_subject+'">'
+            'Share your cleaning challenge by email ↗</a>'
+            '</section>'
+        )
+        for page_name in (
+            "index.html",
+            "guides/remove-pet-hair-from-car-seats/index.html",
+            "guides/remove-pet-hair-from-sofa/index.html",
+        ):
+            generated[page_name] = generated[page_name].replace(
+                "</main>", research_cta+"</main>", 1)
     previous=output/"build-receipt.json"
     if previous.exists():
         before=json.loads(previous.read_text(encoding="utf-8"))

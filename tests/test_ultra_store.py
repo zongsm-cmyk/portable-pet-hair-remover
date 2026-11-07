@@ -160,6 +160,16 @@ class UltraTests(unittest.TestCase):
                 self.assertIn('href="/guides/remove-pet-hair-from-car-seats/">Read guide <span>',html,path)
         self.assertFalse(json.loads((ROOT/"data/settings.json").read_text())["checkout_enabled"])
 
+    def test_prelaunch_feedback_is_opt_in_no_checkout_or_marketing_enrollment(self):
+        for path in ("index.html",
+                     "guides/remove-pet-hair-from-car-seats/index.html",
+                     "guides/remove-pet-hair-from-sofa/index.html"):
+            html=(ROOT/path).read_text()
+            self.assertIn("What is the hardest place to remove pet hair?", html, path)
+            self.assertIn("not an order, preorder or marketing subscription", html, path)
+            self.assertIn("mailto:zongsm+verveliving@gmail.com?subject=VerveLiving%20pet%20hair%20cleaning%20problem", html, path)
+            self.assertNotIn('data-launch-buy',html,path)
+
     def test_payment_return_and_tracking_unchanged_contract(self):
         page=(ROOT/"checkout/return/index.html").read_text()
         self.assertIn('id="capture-status"',page)
