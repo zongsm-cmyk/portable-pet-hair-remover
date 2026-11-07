@@ -297,6 +297,29 @@ def build(root=ROOT, output=None):
         for path in (PRODUCT, "/categories/smart-cleaning-tools/"):
             generated["sitemap.xml"] = generated["sitemap.xml"].replace(
                 "<url><loc>"+site+path+"</loc></url>\n", "")
+
+    # Original help content remains indexable even while physical products are unqualified.
+    new_guide_route = "/guides/remove-pet-hair-from-sofa/"
+    new_guide_title = "How to remove pet hair from a sofa safely"
+    new_guide_desc = "Simple sofa pet-hair cleaning tips: check fabric care labels, remove loose fur gently, test tools first and protect delicate upholstery."
+    new_guide_body = '''<article class="guide wrap"><span class="kicker">THE CARE NOTES / 002</span><h1>How to remove pet hair from a sofa without damaging upholstery.</h1><p class="guide-lead">A practical routine for fabric couches and pet-friendly homes. Always check the upholstery care label first.</p><div class="guide-content"><div><h2>Start with the fabric, not the tool.</h2><p>Pet hair can collect along seams, cushions and throws. Work gently: some upholstery fibers snag or pill under rubbing. If the manufacturer specifies professional-only cleaning, follow that instruction rather than trying an untested hack.</p><h2>1. Check the care code and test a hidden spot</h2><p>Follow the furniture makers cleaning instructions. Keep water off fabrics marked for solvent-only or professional cleaning. Before any repeated strokes or moisture, test the method on a concealed area.</p><h2>2. Lift loose hair in short passes</h2><p>Start with a clean, dry microfiber cloth or a vacuum upholstery attachment. Work from the back toward the front, collecting the fur as you go. Use light pressure, especially near piping, delicate weave and cushions.</p><h2>3. Try an upholstery-compatible lint tool</h2><p>A reusable lint brush or rubber tool may help on durable woven fabric. Test carefully first: do not use abrasive edges, hard scraping or force on velvet, loosely woven material, leather or suede. Stop if you see pulling, pilling or color change.</p><h2>4. Finish the seams and maintain a simple routine</h2><p>Vacuum crevices, clean the collection tool and wash removable covers only as directed by their labels. Frequent gentle upkeep is preferable to aggressive scraping after fur builds up.</p><h2>Quick questions</h2><p><strong>Can I use a wet rubber glove?</strong> Only if the furniture maker permits damp cleaning and your hidden-spot test is successful; otherwise choose a dry method.</p><p><strong>Will one tool work on every couch?</strong> No. Fabric, weave and surface treatments differ. Avoid claims of universal compatibility.</p><p><strong>Is a product available from VerveLiving?</strong> Not yet. We are verifying supplier stock, quality and shipping before accepting orders.</p><p>More specific help: <a href="/guides/remove-pet-hair-from-car-seats/">how to lift pet hair from car seats</a> and our <a href="/products/home-car-glove-duo/">current product research preview</a>.</p></div></div></article>'''
+    guide_template = generated["guides/remove-pet-hair-from-car-seats/index.html"]
+    guide_page = (guide_template
+        .replace("How to remove pet hair from car seats", new_guide_title)
+        .replace("A practical guide to lifting loose pet hair from compatible upholstery.", new_guide_desc)
+        .replace('<link rel="canonical" href="'+site+GUIDE+'">',
+                 '<link rel="canonical" href="'+site+new_guide_route+'">')
+        .replace('<meta property="og:url" content="'+site+GUIDE+'">',
+                 '<meta property="og:url" content="'+site+new_guide_route+'">')
+        .replace('<meta property="og:image" content="'+site+PHOTO+'">', ""))
+    guide_page = re.sub(r'<main id="main">.*?</main>',
+                        '<main id="main">'+new_guide_body+'</main>',
+                        guide_page, count=1, flags=re.S)
+    generated["guides/remove-pet-hair-from-sofa/index.html"] = guide_page
+    generated["index.html"] = generated["index.html"].replace(
+        "</main>", '''<section class="guide wrap" aria-label="Pet hair cleaning guide"><span class="kicker">FREE CLEANING GUIDE</span><h2>Pet hair on the sofa?</h2><p>Start with the fabric care label. Learn gentle, practical ways to remove loose hair without buying a new gadget.</p><a class="arrow-link" href="/guides/remove-pet-hair-from-sofa/">Read the sofa-cleaning guide ↗</a></section>'''+"</main>", 1)
+    generated["sitemap.xml"] = generated["sitemap.xml"].replace(
+        "</urlset>", "<url><loc>"+site+new_guide_route+"</loc></url>\n</urlset>", 1)
     previous=output/"build-receipt.json"
     if previous.exists():
         before=json.loads(previous.read_text(encoding="utf-8"))

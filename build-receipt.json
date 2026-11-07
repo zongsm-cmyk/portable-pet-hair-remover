@@ -17,7 +17,8 @@
     "checkout/return/index.html": "c4b65f0da10fe75c303e3ca4312a4adc364fd4615381890e0c704718702ff931",
     "feed.xml": "a9051f41935775e4f7dd5f7dff2c698adf99d60be481d7e4a3f536c4990feadc",
     "guides/remove-pet-hair-from-car-seats/index.html": "b9672ffc66efce53534ea7b65173fc1ef14211efeee7d97bd90d1da0f43a7749",
-    "index.html": "5a77be48a88b9567fdde3354a844206a1be6f0c8003b6d87b4eb74eccb4c1638",
+    "guides/remove-pet-hair-from-sofa/index.html": "1ba2603204c491659a7ba3f9904746200825b8fcd2b939ee9c3825ac901354e8",
+    "index.html": "9f547c9733f0b06c42408f30d02eccbadbe56c6a2765e9216b72e60d64d2efb6",
     "policies/contact/index.html": "c519b202183c2df9d01c419406d0c2a4570bb534ba0d147a8e4eaad56d76fac6",
     "policies/privacy/index.html": "6995ea05c43ec056ee2a8e71495db46af3e1b3188ac9367e4cd7dfabee696af0",
     "policies/refunds/index.html": "8ed299b8ddf18ed16e07fe56f839138f8b276d53c9ba5f17edd8ff10549d4cb0",
@@ -25,7 +26,7 @@
     "policies/terms/index.html": "0f2c67d0c59ac70b1b605c92b35e1ff31e2ec2769b95ee1a2c0f7da6499af370",
     "products/home-car-glove-duo/index.html": "24a3129733a7290a19de6b8ec635a5d9bb84b38d726d13311f840ea38aafc268",
     "robots.txt": "dd19510722057b78be4c1a85504c1f9efc6877f7dd345f32ef2bee5db82a8349",
-    "sitemap.xml": "33b9782d20b4445c9f491075708fc2f52b81647b4229f86886987eeb0e7a1d26",
+    "sitemap.xml": "a5c210a33fec857efc35335a470eafbf8b52bb095f1576f0479e8d6e5fed6912",
     "track-order/index.html": "3dfd1668a370a0f3419e56b684a3783fa6ea9ff4b2580a241eeadb8add7ca22f"
   }
 }
