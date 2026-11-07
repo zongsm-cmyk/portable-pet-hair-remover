@@ -20,11 +20,22 @@ def build(root=ROOT, output=None):
     catalog = json.loads((root/"data/catalog.json").read_text(encoding="utf-8"))
     offer = json.loads((root/"workers/order-gateway/launch-offer.json").read_text(encoding="utf-8"))
     assert catalog["products"] == [], "Unverified products must be purged"
-    assert config["paypal_environment"] == "live" and config["launch_offer_enabled"]
-    assert offer["verified_for_checkout"] and offer["stock_status"] == "in_stock"
-    assert offer["cj_sku"] and offer["cj_variant_id"] and offer["warehouse_origin"] == "US"
-    assert offer["price_usd"] > offer["shipping_us_usd"] + offer["supplier_cost_usd"]
-    assert datetime.fromisoformat(offer["supplier_verified_at"].replace("Z","+00:00")).tzinfo
+    qualified = (
+        config.get("checkout_enabled") is True and config.get("paypal_environment") == "live"
+        and config.get("launch_offer_enabled") is True
+        and offer.get("verified_for_checkout") is True and offer.get("stock_status") == "in_stock"
+        and offer.get("cj_sku") and offer.get("cj_variant_id") and offer.get("warehouse_origin") == "US"
+        and all(isinstance(offer.get(key), (int, float)) for key in ("price_usd", "supplier_cost_usd", "shipping_us_usd"))
+        and offer["price_usd"] >= 3 * (offer["supplier_cost_usd"] + offer["shipping_us_usd"])
+        and offer.get("supplier_verified_at")
+    )
+    if qualified:
+        try:
+            from datetime import timezone, timedelta
+            age = datetime.now(timezone.utc) - datetime.fromisoformat(offer["supplier_verified_at"].replace("Z","+00:00"))
+            qualified = timedelta(0) <= age <= timedelta(days=7)
+        except (ValueError, TypeError):
+            qualified = False
     site=config["site_url"].rstrip("/"); support=e(config["support_email"])
     price=usd(offer["price_usd"])
     css=(root/"static/store.css").read_text(encoding="utf-8")
@@ -235,6 +246,57 @@ def build(root=ROOT, output=None):
       '<g:description>Two black reusable mesh gloves.</g:description><g:link>'+site+PRODUCT+'</g:link>'
       '<g:image_link>'+site+PHOTO+'</g:image_link><g:price>10.99 USD</g:price><g:availability>in stock</g:availability>'
       '<g:condition>new</g:condition></item></channel></rss>\n')
+    if not qualified:
+        hold_box = ('<section class="buybox" id="home-car-glove-duo" aria-label="Product under review">'
+                    '<span class="kicker">PRODUCT RESEARCH</span><h2>Ordering is paused</h2>'
+                    '<p>Supplier stock, pricing, shipping and media rights are being verified. '
+                    'No orders can be placed here.</p></section>')
+        replacements = [
+            ('"paypal_environment":"live","launch_offer_enabled":true',
+             '"paypal_environment":"sandbox","launch_offer_enabled":false'),
+            ("Tracked US shipping included on the Home + Car glove duo", "Supplier validation in progress — ordering is paused"),
+            ("Tracked US shipping", "Shipping under review"),
+            ("Tracked contiguous-US shipping included.", "Shipping not verified."),
+            ("A focused, verified offer instead of an endless catalog of uncertain products.", "Product concept under supplier verification; no sales are open."),
+            ("Shop a reusable two-glove pet-hair removal set with tracked contiguous-US shipping.", "Preview a pet-hair cleaning concept. No products are currently for sale."),
+            ("Two reusable mesh gloves per pack, from $10.99 with shipping included.", "Research preview. Not currently available for sale."),
+            ("Shop verified reusable pet hair-removal gloves.", "Research preview of reusable pet hair-removal gloves."),
+            ("Every product here has a specified supplier variant and a clear checkout total.", "No products currently meet our supplier qualification requirements."),
+            ("The current sellable product is the Home + Car two-glove set for delivery within the contiguous United States.", "VerveLiving is not currently accepting new orders; product stock, delivery and returns are under review."),
+            ("The estimated delivery window is 3–10 days including processing. It is not a delivery guarantee. We send tracking details after dispatch.", "No delivery estimate is available while orders are paused."),
+            ("3–10 days including processing.", "not yet confirmed."),
+            ("Two black reusable mesh gloves, as specified for our current US supplier variant.", "Two gloves are shown for product research. Supplier variant is not yet confirmed."),
+            ("Yes. Choose one, two or three two-glove packs. Each pack is priced at $10.99 including standard contiguous-US shipping.", "No packs are currently available for purchase."),
+            ("Two gloves per pack · $10.99 shipped to the contiguous US.", "Two-glove concept · Not currently for sale."),
+            ("The Home + Car glove duo has a dedicated checkout. Choose 1, 2 or 3 packs on the product page.", "No products are currently available for checkout."),
+            ("Shop now ↗", "View details ↗"),
+            ("Shop the duo ↗", "View product research ↗"),
+            ("Shop the glove duo ↗", "View product research ↗"),
+            ("Shop gloves", "Preview product"),
+            ("GET YOUR DUO", "EXPLORE THE CONCEPT"),
+            ("THE TOOL WE CHOSE", "PRODUCT UNDER REVIEW"),
+            ("A secure checkout and support when you need it.", "Ordering is paused until supplier verification is complete."),
+            ("VerveLiving sells selected physical household-care items. The product page specifies contents, pricing and current shipping markets.", "VerveLiving is preparing physical household-care products; none are currently available to order. Product details, price and shipping will be confirmed before sales begin."),
+            ("Standard shipping is included in the displayed US price. Your address and total are reviewed at PayPal before approval. Tracking is provided after the supplier dispatches the order.", "There is no active product price or shipping promise while sales are paused. Any future checkout will show the confirmed price, shipping terms and final total."),
+            ("We do not currently accept checkout for other destinations.", "Checkout is currently unavailable for all destinations."),
+            ("$10.99", "Price pending"), ("$21.98", "Price pending"), ("$32.97", "Price pending"),
+        ]
+        for name, html in list(generated.items()):
+            if name.endswith(".html"):
+                html = re.sub(r'<section class="buybox"[^>]*>.*?</section>', hold_box, html, flags=re.S)
+                html = re.sub(r'<script type="application/ld\+json">.*?</script>', "", html, flags=re.S)
+                for before, after in replacements:
+                    html = html.replace(before, after)
+                if name.startswith(("products/", "categories/")):
+                    html = html.replace('<meta name="robots" content="index,follow">',
+                                        '<meta name="robots" content="noindex,follow">')
+                generated[name] = html
+        generated["feed.xml"] = ('<?xml version="1.0" encoding="utf-8"?>\n'
+              '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"><channel>'
+              '<title>VerveLiving</title><link>'+site+'</link></channel></rss>\n')
+        for path in (PRODUCT, "/categories/smart-cleaning-tools/"):
+            generated["sitemap.xml"] = generated["sitemap.xml"].replace(
+                "<url><loc>"+site+path+"</loc></url>\n", "")
     previous=output/"build-receipt.json"
     if previous.exists():
         before=json.loads(previous.read_text(encoding="utf-8"))
@@ -246,9 +308,11 @@ def build(root=ROOT, output=None):
     for path,contents in generated.items():
         dest=output/path;dest.parent.mkdir(parents=True,exist_ok=True)
         dest.write_text(contents,encoding="utf-8")
-    receipt={"version":"ULTRA-20261104","result":"BUILT_VERIFIED_LIVE_OFFER",
-      "verified_products":1,"unverified_products":len(catalog["products"]),
-      "checkout_environment":"live","payment_executed":False,
+    receipt={"version":"ULTRA-20261107-SAFE-HOLD",
+      "result":"BUILT_VERIFIED_LIVE_OFFER" if qualified else "BUILT_RESEARCH_HOLD_NO_CHECKOUT",
+      "verified_products":1 if qualified else 0,
+      "unverified_products":len(catalog["products"])+(0 if qualified else 1),
+      "checkout_environment":config["paypal_environment"],"payment_executed":False,
       "files":{path:hashlib.sha256(txt.encode()).hexdigest() for path,txt in sorted(generated.items())}}
     (output/"build-receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"result":receipt["result"],"pages":len(generated),"purged":len(catalog["products"])}))
