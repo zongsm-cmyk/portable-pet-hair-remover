@@ -37,6 +37,50 @@ class UltraTests(unittest.TestCase):
             for name in receipt["files"]:
                 self.assertEqual((Path(tmp)/name).read_bytes(),(ROOT/name).read_bytes(),name)
 
+    def test_qualified_offer_client_readiness_uses_isolated_fixture_only(self):
+        # Pure static build regression: no supplier purchase, PayPal call or deployment.
+        from shutil import copy2
+        from datetime import datetime, timezone
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)/"fixture"
+            for p in ("data/settings.json", "data/catalog.json",
+                      "workers/order-gateway/launch-offer.json",
+                      "static/store.css", "static/store.js", "static/vivid.css",
+                      "static/vivid.js"):
+                source=ROOT/p
+                dest=root/p
+                dest.parent.mkdir(parents=True,exist_ok=True)
+                copy2(source,dest)
+            config_path=root/"data/settings.json"
+            config=json.loads(config_path.read_text())
+            config.update(checkout_enabled=True, paypal_environment="live",
+                          launch_offer_enabled=True)
+            config_path.write_text(json.dumps(config))
+            offer_path=root/"workers/order-gateway/launch-offer.json"
+            offer=json.loads(offer_path.read_text())
+            offer.update(price_usd=35.99, verified_for_checkout=True,
+                         stock_status="in_stock",
+                         supplier_verified_at=datetime.now(timezone.utc).isoformat())
+            offer_path.write_text(json.dumps(offer))
+            out=root/"generated"
+            receipt=ultra.build(root=root,output=out)
+            self.assertEqual(receipt["verified_products"],1)
+            page=(out/"products/home-car-glove-duo/index.html").read_text()
+            self.assertIn('"checkout_enabled":true',page)
+            self.assertIn('"paypal_environment":"live"',page)
+            self.assertIn('"launch_offer_enabled":true',page)
+            self.assertIn('data-launch-buy',page)
+            # Disabled/underverified variant must never accidentally expose checkout.
+            offer["verified_for_checkout"]=False
+            offer_path.write_text(json.dumps(offer))
+            blocked=ultra.build(root=root,output=out)
+            self.assertEqual(blocked["verified_products"],0)
+            paused=(out/"products/home-car-glove-duo/index.html").read_text()
+            self.assertIn('"checkout_enabled":false',paused)
+            self.assertIn('"launch_offer_enabled":false',paused)
+            self.assertNotIn('data-launch-buy',paused)
+            self.assertIn("Ordering is paused",paused)
+
     def test_unverified_offer_is_preview_only(self):
         html=(ROOT/"products/home-car-glove-duo/index.html").read_text()
         self.assertIn('id="home-car-glove-duo"',html)
