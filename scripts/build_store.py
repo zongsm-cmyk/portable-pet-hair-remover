@@ -319,7 +319,7 @@ def build(root=ROOT, output=None):
     generated["index.html"] = generated["index.html"].replace(
         "</main>", '''<section class="guide wrap" aria-label="Pet hair cleaning guide"><span class="kicker">FREE CLEANING GUIDE</span><h2>Pet hair on the sofa?</h2><p>Start with the fabric care label. Learn gentle, practical ways to remove loose hair without buying a new gadget.</p><a class="arrow-link" href="/guides/remove-pet-hair-from-sofa/">Read the sofa-cleaning guide ↗</a></section>'''+"</main>", 1)
     generated["sitemap.xml"] = generated["sitemap.xml"].replace(
-        "</urlset>", "<url><loc>"+site+new_guide_route+"</loc></url>\\n</urlset>", 1)
+        "</urlset>", "<url><loc>"+site+new_guide_route+"</loc></url>\n</urlset>", 1)
     previous=output/"build-receipt.json"
     if previous.exists():
         before=json.loads(previous.read_text(encoding="utf-8"))
