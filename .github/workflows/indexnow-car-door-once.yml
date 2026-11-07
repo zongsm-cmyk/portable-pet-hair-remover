@@ -1,0 +1,30 @@
+name: One-shot IndexNow new dog car door guide
+on:
+  push:
+    paths: ['.github/workflows/indexnow-car-door-once.yml']
+permissions:
+  contents: read
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Verify public guide and ownership then notify IndexNow once
+        run: |
+          python - <<'PY'
+          import urllib.request,urllib.error,json,sys
+          site="https://shop.askouresystems.com"
+          key="fdabe843d27b7a4063083de635c2b1d4"
+          url=site+"/guides/protect-car-doors-from-dog-scratches/"
+          with urllib.request.urlopen(site+"/"+key+".txt",timeout=15) as x:
+              assert x.status==200 and x.read(256).decode().strip()==key, "domain_not_proven"
+          with urllib.request.urlopen(url,timeout=15) as x:
+              assert x.status==200 and "How to protect car doors from dog scratches" in x.read(20000).decode(), "guide_not_deployed"
+          print("GUIDE_PUBLIC_AND_OWNERSHIP_VERIFIED=true")
+          payload={"host":"shop.askouresystems.com","key":key,"keyLocation":site+"/"+key+".txt","urlList":[url]}
+          req=urllib.request.Request("https://api.indexnow.org/indexnow",data=json.dumps(payload).encode(),
+                                     headers={"Content-Type":"application/json"},method="POST")
+          with urllib.request.urlopen(req,timeout=20) as x:
+              print("INDEXNOW_GUIDE_SUBMIT_HTTP="+str(x.status))
+              assert x.status in (200,202), "indexnow_not_accepted"
+          PY
