@@ -366,6 +366,16 @@ def build(root=ROOT, output=None):
         ):
             generated[page_name] = generated[page_name].replace(
                 "</main>", research_cta+"</main>", 1)
+    # Editorial affiliate landing page is a versioned build input, not an output-only edit.
+    # Fail closed: no checkout or payment link may enter the generated homepage.
+    editorial_template = root / "static/affiliate-home.html"
+    if not qualified and editorial_template.is_file():
+        editorial_html = editorial_template.read_text(encoding="utf-8")
+        assert '"checkout_enabled":false' in editorial_html
+        assert '"paypal_environment":"sandbox"' in editorial_html
+        assert 'data-launch-buy' not in editorial_html
+        assert 'href="/track-order/"' not in editorial_html
+        generated["index.html"] = editorial_html
     previous=output/"build-receipt.json"
     if previous.exists():
         before=json.loads(previous.read_text(encoding="utf-8"))
