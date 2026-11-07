@@ -323,6 +323,27 @@ def build(root=ROOT, output=None):
         "</main>", '''<section class="guide wrap" aria-label="Pet hair cleaning guide"><span class="kicker">FREE CLEANING GUIDE</span><h2>Pet hair on the sofa?</h2><p>Start with the fabric care label. Learn gentle, practical ways to remove loose hair without buying a new gadget.</p><a class="arrow-link" href="/guides/remove-pet-hair-from-sofa/">Read the sofa-cleaning guide ↗</a></section>'''+"</main>", 1)
     generated["sitemap.xml"] = generated["sitemap.xml"].replace(
         "</urlset>", "<url><loc>"+site+new_guide_route+"</loc></url>\n</urlset>", 1)
+    # Editorial car-door scratch guide: research and safe fitting advice, no unverified sale.
+    door_route = "/guides/protect-car-doors-from-dog-scratches/"
+    door_title = "How to protect car doors from dog scratches"
+    door_desc = "Practical dog-car travel tips: keep claws away from door trim, check window and airbag clearance, test protective covers and avoid tint damage."
+    door_body = '''<article class="guide wrap"><span class="kicker">THE CARE NOTES / 003</span><h1>How to protect car doors from dog scratches.</h1><p class="guide-lead">A practical checklist for dog-friendly rides. Pick a guard that fits the vehicle, not just the product photo.</p><div class="guide-content"><div><h2>Why door panels get marked</h2><p>Dogs often lean toward the window during rides. Claws, mud and drool can leave scratches or stains on armrests and interior trim. A protective cover can help, but the right fit and safe installation matter.</p><h2>1. Measure before buying</h2><p>Check the width and height of the door panel and window frame, the location of switches, handles, seat belts and any side-airbag zones. Generic "universal fit" labels do not replace actual measurements.</p><h2>2. Choose an attachment that does not harm the vehicle</h2><p>Some covers rely on window-slot tabs, others on suction cups or removable straps. Read the vehicle and protector instructions. Avoid placing adhesives on delicate trim, textured leather or aftermarket window film without the manufacturers approval. Test in a concealed area first.</p><h2>3. Keep controls and safety systems clear</h2><p>Never obstruct door handles, locks, window controls, seat-belt anchors, airbags, child-safety locks or visibility. Check whether the protector manufacturer restricts lowering windows while fitted. Do not allow a pet to hang its head out of a moving vehicle; use a suitable pet restraint appropriate for the vehicle.</p><h2>4. Check fabric and fit after installation</h2><p>Choose material that can be wiped clean and does not slip into the door mechanism. Before each drive, inspect clips and straps for looseness, remove any obstruction and verify the panel cannot interfere with opening the door in an emergency.</p><h2>5. Clean gently and reassess</h2><p>Follow the fabric-care label and the vehicle makers recommendations. Remove the cover for cleaning and inspect the underlying trim. A cover is a protective aid, not a guarantee against every scratch or spill.</p><h2>Frequently asked questions</h2><p><strong>Do dog door protectors fit every car?</strong> No. Door shapes, window channels and side-airbag designs vary. Always compare measurements and mounting methods.</p><p><strong>Can windows still be lowered?</strong> Only if the specific product and vehicle instructions explicitly allow it. Some protectors warn against fully lowering windows during travel.</p><p><strong>Is VerveLiving selling a door protector yet?</strong> No. We are checking one-unit supplier prices, actual warehouse inventory, media rights and delivery before listing any product.</p><p>Related help: <a href="/guides/remove-pet-hair-from-car-seats/">clean loose hair from car seats</a> and <a href="/guides/remove-pet-hair-from-sofa/">remove loose pet hair from sofas</a>.</p></div></div></article>'''
+    door_template = generated["guides/remove-pet-hair-from-sofa/index.html"]
+    door_page = (door_template
+        .replace("How to remove pet hair from a sofa safely", door_title)
+        .replace("Simple sofa pet-hair cleaning tips: check fabric care labels, remove loose fur gently, test tools first and protect delicate upholstery.", door_desc)
+        .replace('<link rel="canonical" href="'+site+new_guide_route+'">',
+                 '<link rel="canonical" href="'+site+door_route+'">')
+        .replace('<meta property="og:url" content="'+site+new_guide_route+'">',
+                 '<meta property="og:url" content="'+site+door_route+'">'))
+    door_page = re.sub(r'<main id="main">.*?</main>',
+                       '<main id="main">'+door_body+'</main>',
+                       door_page, count=1, flags=re.S)
+    generated["guides/protect-car-doors-from-dog-scratches/index.html"] = door_page
+    generated["index.html"] = generated["index.html"].replace(
+        "</main>", '''<section class="guide wrap" aria-label="Protect car door interiors"><span class="kicker">PET TRAVEL GUIDE</span><h2>Dog claws on your car doors?</h2><p>Check fit, window clearance and safe attachment before choosing a scratch protector. Read the free car-door protection checklist.</p><a class="arrow-link" href="/guides/protect-car-doors-from-dog-scratches/">Read the car-door guide ↗</a></section>'''+"</main>", 1)
+    generated["sitemap.xml"] = generated["sitemap.xml"].replace(
+        "</urlset>", "<url><loc>"+site+door_route+"</loc></url>\n</urlset>", 1)
     # Voluntary, non-transactional demand signal before any supplier is approved.
     # Mailto avoids a third-party form processor and does not subscribe users to marketing.
     if not qualified:
@@ -341,6 +362,7 @@ def build(root=ROOT, output=None):
             "index.html",
             "guides/remove-pet-hair-from-car-seats/index.html",
             "guides/remove-pet-hair-from-sofa/index.html",
+            "guides/protect-car-doors-from-dog-scratches/index.html",
         ):
             generated[page_name] = generated[page_name].replace(
                 "</main>", research_cta+"</main>", 1)
