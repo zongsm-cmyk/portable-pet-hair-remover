@@ -54,7 +54,7 @@ def build(root=ROOT, output=None):
          '<header class="site-header"><div class="wrap nav"><a class="logo" href="/">VERVE<span>LIVING</span><small>®</small></a>'
          '<nav class="nav-links"><a href="'+link+'">Shop gloves</a><a href="/#story">Our approach</a>'
          '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Track order</a></nav>'
-         '<a class="nav-shop" href="'+link+'">Shop now <span>↗</span></a>'
+         '<a class="nav-shop" href="'+(link if qualified else GUIDE)+'">'+('Shop now' if qualified else 'Read guide')+' <span>↗</span></a>'
          '<details class="mobile-menu"><summary>Menu ☰</summary><div class="mobile-menu-panel">'
          '<a href="'+link+'">Shop gloves</a><a href="/#story">Our approach</a>'
          '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Track order</a></div></details></div></header>')

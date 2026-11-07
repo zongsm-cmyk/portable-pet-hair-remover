@@ -107,6 +107,15 @@ class UltraTests(unittest.TestCase):
         rec=json.loads((ROOT/"build-receipt.json").read_text())
         self.assertIn("guides/remove-pet-hair-from-sofa/index.html",rec["files"])
 
+    def test_paused_header_never_promises_shopping(self):
+        receipt=json.loads((ROOT/"build-receipt.json").read_text())
+        for path in receipt["files"]:
+            if path.endswith(".html"):
+                html=(ROOT/path).read_text()
+                self.assertNotIn("Shop now <span>",html,path)
+                self.assertIn('href="/guides/remove-pet-hair-from-car-seats/">Read guide <span>',html,path)
+        self.assertFalse(json.loads((ROOT/"data/settings.json").read_text())["checkout_enabled"])
+
     def test_payment_return_and_tracking_unchanged_contract(self):
         page=(ROOT/"checkout/return/index.html").read_text()
         self.assertIn('id="capture-status"',page)
