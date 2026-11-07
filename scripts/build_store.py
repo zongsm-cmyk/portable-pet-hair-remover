@@ -276,6 +276,9 @@ def build(root=ROOT, output=None):
             ("GET YOUR DUO", "EXPLORE THE CONCEPT"),
             ("THE TOOL WE CHOSE", "PRODUCT UNDER REVIEW"),
             ("A secure checkout and support when you need it.", "Ordering is paused until supplier verification is complete."),
+            ("VerveLiving sells selected physical household-care items. The product page specifies contents, pricing and current shipping markets.", "VerveLiving is preparing physical household-care products; none are currently available to order. Product details, price and shipping will be confirmed before sales begin."),
+            ("Standard shipping is included in the displayed US price. Your address and total are reviewed at PayPal before approval. Tracking is provided after the supplier dispatches the order.", "There is no active product price or shipping promise while sales are paused. Any future checkout will show the confirmed price, shipping terms and final total."),
+            ("We do not currently accept checkout for other destinations.", "Checkout is currently unavailable for all destinations."),
             ("$10.99", "Price pending"), ("$21.98", "Price pending"), ("$32.97", "Price pending"),
         ]
         for name, html in list(generated.items()):
