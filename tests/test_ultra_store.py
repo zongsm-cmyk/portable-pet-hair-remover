@@ -24,7 +24,7 @@ class UltraTests(unittest.TestCase):
         self.assertEqual(json.loads((ROOT/"data/catalog.json").read_text())["products"],[])
         self.assertEqual(json.loads((ROOT/"workers/order-gateway/catalog.generated.json").read_text())["products"],[])
         active=json.loads((ROOT/"workers/order-gateway/launch-offer.json").read_text())
-        self.assertTrue(active["verified_for_checkout"])
+        self.assertFalse(active["verified_for_checkout"])
         self.assertEqual(active["id"],"home-car-glove-duo")
         self.assertEqual(active["cj_variant_id"],"CJYD233200812LO")
         self.assertEqual(active["warehouse_origin"],"US")
@@ -32,23 +32,22 @@ class UltraTests(unittest.TestCase):
     def test_build_is_deterministic(self):
         with TemporaryDirectory() as tmp:
             receipt=ultra.build(output=tmp)
-            self.assertEqual(receipt["verified_products"],1)
-            self.assertEqual(receipt["unverified_products"],0)
+            self.assertEqual(receipt["verified_products"],0)
+            self.assertEqual(receipt["unverified_products"],1)
             for name in receipt["files"]:
                 self.assertEqual((Path(tmp)/name).read_bytes(),(ROOT/name).read_bytes(),name)
 
-    def test_live_offer_and_bundle_totals(self):
+    def test_unverified_offer_is_preview_only(self):
         html=(ROOT/"products/home-car-glove-duo/index.html").read_text()
         self.assertIn('id="home-car-glove-duo"',html)
-        self.assertIn('data-launch-buy',html)
-        self.assertIn('data-launch-phone',html)
-        self.assertIn('data-launch-quantity',html)
-        for qty,amount in (("1","$10.99"),("2","$21.98"),("3","$32.97")):
-            self.assertIn('value="'+qty+'"',html)
-            self.assertIn(amount,html)
-        self.assertIn('"paypal_environment":"live"',html)
-        self.assertIn('"launch_offer_enabled":true',html)
-        self.assertIn('approvalDestination',(ROOT/"assets/store.js").read_text())
+        self.assertIn("Ordering is paused",html)
+        self.assertIn('name="robots" content="noindex,follow"',html)
+        self.assertNotIn('data-launch-buy',html)
+        self.assertNotIn('application/ld+json',html)
+        self.assertNotIn('"paypal_environment":"live"',html)
+        self.assertIn('"launch_offer_enabled":false',html)
+        self.assertNotIn('InStock',html)
+        self.assertNotIn('$10.99',html)
 
     def test_product_page_is_discoverable(self):
         home=(ROOT/"index.html").read_text()
@@ -60,10 +59,10 @@ class UltraTests(unittest.TestCase):
         self.assertIn('/assets/vivid.css?v=',home)
         self.assertIn('/assets/vivid.js?v=',home)
         self.assertIn('class="feature-grid"',home)
-        self.assertNotIn("Ordering is paused",home)
+        self.assertIn("Ordering is paused",home)
         self.assertNotIn("Product previews",home)
         self.assertIn("Home + Car",home)
-        self.assertIn("Paypal".lower(),home.lower())
+        self.assertNotIn("data-launch-buy",home)
 
     def test_all_generated_internal_paths_exist(self):
         paths=json.loads((ROOT/"build-receipt.json").read_text())["files"]
@@ -86,10 +85,10 @@ class UltraTests(unittest.TestCase):
         self.assertEqual([p.parent.name for p in (ROOT/"categories").rglob("index.html")],
                          ["smart-cleaning-tools"])
         feed=(ROOT/"feed.xml").read_text()
-        self.assertIn("home-car-glove-duo",feed)
+        self.assertNotIn("<item>",feed)
         self.assertNotIn("fruit-colander",feed)
         sitemap=(ROOT/"sitemap.xml").read_text()
-        self.assertIn("/products/home-car-glove-duo/",sitemap)
+        self.assertNotIn("/products/home-car-glove-duo/",sitemap)
         self.assertNotIn("/products/furoff-",sitemap)
 
     def test_payment_return_and_tracking_unchanged_contract(self):
