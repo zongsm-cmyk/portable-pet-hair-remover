@@ -170,6 +170,20 @@ class UltraTests(unittest.TestCase):
             self.assertIn("mailto:zongsm+verveliving@gmail.com?subject=VerveLiving%20pet%20hair%20cleaning%20problem", html, path)
             self.assertNotIn('data-launch-buy',html,path)
 
+    def test_dog_car_door_guide_is_indexed_and_does_not_offer_unverified_product(self):
+        html=(ROOT/"guides/protect-car-doors-from-dog-scratches/index.html").read_text()
+        self.assertIn("How to protect car doors from dog scratches",html)
+        self.assertIn("side-airbag",html)
+        self.assertIn("What is the hardest place to remove pet hair?",html)
+        self.assertIn('name="robots" content="index,follow"',html)
+        self.assertNotIn('data-launch-buy',html)
+        self.assertNotIn("schema.org/InStock",html)
+        self.assertNotIn("Add to cart",html)
+        self.assertIn("/guides/protect-car-doors-from-dog-scratches/",(ROOT/"index.html").read_text())
+        self.assertIn("/guides/protect-car-doors-from-dog-scratches/",(ROOT/"sitemap.xml").read_text())
+        self.assertIn("guides/protect-car-doors-from-dog-scratches/index.html",
+                      json.loads((ROOT/"build-receipt.json").read_text())["files"])
+
     def test_payment_return_and_tracking_unchanged_contract(self):
         page=(ROOT/"checkout/return/index.html").read_text()
         self.assertIn('id="capture-status"',page)
