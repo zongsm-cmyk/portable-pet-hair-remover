@@ -91,6 +91,22 @@ class UltraTests(unittest.TestCase):
         self.assertNotIn("/products/home-car-glove-duo/",sitemap)
         self.assertNotIn("/products/furoff-",sitemap)
 
+    def test_sofa_help_article_is_original_indexed_content_not_sale(self):
+        page=(ROOT/"guides/remove-pet-hair-from-sofa/index.html").read_text()
+        self.assertIn("How to remove pet hair from a sofa",page)
+        self.assertIn("Always check the upholstery care label first",page)
+        self.assertIn('name="robots" content="index,follow"',page)
+        self.assertNotIn('application/ld+json',page)
+        self.assertNotIn('data-launch-buy',page)
+        self.assertNotIn('schema.org/InStock',page)
+        self.assertNotIn('$10.99',page)
+        self.assertIn('/guides/remove-pet-hair-from-sofa/',(ROOT/"index.html").read_text())
+        sitemap=(ROOT/"sitemap.xml").read_text()
+        self.assertIn('/guides/remove-pet-hair-from-sofa/',sitemap)
+        self.assertNotIn('/products/home-car-glove-duo/',sitemap)
+        rec=json.loads((ROOT/"build-receipt.json").read_text())
+        self.assertIn("guides/remove-pet-hair-from-sofa/index.html",rec["files"])
+
     def test_payment_return_and_tracking_unchanged_contract(self):
         page=(ROOT/"checkout/return/index.html").read_text()
         self.assertIn('id="capture-status"',page)
