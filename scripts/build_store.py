@@ -44,8 +44,11 @@ def build(root=ROOT, output=None):
     vivid_js=(root/"static/vivid.js").read_text(encoding="utf-8")
     cv=hashlib.sha256(css.encode()).hexdigest()[:10]; jv=hashlib.sha256(js.encode()).hexdigest()[:10]
     vv=hashlib.sha256(vivid_css.encode()).hexdigest()[:10]; vm=hashlib.sha256(vivid_js.encode()).hexdigest()[:10]
-    client={"checkout_enabled":False,"api_base":config["api_base"],"paypal_environment":"live",
-            "launch_offer_enabled":True,"catalog":[]}
+    # The browser sees the same eligibility decision as the generated offer.
+    # Never expose a live checkout merely because configuration was switched on.
+    client={"checkout_enabled":config.get("checkout_enabled") is True and bool(qualified),
+            "api_base":config["api_base"],"paypal_environment":config["paypal_environment"],
+            "launch_offer_enabled":bool(qualified),"catalog":[]}
     client_json=json.dumps(client,separators=(",",":")).replace("<","\\u003c")
     link=PRODUCT+"#home-car-glove-duo"
     img='<img src="'+PHOTO+'" alt="Black mesh pet-hair glove on a hand. Each pack contains two gloves." width="485" height="500" loading="lazy">'
