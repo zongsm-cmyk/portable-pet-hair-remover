@@ -294,6 +294,90 @@ def build(root=ROOT, output=None):
                     html = html.replace('<meta name="robots" content="index,follow">',
                                         '<meta name="robots" content="noindex,follow">')
                 generated[name] = html
+        # In editorial (no-checkout) mode, merchant terms govern external purchases.
+        # Preserve legacy direct-order support; never imply current VerveLiving checkout.
+        editorial_policy_updates = {
+        "policies/shipping/index.html": [
+                [
+                        "VerveLiving is not currently accepting new orders; product stock, delivery and returns are under review.",
+                        "VerveLiving is an independent buying guide. We do not accept orders on this site; products linked from our guides are purchased directly from third-party retailers."
+                ],
+                [
+                        "<h2>Delivery estimate</h2><p>not yet confirmed. Carrier and address conditions can affect delivery; this is not a guaranteed arrival date.</p>",
+                        "<h2>Delivery, stock and charges</h2><p>Each retailer sets its own shipping destinations, availability, delivery estimates and final charges. Check the retailer's current offer and checkout terms before paying.</p>"
+                ],
+                [
+                        "<h2>Tracking and charges</h2><p>There is no active product price or shipping promise while sales are paused. Any future checkout will show the confirmed price, shipping terms and final total.</p><p>Checkout is currently unavailable for all destinations.</p>",
+                        "<h2>Who handles your order?</h2><p>The retailer handles delivery updates, tracking, cancellations and questions about its orders. VerveLiving cannot access or change orders placed on third-party sites.</p><p>VerveLiving does not offer direct checkout.</p>"
+                ]
+        ],
+        "policies/refunds/index.html": [
+                [
+                        "<p>Contact us with your order number before sending any return. We will confirm next steps and the appropriate destination.</p>",
+                        "<p>For products bought through links on our guides, the retailer you purchased from handles returns and refunds. Contact that retailer using the order confirmation; do not send a return to VerveLiving.</p>"
+                ],
+                [
+                        "<h2>Damaged or incorrect items</h2><p>Send photos and your order reference so we can assess an appropriate replacement or refund.</p>",
+                        "<h2>Damaged or incorrect items</h2><p>Contact the retailer promptly with your order confirmation and relevant photos, following its published support process.</p>"
+                ],
+                [
+                        "<h2>Change-of-mind requests</h2><p>Contact support promptly. Eligibility and return shipping costs depend on the circumstances and applicable consumer law. Mandatory consumer rights are not limited.</p>",
+                        "<h2>Change-of-mind requests</h2><p>Review the retailer's return window, eligibility and postage rules. Applicable mandatory consumer rights remain unaffected.</p>"
+                ],
+                [
+                        "<h2>Refund timing</h2><p>Approved refunds return to the original payment method. Payment provider processing times vary.</p>",
+                        "<h2>Refund timing</h2><p>The retailer and its payment provider determine the refund process and timing. For any historical order placed directly with VerveLiving, contact us with its order number for support.</p>"
+                ]
+        ],
+        "policies/terms/index.html": [
+                [
+                        "<p>VerveLiving is preparing physical household-care products; none are currently available to order. Product details, price and shipping will be confirmed before sales begin.</p>",
+                        "<p>VerveLiving is currently an independent editorial guide to household and pet-care tools. We do not accept orders or payments. Product descriptions and reference prices can change; confirm details with the linked retailer before purchasing.</p>"
+                ],
+                [
+                        "<h2>Payment</h2><p>PayPal processes payments in USD. An order is confirmed only after the server verifies a completed capture and records the order; leaving PayPal before confirmation is not an accepted order.</p>",
+                        "<h2>External purchases</h2><p>Orders placed on linked retailer websites are governed by those retailers' own payment, delivery, returns and privacy terms. Following a VerveLiving link does not create an order with us.</p>"
+                ],
+                [
+                        "<h2>Support</h2><p>Contact us about damaged or missing deliveries. Statutory consumer rights remain applicable.</p>",
+                        "<h2>Support</h2><p>Contact the retailer for purchases placed with that retailer. For questions about our guides, or any historical direct VerveLiving order, contact us. Statutory consumer rights remain applicable.</p>"
+                ]
+        ],
+        "policies/privacy/index.html": [
+                [
+                        "<p>VerveLiving is operated by Askoure Systems. We process delivery information, customer email, order items, PayPal reference and tracking details to fulfill orders.</p>",
+                        "<p>VerveLiving is operated by Askoure Systems and currently provides independent product guides. We do not collect payment or delivery details from purchases made at linked retailers. If you email us, we receive the information you choose to send.</p>"
+                ],
+                [
+                        "<h2>Third-party services</h2><p>PayPal handles payment credentials. Order records are stored on Cloudflare D1. Shipping information is shared with the supplier and carriers as needed for fulfillment. GitHub Pages and Cloudflare serve the storefront.</p>",
+                        "<h2>Third-party services and links</h2><p>Retailers handle their own orders, payments and delivery information under their privacy notices. GitHub Pages and Cloudflare serve this site. Referral links, when expressly identified as affiliate links, may contain a partner identifier. Historical direct-order records, if any, are retained subject to applicable obligations.</p>"
+                ],
+                [
+                        "<h2>Requests</h2><p>Contact us to request access, correction or deletion of personal information, subject to required accounting and dispute records. Never email payment card details.</p>",
+                        "<h2>Requests</h2><p>Contact us to request access, correction or deletion of information we hold, subject to applicable record-retention requirements. For information held by a retailer, contact that retailer. Never email payment-card details.</p>"
+                ]
+        ],
+        "policies/contact/index.html": [
+                [
+                        "<p>Questions about products, orders, shipping or returns? Email <a href=\"mailto:zongsm+verveliving@gmail.com\">zongsm+verveliving@gmail.com</a>.</p>",
+                        "<p>Questions about our product guides or a historical VerveLiving order? Email <a href=\"mailto:zongsm+verveliving@gmail.com\">zongsm+verveliving@gmail.com</a>.</p>"
+                ],
+                [
+                        "<p>Include your order number for order-specific inquiries. Never send payment card details by email.</p>",
+                        "<p>New product purchases are completed on the linked retailer's website. Contact that retailer for delivery, cancellation or refund requests. For an older VerveLiving order, include its number. Never send payment-card details by email.</p>"
+                ],
+                [
+                        "<a class=\"arrow-link\" href=\"/track-order/\">Look up an existing order ↗</a>",
+                        "<a class=\"arrow-link\" href=\"/track-order/\">Look up a previous VerveLiving order ↗</a>"
+                ]
+        ]
+}
+        for policy_path, replacements in editorial_policy_updates.items():
+            policy_html = generated[policy_path]
+            for before, after in replacements:
+                assert before in policy_html, f"Expected policy text missing: {policy_path}"
+                policy_html = policy_html.replace(before, after, 1)
+            generated[policy_path] = policy_html
         generated["feed.xml"] = ('<?xml version="1.0" encoding="utf-8"?>\n'
               '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"><channel>'
               '<title>VerveLiving</title><link>'+site+'</link></channel></rss>\n')
