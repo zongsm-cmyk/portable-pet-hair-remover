@@ -20,22 +20,9 @@ def build(root=ROOT, output=None):
     catalog = json.loads((root/"data/catalog.json").read_text(encoding="utf-8"))
     offer = json.loads((root/"workers/order-gateway/launch-offer.json").read_text(encoding="utf-8"))
     assert catalog["products"] == [], "Unverified products must be purged"
-    qualified = (
-        config.get("checkout_enabled") is True and config.get("paypal_environment") == "live"
-        and config.get("launch_offer_enabled") is True
-        and offer.get("verified_for_checkout") is True and offer.get("stock_status") == "in_stock"
-        and offer.get("cj_sku") and offer.get("cj_variant_id") and offer.get("warehouse_origin") == "US"
-        and all(isinstance(offer.get(key), (int, float)) for key in ("price_usd", "supplier_cost_usd", "shipping_us_usd"))
-        and offer["price_usd"] >= 3 * (offer["supplier_cost_usd"] + offer["shipping_us_usd"])
-        and offer.get("supplier_verified_at")
-    )
-    if qualified:
-        try:
-            from datetime import timezone, timedelta
-            age = datetime.now(timezone.utc) - datetime.fromisoformat(offer["supplier_verified_at"].replace("Z","+00:00"))
-            qualified = timedelta(0) <= age <= timedelta(days=7)
-        except (ValueError, TypeError):
-            qualified = False
+    # Owner decision 2026-11-07: research/affiliate only; no direct sales.
+    # Never enable merchant checkout from supplier fixtures or configuration.
+    qualified = False
     site=config["site_url"].rstrip("/"); support=e(config["support_email"])
     price=usd(offer["price_usd"])
     css=(root/"static/store.css").read_text(encoding="utf-8")
@@ -47,7 +34,7 @@ def build(root=ROOT, output=None):
     # The browser sees the same eligibility decision as the generated offer.
     # Never expose a live checkout merely because configuration was switched on.
     client={"checkout_enabled":config.get("checkout_enabled") is True and bool(qualified),
-            "api_base":config["api_base"],"paypal_environment":config["paypal_environment"],
+            "api_base":config["api_base"],"paypal_environment":"sandbox",
             "launch_offer_enabled":bool(qualified),"catalog":[]}
     client_json=json.dumps(client,separators=(",",":")).replace("<","\\u003c")
     link=PRODUCT+"#home-car-glove-duo"
@@ -475,7 +462,7 @@ def build(root=ROOT, output=None):
       "result":"BUILT_VERIFIED_LIVE_OFFER" if qualified else "BUILT_RESEARCH_HOLD_NO_CHECKOUT",
       "verified_products":1 if qualified else 0,
       "unverified_products":len(catalog["products"])+(0 if qualified else 1),
-      "checkout_environment":config["paypal_environment"],"payment_executed":False,
+      "checkout_environment":"sandbox","payment_executed":False,
       "files":{path:hashlib.sha256(txt.encode()).hexdigest() for path,txt in sorted(generated.items())}}
     (output/"build-receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"result":receipt["result"],"pages":len(generated),"purged":len(catalog["products"])}))
