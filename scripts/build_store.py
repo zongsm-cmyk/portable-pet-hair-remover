@@ -39,21 +39,21 @@ def build(root=ROOT, output=None):
     link=PRODUCT+"#home-car-glove-duo"
     img='<img src="'+PHOTO+'" alt="Black mesh pet-hair glove on a hand. Each pack contains two gloves." width="485" height="500" loading="lazy">'
     image_eager=img.replace('loading="lazy"','fetchpriority="high"')
-    nav=('<div class="announcement"><span class="announce-dot"></span> Tracked US shipping included on the Home + Car glove duo</div>'
+    nav=('<div class="announcement"><span class="announce-dot"></span> Independent product research — we do not sell or fulfill orders</div>'
          '<header class="site-header"><div class="wrap nav"><a class="logo" href="/">VERVE<span>LIVING</span><small>®</small></a>'
-         '<nav class="nav-links"><a href="'+link+'">Shop gloves</a><a href="/#story">Our approach</a>'
-         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Track order</a></nav>'
+         '<nav class="nav-links"><a href="'+link+'">Product research</a><a href="/#story">Our approach</a>'
+         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Buying guidance</a></nav>'
          '<a class="nav-shop" href="'+(link if qualified else GUIDE)+'">'+('Shop now' if qualified else 'Read guide')+' <span>↗</span></a>'
          '<details class="mobile-menu"><summary>Menu ☰</summary><div class="mobile-menu-panel">'
-         '<a href="'+link+'">Shop gloves</a><a href="/#story">Our approach</a>'
-         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Track order</a></div></details></div></header>')
+         '<a href="'+link+'">Product research</a><a href="/#story">Our approach</a>'
+         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Buying guidance</a></div></details></div></header>')
     footer=('<footer class="footer"><div class="wrap footer-grid"><div class="footer-about">'
             '<a class="logo" href="/">VERVE<span>LIVING</span></a><h3>Small tools. More room for living.</h3>'
             '<p>Curated home essentials by Askoure Systems.</p></div>'
             '<div><b>Discover</b><a href="'+link+'">The glove duo</a><a href="'+GUIDE+'">Care guide</a>'
             '<a href="/categories/smart-cleaning-tools/">Cleaning essentials</a></div>'
-            '<div><b>Customer care</b><a href="/track-order/">Track order</a>'
-            '<a href="/policies/shipping/">Shipping</a><a href="/policies/refunds/">Returns</a>'
+            '<div><b>Independent guidance</b><a href="/track-order/">Buying guidance</a>'
+            '<a href="/policies/shipping/">Buying & delivery guidance</a><a href="/policies/refunds/">Returns with retailers</a>'
             '<a href="/policies/contact/">Contact</a></div>'
             '<div><b>Information</b><a href="/policies/privacy/">Privacy</a>'
             '<a href="/policies/terms/">Terms</a><a href="mailto:'+support+'">'+support+'</a></div>'
@@ -243,7 +243,7 @@ def build(root=ROOT, output=None):
         replacements = [
             ('"paypal_environment":"live","launch_offer_enabled":true',
              '"paypal_environment":"sandbox","launch_offer_enabled":false'),
-            ("Tracked US shipping included on the Home + Car glove duo", "Supplier validation in progress — ordering is paused"),
+            ("Independent product research — we do not sell or fulfill orders", "Supplier validation in progress — ordering is paused"),
             ("Tracked US shipping", "Shipping under review"),
             ("Tracked contiguous-US shipping included.", "Shipping not verified."),
             ("A focused, verified offer instead of an endless catalog of uncertain products.", "Product concept under supplier verification; no sales are open."),
