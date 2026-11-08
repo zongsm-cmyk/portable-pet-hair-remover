@@ -20,22 +20,8 @@ def build(root=ROOT, output=None):
     catalog = json.loads((root/"data/catalog.json").read_text(encoding="utf-8"))
     offer = json.loads((root/"workers/order-gateway/launch-offer.json").read_text(encoding="utf-8"))
     assert catalog["products"] == [], "Unverified products must be purged"
-    qualified = (
-        config.get("checkout_enabled") is True and config.get("paypal_environment") == "live"
-        and config.get("launch_offer_enabled") is True
-        and offer.get("verified_for_checkout") is True and offer.get("stock_status") == "in_stock"
-        and offer.get("cj_sku") and offer.get("cj_variant_id") and offer.get("warehouse_origin") == "US"
-        and all(isinstance(offer.get(key), (int, float)) for key in ("price_usd", "supplier_cost_usd", "shipping_us_usd"))
-        and offer["price_usd"] >= 3 * (offer["supplier_cost_usd"] + offer["shipping_us_usd"])
-        and offer.get("supplier_verified_at")
-    )
-    if qualified:
-        try:
-            from datetime import timezone, timedelta
-            age = datetime.now(timezone.utc) - datetime.fromisoformat(offer["supplier_verified_at"].replace("Z","+00:00"))
-            qualified = timedelta(0) <= age <= timedelta(days=7)
-        except (ValueError, TypeError):
-            qualified = False
+    # Affiliate-only decision (2026-11-07): direct selling is permanently disabled in this build.
+    qualified = False
     site=config["site_url"].rstrip("/"); support=e(config["support_email"])
     price=usd(offer["price_usd"])
     css=(root/"static/store.css").read_text(encoding="utf-8")
@@ -47,27 +33,27 @@ def build(root=ROOT, output=None):
     # The browser sees the same eligibility decision as the generated offer.
     # Never expose a live checkout merely because configuration was switched on.
     client={"checkout_enabled":config.get("checkout_enabled") is True and bool(qualified),
-            "api_base":config["api_base"],"paypal_environment":config["paypal_environment"],
+            "api_base":config["api_base"],"paypal_environment":"sandbox",
             "launch_offer_enabled":bool(qualified),"catalog":[]}
     client_json=json.dumps(client,separators=(",",":")).replace("<","\\u003c")
     link=PRODUCT+"#home-car-glove-duo"
     img='<img src="'+PHOTO+'" alt="Black mesh pet-hair glove on a hand. Each pack contains two gloves." width="485" height="500" loading="lazy">'
     image_eager=img.replace('loading="lazy"','fetchpriority="high"')
-    nav=('<div class="announcement"><span class="announce-dot"></span> Tracked US shipping included on the Home + Car glove duo</div>'
+    nav=('<div class="announcement"><span class="announce-dot"></span> Independent product research — we do not sell or fulfill orders</div>'
          '<header class="site-header"><div class="wrap nav"><a class="logo" href="/">VERVE<span>LIVING</span><small>®</small></a>'
-         '<nav class="nav-links"><a href="'+link+'">Shop gloves</a><a href="/#story">Our approach</a>'
-         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Track order</a></nav>'
+         '<nav class="nav-links"><a href="'+link+'">Product research</a><a href="/#story">Our approach</a>'
+         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Buying guidance</a></nav>'
          '<a class="nav-shop" href="'+(link if qualified else GUIDE)+'">'+('Shop now' if qualified else 'Read guide')+' <span>↗</span></a>'
          '<details class="mobile-menu"><summary>Menu ☰</summary><div class="mobile-menu-panel">'
-         '<a href="'+link+'">Shop gloves</a><a href="/#story">Our approach</a>'
-         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Track order</a></div></details></div></header>')
+         '<a href="'+link+'">Product research</a><a href="/#story">Our approach</a>'
+         '<a href="'+GUIDE+'">Care guide</a><a href="/track-order/">Buying guidance</a></div></details></div></header>')
     footer=('<footer class="footer"><div class="wrap footer-grid"><div class="footer-about">'
             '<a class="logo" href="/">VERVE<span>LIVING</span></a><h3>Small tools. More room for living.</h3>'
             '<p>Curated home essentials by Askoure Systems.</p></div>'
             '<div><b>Discover</b><a href="'+link+'">The glove duo</a><a href="'+GUIDE+'">Care guide</a>'
             '<a href="/categories/smart-cleaning-tools/">Cleaning essentials</a></div>'
-            '<div><b>Customer care</b><a href="/track-order/">Track order</a>'
-            '<a href="/policies/shipping/">Shipping</a><a href="/policies/refunds/">Returns</a>'
+            '<div><b>Independent guidance</b><a href="/track-order/">Buying guidance</a>'
+            '<a href="/policies/shipping/">Buying & delivery guidance</a><a href="/policies/refunds/">Returns with retailers</a>'
             '<a href="/policies/contact/">Contact</a></div>'
             '<div><b>Information</b><a href="/policies/privacy/">Privacy</a>'
             '<a href="/policies/terms/">Terms</a><a href="mailto:'+support+'">'+support+'</a></div>'
@@ -257,7 +243,7 @@ def build(root=ROOT, output=None):
         replacements = [
             ('"paypal_environment":"live","launch_offer_enabled":true',
              '"paypal_environment":"sandbox","launch_offer_enabled":false'),
-            ("Tracked US shipping included on the Home + Car glove duo", "Supplier validation in progress — ordering is paused"),
+            ("Independent product research — we do not sell or fulfill orders", "Supplier validation in progress — ordering is paused"),
             ("Tracked US shipping", "Shipping under review"),
             ("Tracked contiguous-US shipping included.", "Shipping not verified."),
             ("A focused, verified offer instead of an endless catalog of uncertain products.", "Product concept under supplier verification; no sales are open."),
@@ -460,6 +446,62 @@ def build(root=ROOT, output=None):
         assert 'data-launch-buy' not in editorial_html
         assert 'href="/track-order/"' not in editorial_html
         generated["index.html"] = editorial_html
+    # Affiliate-only safety overlay: generated routes cannot resurrect merchant checkout.
+    # Keep the independently authored media-first homepage unchanged.
+    if not qualified:
+        notice = ("<p><strong>Independent product research only.</strong> "
+                  "VerveLiving does not sell products, take payments, fulfill orders "
+                  "or provide retailer order tracking. Merchant terms apply to purchases "
+                  "made on third-party websites.</p>")
+        info_routes = {
+            "cart/index.html": ("No shopping cart", "This website has no cart or direct checkout."),
+            "checkout/index.html": ("No direct checkout", "We do not accept payments or orders."),
+            "checkout/return/index.html": ("No payment processing", "VerveLiving does not process payments."),
+            "checkout/cancel/index.html": ("No payment processing", "VerveLiving does not process payments."),
+            "track-order/index.html": ("No order tracking", "For an external purchase, contact the retailer directly."),
+            "policies/shipping/index.html": ("Shipping information", "VerveLiving does not ship goods. Check delivery details with the retailer."),
+            "policies/refunds/index.html": ("Returns information", "VerveLiving does not handle returns. Check the seller's refund policy."),
+            "policies/terms/index.html": ("Research site terms", "Information is educational, not an offer to sell. External sellers set purchase terms."),
+            "policies/privacy/index.html": ("Privacy information", "VerveLiving does not collect checkout or delivery details. Contact us for privacy inquiries."),
+            "policies/contact/index.html": ("Contact", "Contact us about research or factual corrections, not orders."),
+            "products/home-car-glove-duo/index.html": ("Product research archive", "This product concept is not offered for sale by VerveLiving."),
+            "categories/smart-cleaning-tools/index.html": ("Cleaning tool research", "Browse independent guides; no items are sold here."),
+        }
+        for route, (heading, description) in info_routes.items():
+            original = generated[route]
+            content = ('<section class="policy wrap"><h1>'+heading+'</h1><p>'+description+'</p>'
+                       +notice+'<p><a href="/guides/remove-pet-hair-from-car-seats/">'
+                       'Read the free cleaning guide</a></p></section>')
+            original = re.sub(r'<main id="main">.*?</main>',
+                              '<main id="main">'+content+'</main>', original, count=1, flags=re.S)
+            original = re.sub(r'<nav class="nav-links">.*?</nav>',
+                              '<nav class="nav-links"><a href="/">Home</a><a href="/guides/remove-pet-hair-from-car-seats/">Care guide</a></nav>',
+                              original, count=1, flags=re.S)
+            original = re.sub(r'<details class="mobile-menu">.*?</details>', '', original, flags=re.S)
+            original = re.sub(r'<footer class="footer">.*?</footer>',
+                              '<footer class="footer"><div class="wrap"><p>Independent research — no direct sales.</p></div></footer>',
+                              original, count=1, flags=re.S)
+            original = re.sub(r'<div class="announcement">.*?</div>',
+                              '<div class="announcement">Independent guides — no sales or fulfillment</div>',
+                              original, count=1, flags=re.S)
+            original = re.sub(r'<a class="nav-shop"[^>]*>.*?</a>', '', original, count=1, flags=re.S)
+            original = re.sub(r'<script src="/assets/(?:store|vivid)\\.js[^"]*" defer></script>', '', original)
+            original = re.sub(r'<script type="application/ld\\+json">.*?</script>', '', original, flags=re.S)
+            original = re.sub(r'<title>.*?</title>', '<title>'+heading+' | VerveLiving</title>', original, count=1)
+            original = re.sub(r'<meta name="description" content="[^"]*">',
+                              '<meta name="description" content="'+description+'">', original, count=1)
+            original = original.replace('<meta name="robots" content="index,follow">',
+                                        '<meta name="robots" content="noindex,follow">')
+            assert 'data-launch-buy' not in original and 'id="order-lookup"' not in original
+            assert 'Continue with PayPal' not in original
+            generated[route] = original
+        # A commerce product feed is inappropriate for a research-only site.
+        generated["feed.xml"] = ('<?xml version="1.0" encoding="utf-8"?>\\n'
+                                 '<rss version="2.0"><channel><title>VerveLiving Research</title>'
+                                 '<link>'+site+'</link></channel></rss>\\n')
+        for path in (PRODUCT, "/categories/smart-cleaning-tools/"):
+            generated["sitemap.xml"] = generated["sitemap.xml"].replace(
+                "<url><loc>"+site+path+"</loc></url>\\n", "")
     previous=output/"build-receipt.json"
     if previous.exists():
         before=json.loads(previous.read_text(encoding="utf-8"))
@@ -475,7 +517,7 @@ def build(root=ROOT, output=None):
       "result":"BUILT_VERIFIED_LIVE_OFFER" if qualified else "BUILT_RESEARCH_HOLD_NO_CHECKOUT",
       "verified_products":1 if qualified else 0,
       "unverified_products":len(catalog["products"])+(0 if qualified else 1),
-      "checkout_environment":config["paypal_environment"],"payment_executed":False,
+      "checkout_environment":"sandbox","payment_executed":False,
       "files":{path:hashlib.sha256(txt.encode()).hexdigest() for path,txt in sorted(generated.items())}}
     (output/"build-receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"result":receipt["result"],"pages":len(generated),"purged":len(catalog["products"])}))
