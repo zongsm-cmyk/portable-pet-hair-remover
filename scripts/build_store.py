@@ -376,6 +376,62 @@ def build(root=ROOT, output=None):
         assert 'data-launch-buy' not in editorial_html
         assert 'href="/track-order/"' not in editorial_html
         generated["index.html"] = editorial_html
+    # Affiliate-only safety overlay: generated routes cannot resurrect merchant checkout.
+    # Keep the independently authored media-first homepage unchanged.
+    if not qualified:
+        notice = ("<p><strong>Independent product research only.</strong> "
+                  "VerveLiving does not sell products, take payments, fulfill orders "
+                  "or provide retailer order tracking. Merchant terms apply to purchases "
+                  "made on third-party websites.</p>")
+        info_routes = {
+            "cart/index.html": ("No shopping cart", "This website has no cart or direct checkout."),
+            "checkout/index.html": ("No direct checkout", "We do not accept payments or orders."),
+            "checkout/return/index.html": ("No payment processing", "VerveLiving does not process payments."),
+            "checkout/cancel/index.html": ("No payment processing", "VerveLiving does not process payments."),
+            "track-order/index.html": ("No order tracking", "For an external purchase, contact the retailer directly."),
+            "policies/shipping/index.html": ("Shipping information", "VerveLiving does not ship goods. Check delivery details with the retailer."),
+            "policies/refunds/index.html": ("Returns information", "VerveLiving does not handle returns. Check the seller's refund policy."),
+            "policies/terms/index.html": ("Research site terms", "Information is educational, not an offer to sell. External sellers set purchase terms."),
+            "policies/privacy/index.html": ("Privacy information", "VerveLiving does not collect checkout or delivery details. Contact us for privacy inquiries."),
+            "policies/contact/index.html": ("Contact", "Contact us about research or factual corrections, not orders."),
+            "products/home-car-glove-duo/index.html": ("Product research archive", "This product concept is not offered for sale by VerveLiving."),
+            "categories/smart-cleaning-tools/index.html": ("Cleaning tool research", "Browse independent guides; no items are sold here."),
+        }
+        for route, (heading, description) in info_routes.items():
+            original = generated[route]
+            content = ('<section class="policy wrap"><h1>'+heading+'</h1><p>'+description+'</p>'
+                       +notice+'<p><a href="/guides/remove-pet-hair-from-car-seats/">'
+                       'Read the free cleaning guide</a></p></section>')
+            original = re.sub(r'<main id="main">.*?</main>',
+                              '<main id="main">'+content+'</main>', original, count=1, flags=re.S)
+            original = re.sub(r'<nav class="nav-links">.*?</nav>',
+                              '<nav class="nav-links"><a href="/">Home</a><a href="/guides/remove-pet-hair-from-car-seats/">Care guide</a></nav>',
+                              original, count=1, flags=re.S)
+            original = re.sub(r'<details class="mobile-menu">.*?</details>', '', original, flags=re.S)
+            original = re.sub(r'<footer class="footer">.*?</footer>',
+                              '<footer class="footer"><div class="wrap"><p>Independent research — no direct sales.</p></div></footer>',
+                              original, count=1, flags=re.S)
+            original = re.sub(r'<div class="announcement">.*?</div>',
+                              '<div class="announcement">Independent guides — no sales or fulfillment</div>',
+                              original, count=1, flags=re.S)
+            original = re.sub(r'<a class="nav-shop"[^>]*>.*?</a>', '', original, count=1, flags=re.S)
+            original = re.sub(r'<script src="/assets/(?:store|vivid)\\.js[^"]*" defer></script>', '', original)
+            original = re.sub(r'<script type="application/ld\\+json">.*?</script>', '', original, flags=re.S)
+            original = re.sub(r'<title>.*?</title>', '<title>'+heading+' | VerveLiving</title>', original, count=1)
+            original = re.sub(r'<meta name="description" content="[^"]*">',
+                              '<meta name="description" content="'+description+'">', original, count=1)
+            original = original.replace('<meta name="robots" content="index,follow">',
+                                        '<meta name="robots" content="noindex,follow">')
+            assert 'data-launch-buy' not in original and 'id="order-lookup"' not in original
+            assert 'Continue with PayPal' not in original
+            generated[route] = original
+        # A commerce product feed is inappropriate for a research-only site.
+        generated["feed.xml"] = ('<?xml version="1.0" encoding="utf-8"?>\\n'
+                                 '<rss version="2.0"><channel><title>VerveLiving Research</title>'
+                                 '<link>'+site+'</link></channel></rss>\\n')
+        for path in (PRODUCT, "/categories/smart-cleaning-tools/"):
+            generated["sitemap.xml"] = generated["sitemap.xml"].replace(
+                "<url><loc>"+site+path+"</loc></url>\\n", "")
     previous=output/"build-receipt.json"
     if previous.exists():
         before=json.loads(previous.read_text(encoding="utf-8"))
