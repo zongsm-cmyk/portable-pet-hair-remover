@@ -17,3 +17,10 @@ test('all twelve catalog entries are out of stock and use a real logo source or 
   assert.doesNotMatch(html,/<b>\$\{p\.symbol\}<\/b>/);
   assert.match(html,/dialog-stock-status/);
 });
+
+test('inline browser JavaScript parses after brand imagery changes',()=>{
+  const scripts=[...html.matchAll(/<script(?:\s+[^>]*)?>([\s\S]*?)<\/script>/g)];
+  const executables=scripts.filter(m=>!m[0].includes('type="application/')).map(m=>m[1]);
+  assert.ok(executables.length>=1);
+  for(const source of executables){assert.doesNotThrow(()=>new Function(source));}
+});
