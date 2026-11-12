@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /checkout/
 Disallow: /api/
+Disallow: /checkout/
 Sitemap: https://shop.askouresystems.com/sitemap.xml

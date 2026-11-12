@@ -2,10 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
+const legacyTest = JSON.parse(readFileSync(new URL('../data/settings.json',import.meta.url),'utf8')).site_mode === 'digital' ? test.skip : test;
 const policy = (name) => readFileSync(new URL(`../policies/${name}/index.html`, import.meta.url), 'utf8');
 const contact = () => readFileSync(new URL('../policies/contact/index.html', import.meta.url), 'utf8');
 
-test('VerveLiving editorial pages clarify the external merchant relationship', () => {
+legacyTest('VerveLiving editorial pages clarify the external merchant relationship', () => {
   const shipping = policy('shipping');
   const refunds = policy('refunds');
   const terms = policy('terms');
@@ -23,7 +24,7 @@ test('VerveLiving editorial pages clarify the external merchant relationship', (
   }
 });
 
-test('Legacy order support stays available without falsely implying new checkout', () => {
+legacyTest('Legacy order support stays available without falsely implying new checkout', () => {
   assert.match(policy('refunds'), /historical order placed directly with VerveLiving/);
   assert.match(contact(), /older VerveLiving order/);
   assert.doesNotMatch(policy('terms'), /PayPal processes payments in USD/);

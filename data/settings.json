@@ -1,10 +1,11 @@
 {
   "site_url": "https://shop.askouresystems.com",
-  "brand": "VerveLiving",
-  "tagline": "Smart Everyday Problem Solvers",
-  "support_email": "zongsm+verveliving@gmail.com",
+  "brand": "Askoure Digital",
+  "tagline": "AI Tools, Digital Products & Subscriptions",
+  "support_email": "zongsm@gmail.com",
   "checkout_enabled": false,
   "api_base": "https://shop.askouresystems.com",
   "paypal_environment": "sandbox",
-  "launch_offer_enabled": false
+  "launch_offer_enabled": false,
+  "site_mode": "digital"
 }

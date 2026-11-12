@@ -17,6 +17,9 @@ def usd(x): return "$" + format(Decimal(str(x)), ".2f")
 def build(root=ROOT, output=None):
     root = Path(root); output = Path(output or root).resolve()
     config = json.loads((root/"data/settings.json").read_text(encoding="utf-8"))
+    if config.get("site_mode") == "digital":
+        from scripts.build_digital_store import build as digital_build
+        return digital_build(root=root, output=output)
     catalog = json.loads((root/"data/catalog.json").read_text(encoding="utf-8"))
     offer = json.loads((root/"workers/order-gateway/launch-offer.json").read_text(encoding="utf-8"))
     assert catalog["products"] == [], "Unverified products must be purged"
