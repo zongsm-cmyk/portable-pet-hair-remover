@@ -47,7 +47,7 @@ def build(root=ROOT, output=None):
         assert product["buy_url"] in body and "$" + str(product["price_usd"]) in body
         generated[path] = body
     # Include real digital product detail routes in search and the RSS product feed.
-    extra_urls = "".join("<url><loc>https://shop.askouresystems.com/digital-products/" + product["slug"] + "/</loc></url>\\n" for product in products)
+    extra_urls = "".join("<url><loc>https://shop.askouresystems.com/digital-products/" + product["slug"] + "/</loc></url>\n" for product in products)
     generated["sitemap.xml"] = SITEMAP.replace("</urlset>", extra_urls + "</urlset>")
     feed_items = "".join(
         "<item><title>" + product["title"] + "</title><link>https://shop.askouresystems.com/digital-products/"
