@@ -1,0 +1,44 @@
+{
+  "currency": "USD",
+  "products": [
+    {
+      "slug": "n8n-workflow-preflight-auditor",
+      "title": "n8n Workflow Preflight Auditor",
+      "short": "Inspect exported n8n workflow JSON before handoff.",
+      "price_usd": 9,
+      "buy_url": "https://mhamedasskoure.gumroad.com/l/n8n-workflow-preflight-auditor",
+      "category": "Workflow QA",
+      "arabic": "أداة فحص ملفات JSON الخاصة بـ n8n قبل التسليم",
+      "tag": "AUTOMATION",
+      "available_via": "Gumroad",
+      "status": "available",
+      "demo_url": ""
+    },
+    {
+      "slug": "llm-reliability-rescue-kit",
+      "title": "LLM Reliability Rescue Kit",
+      "short": "Validate structured model output before it reaches application logic.",
+      "price_usd": 19,
+      "buy_url": "https://mhamedasskoure.gumroad.com/l/llm-reliability-rescue-kit",
+      "category": "AI / Python Reliability",
+      "arabic": "حزمة Python وFastAPI للتحقق من مخرجات JSON",
+      "tag": "PYTHON / FASTAPI",
+      "available_via": "Gumroad",
+      "status": "available",
+      "demo_url": "https://github.com/zongsm-cmyk/llm-reliability-rescue-demo"
+    },
+    {
+      "slug": "agent-runaway-guard-kit",
+      "title": "Agent Runaway Guard Kit",
+      "short": "Stop repeated tool calls, retry storms and budget overruns before dispatch.",
+      "price_usd": 24,
+      "buy_url": "https://mhamedasskoure.gumroad.com/l/agent-runaway-guard-kit",
+      "category": "AI Agent Reliability",
+      "arabic": "حواجز وقائية لأخطاء تكرار الوكلاء واستهلاك الميزانية",
+      "tag": "AGENT GUARDRAILS",
+      "available_via": "Gumroad",
+      "status": "available",
+      "demo_url": "https://github.com/zongsm-cmyk/agent-runaway-guard-demo"
+    }
+  ]
+}

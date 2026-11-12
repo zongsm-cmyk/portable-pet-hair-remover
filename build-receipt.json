@@ -1,8 +1,8 @@
 {
-  "version": "ASKOURE-DIGITAL-20261112-V1",
-  "result": "BUILT_DIGITAL_CATALOG_NO_CHECKOUT",
-  "verified_products": 0,
-  "unverified_products": 0,
+  "version": "ASKOURE-DIGITAL-20261112-COMMERCE",
+  "result": "BUILT_ORIGINAL_DIGITAL_KITS_GUMROAD_CHECKOUT",
+  "verified_products": 3,
+  "unverified_products": 12,
   "checkout_environment": "sandbox",
   "payment_executed": false,
   "files": {
@@ -15,11 +15,14 @@
     "checkout/cancel/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "checkout/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "checkout/return/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
-    "feed.xml": "63ceaab8545b7cb4c51a246eb235ecdb61bb82aca5d7e54451dafb033027c0b2",
+    "digital-products/agent-runaway-guard-kit/index.html": "6a91568490f4abfb19804a160c9d6b180e8943152fb65a5af6c79b6c36500197",
+    "digital-products/llm-reliability-rescue-kit/index.html": "991d1fb58698304d31a37d813f5e3e1493584470eaa496f1b48d572eeb643e6e",
+    "digital-products/n8n-workflow-preflight-auditor/index.html": "572610f740d0fc9692595bc9a7a68e7841f3eddc0f4bf57bf9f5bd244a31c8a4",
+    "feed.xml": "6e126d530e7fca05d1a03c7b2a4bbf414a3f547423bf719e65ae4da735de8433",
     "guides/protect-car-doors-from-dog-scratches/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-car-seats/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-sofa/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
-    "index.html": "e39dcc6b7dd7f146ef82bf87f90ef66922fc42c88a82a03cc5fba462911eaa80",
+    "index.html": "cfdacd0499048cc238d80c5b6c6d6a6cd747e1d904c84622045ea0e79500c4fa",
     "policies/contact/index.html": "80af3c3d74a22281c5d2102e6b50fbff4ea38dc935cb5ff9250b44116dac3036",
     "policies/privacy/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "policies/refunds/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
@@ -27,7 +30,7 @@
     "policies/terms/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "products/home-car-glove-duo/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "robots.txt": "bae11a22b30b145c8ef654b73722e864d7632cea38170268706f5511991f86d3",
-    "sitemap.xml": "4d62bd03d44d876a54a854b7d43ce0e5e3f35aa395eead0b1d91a70754cd3f6a",
+    "sitemap.xml": "e7ef5084bd5268d63288eb6c5a52b24d83bbbb14cf16aa73228ad4901ab4e0eb",
     "track-order/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1"
   }
 }

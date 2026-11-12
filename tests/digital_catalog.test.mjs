@@ -24,3 +24,17 @@ test('inline browser JavaScript parses after brand imagery changes',()=>{
   assert.ok(executables.length>=1);
   for(const source of executables){assert.doesNotThrow(()=>new Function(source));}
 });
+
+test('original Askoure digital kits have real USD prices and external checkout, without restocking third party services',()=>{
+  assert.match(html,/id="original-products"/);
+  assert.equal((html.match(/class="own-card /g)||[]).length,3);
+  const slugs=['n8n-workflow-preflight-auditor','llm-reliability-rescue-kit','agent-runaway-guard-kit'];
+  const prices=[9,19,24];
+  for(let i=0;i<slugs.length;i++){
+    assert.ok(html.includes('https://mhamedasskoure.gumroad.com/l/'+slugs[i]),slugs[i]);
+    assert.ok(html.includes('/digital-products/'+slugs[i]+'/'),slugs[i]);
+    assert.ok(html.includes('$'+prices[i]),'price '+prices[i]);
+  }
+  assert.equal((html.match(/stock:'out_of_stock'/g)||[]).length,12);
+  assert.match(html,/"checkout_enabled":false/);
+});
