@@ -32,6 +32,30 @@ def build(root=ROOT, output=None):
         "feed.xml": FEED,
         "policies/contact/index.html": CONTACT_HTML,
     }
+    # Source-of-truth digital catalog: three existing Gumroad-downloadable Askoure products.
+    inventory = json.loads((root / "data/original-digital-products.json").read_text(encoding="utf-8"))
+    products = inventory["products"]
+    assert inventory["currency"] == "USD" and len(products) == 3
+    for product in products:
+        slug = product["slug"]
+        assert slug in ("n8n-workflow-preflight-auditor", "llm-reliability-rescue-kit", "agent-runaway-guard-kit")
+        assert product["status"] == "available"
+        assert product["price_usd"] > 0
+        assert product["buy_url"] == "https://mhamedasskoure.gumroad.com/l/" + slug
+        path = "digital-products/" + slug + "/index.html"
+        body = (root / "static/original-product-pages" / (slug + ".html")).read_text(encoding="utf-8")
+        assert product["buy_url"] in body and "$" + str(product["price_usd"]) in body
+        generated[path] = body
+    # Include real digital product detail routes in search and the RSS product feed.
+    extra_urls = "".join("<url><loc>https://shop.askouresystems.com/digital-products/" + product["slug"] + "/</loc></url>\\n" for product in products)
+    generated["sitemap.xml"] = SITEMAP.replace("</urlset>", extra_urls + "</urlset>")
+    feed_items = "".join(
+        "<item><title>" + product["title"] + "</title><link>https://shop.askouresystems.com/digital-products/"
+        + product["slug"] + "/</link><description>Original downloadable digital toolkit: USD "
+        + str(product["price_usd"]) + " once. Buy through Gumroad.</description></item>"
+        for product in products
+    )
+    generated["feed.xml"] = FEED.replace("</channel>", feed_items + "</channel>")
     for path in LEGACY_ROUTES:
         generated[path] = LEGACY_HTML
     for path in ASSETS:
@@ -41,10 +65,10 @@ def build(root=ROOT, output=None):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
     receipt = {
-        "version": "ASKOURE-DIGITAL-20261112-V1",
-        "result": "BUILT_DIGITAL_CATALOG_NO_CHECKOUT",
-        "verified_products": 0,
-        "unverified_products": 0,
+        "version": "ASKOURE-DIGITAL-20261112-COMMERCE",
+        "result": "BUILT_ORIGINAL_DIGITAL_KITS_GUMROAD_CHECKOUT",
+        "verified_products": len(products),
+        "unverified_products": 12,
         "checkout_environment": "sandbox",
         "payment_executed": False,
         "files": {path: hashlib.sha256(content.encode("utf-8")).hexdigest()
