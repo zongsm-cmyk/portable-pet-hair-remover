@@ -7,3 +7,38 @@ main{padding:64px 0 88px}.page-title{font-size:clamp(46px,5.5vw,69px);letter-spa
 footer{background:#0a0f1d;border-top:1px solid #2e3244;padding:48px 0 25px;color:#91a6c2}footer .footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}footer strong{font-size:27px;font-family:Georgia,serif;font-style:italic;color:white}footer strong em{color:#3789ff}footer p{font-size:13px}footer h3{font-size:14px;color:white}footer a{display:block;font-size:13px;margin:10px 0}footer .copy{border-top:1px solid #252b3d;margin-top:25px;padding-top:18px;font-size:12px}.more{margin:60px 0 0;padding:22px 0;border-top:1px solid #252a3e}.more h2{font-size:24px}.more p{color:#a8b9ce}
 body[dir=rtl] .only-available{margin-left:0;margin-right:auto}body[dir=rtl] .whatsapp{right:auto;left:22px}body[dir=rtl] .drawer{right:auto;left:20px}
 @media(max-width:1220px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:980px){.nav{display:none}.container{padding:0 30px}}@media(max-width:650px){.container{padding:0 18px}.header-row{min-height:71px}.brand{font-size:27px}.actions{gap:6px}.lang{height:40px;padding:0 10px;font-size:12px}.circle-btn{height:40px;width:40px}.theme{display:none}main{padding-top:40px}.page-title{font-size:44px}.intro{font-size:14px;margin-bottom:30px}.toolbar{grid-template-columns:1fr}.searchbox,.sortbox{height:54px}.filter{font-size:12px;min-height:41px;padding:7px 12px}.filters{margin-bottom:31px}.only-available{flex-basis:100%;margin-left:0}.grid{grid-template-columns:1fr;gap:19px}.card{min-height:610px;padding:25px 24px}.logo-box{width:147px;height:147px}.description{min-height:58px}.perks{min-height:70px}footer .footer-inner{grid-template-columns:1fr 1fr}footer .footer-inner>div:first-child{grid-column:1/-1}.whatsapp{right:13px;bottom:13px;padding:12px 15px;font-size:12px}}
+/* Final UI polish: keyboard navigation, optional light mode and compact phones.
+   Dark reference appearance remains the default. */
+.skip-link{position:fixed;z-index:1000;top:-90px;left:16px;background:#fff;color:#152741;font-weight:800;padding:11px 17px;border-radius:9px;box-shadow:0 8px 22px #0004}.skip-link:focus{top:8px}
+html{scroll-padding-top:100px}
+.filter:focus-visible,.add-btn:focus-visible,.arrow:focus-visible,.lang:focus-visible,.circle-btn:focus-visible,.whatsapp:focus-visible,.drawer-send:focus-visible{outline:3px solid #6ccafa;outline-offset:3px}
+#subscriptions,#faq,#how{scroll-margin-top:105px}
+.logo-box img[hidden],.logo-box b[hidden]{display:none!important}
+.drawer button,.modal button{min-height:34px;min-width:34px}
+body.light-mode{color-scheme:light;background:radial-gradient(ellipse 70% 65% at 85% 20%,#ebe4ff,#f3f7fd 60%,#f6f8fc);color:#1d2945}
+body.light-mode header{background:#ffffffed;border-bottom-color:#dfe5ee}
+body.light-mode .brand,body.light-mode .page-title,body.light-mode footer strong{color:#1b2a46}
+body.light-mode .nav{color:#445673}
+body.light-mode .lang,body.light-mode .circle-btn,body.light-mode .searchbox,body.light-mode .sortbox,body.light-mode .filter{background:#fff;color:#273855;border-color:#d5dded}
+body.light-mode .searchbox input,body.light-mode .sortbox select{color:#1c2946}
+body.light-mode .searchbox input::placeholder{color:#607698}
+body.light-mode .filter.active{color:#fff;background:linear-gradient(110deg,#8264e8,#278dc1);border-color:#8264e8}
+body.light-mode .card{background:#fff;color:#1d2945;border-color:#d9e2ef;box-shadow:0 12px 32px #243f7714}
+body.light-mode .card h2,body.light-mode .price b{color:#1e2c4c}
+body.light-mode .card .description,body.light-mode .card .perks li{color:#4d617d}
+body.light-mode .card .meta,body.light-mode .intro,body.light-mode .counter{color:#3c79a8}
+body.light-mode .card .card-bottom{border-top-color:#e5eaf1}
+body.light-mode .card .label{background:#f1eafe}
+body.light-mode .card .status.out{color:#6d7d96}
+body.light-mode .card .price span{color:#5c7490}
+body.light-mode .card .arrow{color:#334767}
+body.light-mode .only-available,body.light-mode .more p{color:#526b86}
+body.light-mode footer{background:#f0f3fa;color:#506480;border-color:#dbe2ee}
+body.light-mode .footer-inner h3{color:#213453}
+body.light-mode .dropdown{background:#fff;color:#192c4d;border-color:#dce3ed}
+body.light-mode .dropdown a:hover{background:#f1ecff}
+body.light-mode .more{border-top-color:#dce2ed}
+body.light-mode .copy{border-top-color:#dce2ed}
+body.light-mode .empty{border-color:#b6c3dd;color:#455e7e}
+@media(max-width:400px){.brand{font-size:24px}.brand small{font-size:6px}.actions{gap:4px}.lang{font-size:11px;padding:0 7px}.circle-btn{width:36px;height:36px;font-size:17px}.header-row{gap:6px}.card{padding:22px 19px}.filter{font-size:11px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
