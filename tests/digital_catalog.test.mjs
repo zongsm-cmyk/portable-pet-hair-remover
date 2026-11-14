@@ -58,10 +58,11 @@ test('three original developer kits retain real prices, routes and separate Gumr
 
 
 test('final polish localizes real product content across French English and Arabic',()=>{
-  for(const key of ['navSubs','navHow','navFaq','footerCopyright','faqA','buyDirect'])assert.ok(html.includes('data-i18n="'+key+'"'),key);
+  for(const key of ['navSubs','navHow','navFaq','footerCopyright','faqA'])assert.ok(html.includes('data-i18n="'+key+'"'),key);
   assert.match(html, /class="skip-link"/);
   assert.match(html, /rel="icon"/);
   assert.match(js, /const externalDescriptions=/);
+  assert.match(js, /buyDirect:/);
   assert.match(js, /const originalDescriptions=/);
   assert.match(js, /function localizeOriginals\(/);
   assert.match(js, /localStorage\.setItem\('ascorshop-lang'/);
