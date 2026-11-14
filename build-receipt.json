@@ -6,6 +6,8 @@
   "checkout_environment": "sandbox",
   "payment_executed": false,
   "files": {
+    "assets/ascorshop.css": "043dd59b93e400b5a4ea0b8b22c67c84825474506b27be1eec9a6816bbc91042",
+    "assets/ascorshop.js": "87fd1d5ecce9afc9cc90ffc6b85c4f5ffda894f3c04fe1c0c213a19b2b52fd5f",
     "assets/store.css": "c5c1af849cf7f143d55d68d36fff8da947f461c941c887272560b74ea3efbe50",
     "assets/store.js": "c80aa26929504a162dd90c49ae4e531421b529dcb40b97291b2d2876cf7d8f59",
     "assets/vivid.css": "e632ee59eb561dd1dd3c423530e982516b3a5bac8808c14c5506a7c3752c513b",
@@ -31,8 +33,6 @@
     "products/home-car-glove-duo/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "robots.txt": "bae11a22b30b145c8ef654b73722e864d7632cea38170268706f5511991f86d3",
     "sitemap.xml": "e7ef5084bd5268d63288eb6c5a52b24d83bbbb14cf16aa73228ad4901ab4e0eb",
-    "track-order/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
-    "assets/ascorshop.css": "043dd59b93e400b5a4ea0b8b22c67c84825474506b27be1eec9a6816bbc91042",
-    "assets/ascorshop.js": "87fd1d5ecce9afc9cc90ffc6b85c4f5ffda894f3c04fe1c0c213a19b2b52fd5f"
+    "track-order/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1"
   }
 }
