@@ -10,7 +10,7 @@ CONTACT_HTML = "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><
 ROBOTS = "User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /checkout/\nSitemap: https://shop.askouresystems.com/sitemap.xml\n"
 SITEMAP = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n<url><loc>https://shop.askouresystems.com/</loc></url>\n<url><loc>https://shop.askouresystems.com/policies/contact/</loc></url>\n</urlset>\n"
 FEED = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<rss version=\"2.0\"><channel><title>Shop Askoure Systems — Digital Products</title><link>https://shop.askouresystems.com/</link><description>AI tools, subscriptions and digital products. No active checkout.</description></channel></rss>\n"
-ASSETS = ["assets/store.css","assets/store.js","assets/vivid.css","assets/vivid.js"]
+ASSETS = ["assets/store.css","assets/store.js","assets/vivid.css","assets/vivid.js","assets/ascorshop.css","assets/ascorshop.js"]
 
 def build(root=ROOT, output=None):
     root = Path(root)
@@ -65,7 +65,7 @@ def build(root=ROOT, output=None):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
     receipt = {
-        "version": "ASKOURE-DIGITAL-20261112-COMMERCE",
+        "version": "ASCORSHOP-DARK-20261114",
         "result": "BUILT_ORIGINAL_DIGITAL_KITS_GUMROAD_CHECKOUT",
         "verified_products": len(products),
         "unverified_products": 12,
