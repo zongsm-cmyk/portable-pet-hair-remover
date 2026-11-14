@@ -50,11 +50,7 @@ ar:{
 'AI Prompt & Template Packs':['حزم أوامر وقوالب رقمية للمهام المتكررة.',['أوامر رقمية','قوالب سير العمل','العروض تحتاج تأكيدًا']]
 }
 };
-const originalFrench=new Map(original.map(card=>[card.dataset.owned,{
- meta:card.querySelector('.meta')?.textContent||'',
- desc:card.querySelector('.description')?.textContent||'',
- perks:[...card.querySelectorAll('.perks li')].map(e=>e.textContent)
-}]));
+
 function localizeOriginals(){
  for(const card of original){
   const copy=lang==='fr'?originalFrench.get(card.dataset.owned):originalDescriptions[card.dataset.owned]?.[lang];
@@ -69,6 +65,11 @@ function localizeOriginals(){
 
 const groups=[['all','▦'],['ai','✦'],['design','◉'],['vpn','⬡'],['education','⌑'],['entertainment','▣'],['software','⚒'],['developer','⌘']];
 const original=[...document.querySelectorAll('.own-card')];
+const originalFrench=new Map(original.map(card=>[card.dataset.owned,{
+ meta:card.querySelector('.meta')?.textContent||'',
+ desc:card.querySelector('.description')?.textContent||'',
+ perks:[...card.querySelectorAll('.perks li')].map(e=>e.textContent)
+}]));
 const selected=new Set();
 const grid=$('#cards');
 let category='all',term='',sort='featured',availableOnly=false,lang='fr';
