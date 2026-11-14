@@ -7,7 +7,7 @@
   "payment_executed": false,
   "files": {
     "assets/ascorshop.css": "7c1662526a12935b256a539045add2531ca07b58292c91e4653a9af827a46df9",
-    "assets/ascorshop.js": "dbd6c6ae2cf59d37f518876a2a3f85efd29c5756d95343ee95ff834bcde49a25",
+    "assets/ascorshop.js": "117432d43c07eb6d673dd7af4c2f408cac894db7c46954f1d6d48e1eb9b9cad3",
     "assets/store.css": "c5c1af849cf7f143d55d68d36fff8da947f461c941c887272560b74ea3efbe50",
     "assets/store.js": "c80aa26929504a162dd90c49ae4e531421b529dcb40b97291b2d2876cf7d8f59",
     "assets/vivid.css": "e632ee59eb561dd1dd3c423530e982516b3a5bac8808c14c5506a7c3752c513b",
@@ -24,7 +24,7 @@
     "guides/protect-car-doors-from-dog-scratches/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-car-seats/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-sofa/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
-    "index.html": "2f600430ba84ece3b87585a05ec4da2564df6339ca4d9c318502b1fa882a6855",
+    "index.html": "1bc4859768e43d8a2e183bd9c53a567a10f3b56474ef2f442e8f2dbe8c857886",
     "policies/contact/index.html": "80af3c3d74a22281c5d2102e6b50fbff4ea38dc935cb5ff9250b44116dac3036",
     "policies/privacy/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "policies/refunds/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",

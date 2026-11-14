@@ -96,7 +96,10 @@ function render(){
  grid.replaceChildren();
  found.forEach(e=>grid.append(e.kind==='original'?e.node:thirdPartyCard(e.p)));
  if(!found.length){let p=document.createElement('div');p.className='empty';p.textContent=names[lang].no;grid.append(p)}
- $('#counter').textContent=found.length+' '+names[lang].count;
+ const n=found.length;
+ $('#counter').textContent=lang==='ar'
+  ?(n===0?'لا توجد منتجات':n===1?'منتج واحد':n===2?'منتجان':n<=10?n+' منتجات':n+' منتجًا')
+  :n+' '+(lang==='fr'?(n===1?'abonnement':'abonnements'):(n===1?'subscription':'subscriptions'));
  original.forEach(card=>{const btn=card.querySelector('[data-add]');const on=selected.has(card.dataset.owned);btn.textContent=on?names[lang].selected:names[lang].add;btn.setAttribute('aria-pressed',String(on));card.querySelector('.status').textContent=names[lang].available});
 }
 function draw(){

@@ -18,8 +18,8 @@ test('AscorShop has working search, categories, sorting and selection controls',
   assert.match(css,/@media\(max-width:650px\)/);
   assert.match(html,/assets\/ascorshop.css/);
   assert.match(html,/assets\/ascorshop.js/);
-  assert.match(html,/ascorshop\.js\?v=20261114-polish2/);
-  assert.match(html,/ascorshop\.css\?v=20261114-polish2/);
+  assert.match(html,/ascorshop\.js\?v=20261114-polish3/);
+  assert.match(html,/ascorshop\.css\?v=20261114-polish3/);
 });
 test('No payment or physical affiliate offer is active on the homepage',()=>{
   assert.match(html,/"checkout_enabled":false/);
@@ -72,4 +72,10 @@ test('final polish localizes real product content across French English and Arab
   assert.match(css, /body\.light-mode/);
   assert.match(css, /@media\(max-width:400px\)/);
   assert.match(css, /prefers-reduced-motion/);
+});
+
+test('result counts use correct singular and plural across supported languages',()=>{
+  assert.ok(js.includes("n===1?'منتج واحد'"));
+  assert.ok(js.includes("n===1?'abonnement'"));
+  assert.ok(js.includes("n===1?'subscription'"));
 });
