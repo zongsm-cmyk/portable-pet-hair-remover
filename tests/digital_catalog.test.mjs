@@ -11,6 +11,7 @@ test('AscorShop has working search, categories, sorting and selection controls',
   assert.match(js,/function render\(/);
   assert.match(js,/function renderFilters\(/);
   assert.match(js,/function draw\(/);
+  assert.match(js,/if\(!selected.size\)box.hidden=true;/);
   assert.match(js,/function availability\(/);
   assert.match(js,/function setLanguage\(/);
   assert.match(css,/\.grid\{display:grid/);

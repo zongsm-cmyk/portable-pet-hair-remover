@@ -40,7 +40,7 @@ const lines=[];
 for(const key of selected){const card=original.find(x=>x.dataset.owned===key);if(!card)continue;const row=document.createElement('div');row.className='drawer-row';const span=document.createElement('span');span.textContent=card.dataset.title+' · $'+card.dataset.price;const btn=document.createElement('button');btn.textContent=names[lang].remove;btn.type='button';btn.onclick=()=>{selected.delete(key);draw();render()};row.append(span,btn);list.append(row);lines.push(card.dataset.title+' ($'+card.dataset.price+') — '+card.dataset.buy)}
 $('#drawerSend').href='https://wa.me/212649117788?text='+encodeURIComponent('Bonjour AscorShop, je souhaite acheter ou demander conseil sur ces kits originaux :\n'+lines.join('\n')+'\nCette demande n’est pas un paiement.');
 $('#drawerSend').textContent=names[lang].send+' ➜';
-box.hidden=selected.size===0;
+if(!selected.size)box.hidden=true;
 }
 function availability(name){
 $('#modalTitle').textContent=name;$('#modalText').textContent=names[lang].modal;$('#modalLink').textContent=names[lang].request+' ↗';
