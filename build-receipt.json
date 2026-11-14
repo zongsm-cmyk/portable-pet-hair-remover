@@ -1,5 +1,5 @@
 {
-  "version": "SCORESHOP-REFERENCE-UX-20261114",
+  "version": "SCORESHOP-SELECTION-FIX-20261114",
   "result": "BUILT_ORIGINAL_DIGITAL_KITS_GUMROAD_CHECKOUT",
   "verified_products": 3,
   "unverified_products": 12,
@@ -22,7 +22,7 @@
     "guides/protect-car-doors-from-dog-scratches/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-car-seats/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-sofa/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
-    "index.html": "1b0c060ee935b54370e42fd3a3772a4e607d43a1e03f1e1d06c7697ca0dcf43d",
+    "index.html": "99caf4bc57dcf63e36e6cc2f6191edbbea0bc8b27591435cfa447f999bcd324d",
     "policies/contact/index.html": "80af3c3d74a22281c5d2102e6b50fbff4ea38dc935cb5ff9250b44116dac3036",
     "policies/privacy/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "policies/refunds/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
