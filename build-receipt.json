@@ -1,5 +1,5 @@
 {
-  "version": "SCORESHOP-SELECTION-FIX-20261114",
+  "version": "ASCORSHOP-DARK-20261114",
   "result": "BUILT_ORIGINAL_DIGITAL_KITS_GUMROAD_CHECKOUT",
   "verified_products": 3,
   "unverified_products": 12,
@@ -22,7 +22,7 @@
     "guides/protect-car-doors-from-dog-scratches/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-car-seats/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "guides/remove-pet-hair-from-sofa/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
-    "index.html": "99caf4bc57dcf63e36e6cc2f6191edbbea0bc8b27591435cfa447f999bcd324d",
+    "index.html": "6ba7bd3014514b436866a70060c7104b37ca1588c1595b1e81b4f6f60c7ab58e",
     "policies/contact/index.html": "80af3c3d74a22281c5d2102e6b50fbff4ea38dc935cb5ff9250b44116dac3036",
     "policies/privacy/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "policies/refunds/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
@@ -31,6 +31,8 @@
     "products/home-car-glove-duo/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
     "robots.txt": "bae11a22b30b145c8ef654b73722e864d7632cea38170268706f5511991f86d3",
     "sitemap.xml": "e7ef5084bd5268d63288eb6c5a52b24d83bbbb14cf16aa73228ad4901ab4e0eb",
-    "track-order/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1"
+    "track-order/index.html": "e64b89b9d27dc61cbb51bee69d90fcbae2f1ceb9cd2dd9ec0263313573b667e1",
+    "assets/ascorshop.css": "043dd59b93e400b5a4ea0b8b22c67c84825474506b27be1eec9a6816bbc91042",
+    "assets/ascorshop.js": "87fd1d5ecce9afc9cc90ffc6b85c4f5ffda894f3c04fe1c0c213a19b2b52fd5f"
   }
 }
