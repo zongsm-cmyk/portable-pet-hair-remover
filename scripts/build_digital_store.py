@@ -65,7 +65,7 @@ def build(root=ROOT, output=None):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
     receipt = {
-        "version": "ASKOURE-DIGITAL-20261112-COMMERCE",
+        "version": "ASCORSHOP-DARK-20261114",
         "result": "BUILT_ORIGINAL_DIGITAL_KITS_GUMROAD_CHECKOUT",
         "verified_products": len(products),
         "unverified_products": 12,
