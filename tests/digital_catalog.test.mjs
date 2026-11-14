@@ -79,3 +79,15 @@ test('result counts use correct singular and plural across supported languages',
   assert.ok(js.includes("n===1?'abonnement'"));
   assert.ok(js.includes("n===1?'subscription'"));
 });
+
+
+test('all original kit storefront cards use their existing verified image covers',()=>{
+  const covers=[
+    'https://ai-reliability-kits.floot.app/_cdn/static/83d745ab-1b7c-4ebc-bb28-8a62eb8b8dd0.png',
+    'https://public-files.gumroad.com/qd4wo25wg2qloe5hzehxmcc78da5',
+    'https://ai-reliability-kits.floot.app/_cdn/static/0077b675-936b-4ced-98b5-1f80ee4429e5.png'
+  ];
+  for(const url of covers) assert.ok(html.includes('src="'+url+'"'),url);
+  assert.doesNotMatch(html, /<div class="logo-box"><b>\{ \}<\/b><\/div>/);
+  assert.equal((html.match(/<article class="own-card /g)||[]).length,3);
+});
