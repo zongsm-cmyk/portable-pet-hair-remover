@@ -156,14 +156,14 @@ function closeDetail(){$('#overlay').classList.remove('visible')};$('#close').on
     list.replaceChildren();
     selected.forEach(id=>{
       const row=document.createElement('div');row.className='selection-item';
-      const label=document.createElement('span');label.textContent=kits[id].name+' · +kits[id].price;
+      const label=document.createElement('span');label.textContent=kits[id].name+' · '+String.fromCharCode(36)+kits[id].price;
       const remove=document.createElement('button');remove.type='button';remove.textContent=arabic?'إزالة':'Remove';remove.addEventListener('click',()=>{selected.delete(id);paint()});
       row.append(label,remove);list.append(row)
     });
     document.querySelectorAll('[data-select-kit]').forEach(b=>{
       const active=selected.has(b.dataset.selectKit);b.setAttribute('aria-pressed',String(active));b.textContent=arabic?(active?'✓ تمت الإضافة':'+ اختر'):(active?'✓ Selected':'+ Select')
     });
-    const chosen=Array.from(selected).map(id=>'- '+kits[id].name+' (+kits[id].price+')');
+    const chosen=Array.from(selected).map(id=>'- '+kits[id].name+' ('+String.fromCharCode(36)+kits[id].price+')');
     const msg='Hello ScoreShop, please help me with these original digital kits:\n'+chosen.join('\n')+'\nPlease confirm the recommended checkout/delivery options. I understand this message is only an inquiry, not payment.';
     send.href='https://wa.me/212649117788?text='+encodeURIComponent(msg);
     send.textContent=arabic?'إرسال الاختيار عبر واتساب ↗':'Send selection on WhatsApp ↗'
