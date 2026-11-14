@@ -18,6 +18,8 @@ test('AscorShop has working search, categories, sorting and selection controls',
   assert.match(css,/@media\(max-width:650px\)/);
   assert.match(html,/assets\/ascorshop.css/);
   assert.match(html,/assets\/ascorshop.js/);
+  assert.match(html,/ascorshop\.js\?v=20261114-polish2/);
+  assert.match(html,/ascorshop\.css\?v=20261114-polish2/);
 });
 test('No payment or physical affiliate offer is active on the homepage',()=>{
   assert.match(html,/"checkout_enabled":false/);
