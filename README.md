@@ -4,6 +4,19 @@ Public domain: https://shop.askouresystems.com/ (GitHub Pages + Cloudflare).
 
 Owner-led pivot on 12 November 2026 replaces the old VerveLiving physical-products editorial site with a digital catalog covering AI software, subscriptions, creative tools and downloadable products. Bilingual responsive catalog with search, filters and inquiries. No activated checkout, unverified sale, or claim of commission.
 
+## Original digital kits — available now
+
+Only these three **original downloadable products** are available for purchase. Checkout and delivery use the seller's external Gumroad pages; local shop checkout is not enabled.
+
+| Product | One-time price | Product details | Gumroad checkout |
+| --- | ---: | --- | --- |
+| n8n Workflow Preflight Auditor | $9 | [View kit](https://shop.askouresystems.com/digital-products/n8n-workflow-preflight-auditor/?utm_source=github&utm_medium=organic&utm_campaign=shop_source_readme) | [Buy](https://mhamedasskoure.gumroad.com/l/n8n-workflow-preflight-auditor) |
+| LLM Reliability Rescue Kit | $19 | [View kit](https://shop.askouresystems.com/digital-products/llm-reliability-rescue-kit/?utm_source=github&utm_medium=organic&utm_campaign=shop_source_readme) | [Buy](https://mhamedasskoure.gumroad.com/l/llm-reliability-rescue-kit) |
+| Agent Runaway Guard Kit | $24 | [View kit](https://shop.askouresystems.com/digital-products/agent-runaway-guard-kit/?utm_source=github&utm_medium=organic&utm_campaign=shop_source_readme) | [Buy](https://mhamedasskoure.gumroad.com/l/agent-runaway-guard-kit) |
+
+The 12 third-party AI/software subscription cards remain **out of stock**; prices and links above are product offers, not evidence of received sales.
+
+
 ## Build and test
 
 `python scripts/build_store.py`
