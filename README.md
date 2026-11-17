@@ -2,6 +2,8 @@
 
 Public domain: https://shop.askouresystems.com/ (GitHub Pages + Cloudflare).
 
+**English product comparison and direct Gumroad checkout links:** [Askoure Systems Developer Kits](https://shop.askouresystems.com/offers/?utm_source=github&utm_medium=organic&utm_campaign=readme_developer_kits).
+
 Owner-led pivot on 12 November 2026 replaces the old VerveLiving physical-products editorial site with a digital catalog covering AI software, subscriptions, creative tools and downloadable products. Bilingual responsive catalog with search, filters and inquiries. No activated checkout, unverified sale, or claim of commission.
 
 ## Original digital kits — available now
